@@ -27,7 +27,7 @@ export default function App() {
       <div className="flex min-h-screen flex-col">
         <a
           href="#main"
-          className="sr-only z-50 rounded-sm bg-ink px-4 py-2 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+          className="sr-only z-50 rounded-md bg-alloy px-4 py-2 font-sans text-sm font-semibold text-white shadow-md focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:ring-2 focus:ring-volt-action focus:outline-none"
         >
           Skip to content
         </a>

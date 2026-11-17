@@ -14,6 +14,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
+- Design branch `design/unslop-foundation` for professional Unslop design transformation
+- Unslop Visual Audit Report `docs/02-design-system/UNSLOP_AUDIT.md` and Design Direction `docs/02-design-system/DESIGN_DIRECTION.md`
+- Typography packages `@fontsource/ibm-plex-sans` and `@fontsource/ibm-plex-mono` for interface text and technical metadata
+- Programmatic WCAG 2.1 contrast verification script `scripts/verify-contrast.mjs`
+- Automated multi-viewport screenshot and overflow verification script `scripts/capture-stage1-screenshots.mjs`
 - Engineering governance foundation branch `chore/production-engineering-foundation`
 - Foundation Audit Report `FOUNDATION_AUDIT_REPORT.md` verifying system status, tools, tests, and readiness
 - Complete `docs/` system covering all 11 governance dimensions:
@@ -39,6 +44,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Changed
 
+- Stage 1 Design Tokens: Implemented Mineral (`#F1F2EC`), Alloy (`#203735`), Volt (`#E56B3F`), and accessible variants VoltAction (`#B95B21`) and VoltText (`#A44E1A`) in `src/index.css`
+- Navigation & Chrome: Refined `SiteHeader.tsx`, `SiteFooter.tsx`, `NavDropdown.tsx`, and `HeaderSearch.tsx` to align with 4px spacing, nested radii, and accessible contrast
+- Button Primitive: Standardized `src/components/ui/Button.tsx` with 8px radius, touch-target sizing (`sm`, `md`, `lg`), and active press micro-interaction
 - `package.json`: Configured `lint`, `lint:fix`, `format`, `format:check`, `typecheck`, `test`, `test:watch`, `test:coverage`, `test:e2e`, and `prepare` scripts
 - Standardized formatting across all source files and markdown documents using Prettier
 

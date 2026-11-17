@@ -1,52 +1,80 @@
 @import "@fontsource-variable/manrope";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
 @import "@fontsource-variable/inter";
 @import "tailwindcss";
 
 /*
- * LevUp Projects design tokens
- * 60% paper (#F7F8F5) / 30% ink — deep slate (#172D38) / 10% copper (#D97736).
- * copper-action is the filled-button tone: white label text on it meets WCAG AA
- * (white on #D97736 does not). copper-ink is copper for body-size text on light surfaces.
+ * LevUp Projects Design System — Alloy & Volt
+ * Mineral (#F1F2EC) — 60% calm engineering canvas
+ * Alloy (#203735) — 30% structural chrome and deep slate text
+ * Volt (#E56B3F) — 10% catalytic action accent
+ *
+ * Programmatically Verified Contrast (WCAG 2.1):
+ * - Alloy (#203735) on Mineral (#F1F2EC): 11.24:1 (WCAG AAA)
+ * - Muted (#556765) on Mineral (#F1F2EC): 5.31:1 (WCAG AA)
+ * - White (#FFFFFF) on VoltAction (#B95B21): 4.58:1 (WCAG AA Normal & Large)
+ * - VoltText (#A44E1A) on Mineral (#F1F2EC): 5.06:1 (WCAG AA Normal & Large)
+ * - Volt (#E56B3F) on Alloy (#203735): 3.92:1 (WCAG AA Large only >= 18pt / 14pt bold)
  */
 @theme {
-  --color-paper: #f7f8f5;
-  --color-paper-deep: #f0f1ec;
+  --color-mineral: #f1f2ec;
+  --color-mineral-deep: #e5e7df;
   --color-white: #ffffff;
-  --color-ink: #172d38;
-  --color-ink-soft: #20404e;
-  --color-ink-line: #2f4d5b;
-  --color-copper: #d97736;
-  --color-copper-action: #b95b21;
-  --color-copper-action-hover: #a9531f;
-  --color-copper-ink: #a9531f;
-  --color-copper-tint: #fbeee4;
-  --color-line: #e4e9e8;
-  --color-muted: #65737b;
-  --color-muted-on-ink: #a9b8bf;
-  --color-success: #547a6d;
+  --color-alloy: #203735;
+  --color-alloy-deep: #152423;
+  --color-alloy-soft: #2c4b48;
+  --color-alloy-line: #395e5b;
+  --color-volt: #e56b3f;
+  --color-volt-action: #b95b21;
+  --color-volt-action-hover: #a44e1a;
+  --color-volt-text: #a44e1a;
+  --color-volt-tint: #fbece5;
+  --color-line: #dce1dc;
+  --color-muted: #556765;
+  --color-muted-on-alloy: #a2b5b3;
+  --color-success: #3f6e5f;
+
+  /* Backward-compatible aliases for existing Figma Make class references */
+  --color-paper: var(--color-mineral);
+  --color-paper-deep: var(--color-mineral-deep);
+  --color-ink: var(--color-alloy);
+  --color-ink-soft: var(--color-alloy-soft);
+  --color-ink-line: var(--color-alloy-line);
+  --color-copper: var(--color-volt);
+  --color-copper-action: var(--color-volt-action);
+  --color-copper-action-hover: var(--color-volt-action-hover);
+  --color-copper-ink: var(--color-volt-text);
+  --color-copper-tint: var(--color-volt-tint);
+  --color-muted-on-ink: var(--color-muted-on-alloy);
 
   --font-display: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Type scale (desktop values match the 1440px reference) */
+  /* Type scale */
   --text-eyebrow: 0.6875rem;
   --text-eyebrow--line-height: 1rem;
-  --text-eyebrow--letter-spacing: 0.08em;
+  --text-eyebrow--letter-spacing: 0.04em;
   --text-hero: clamp(2.125rem, 1.25rem + 2.1vw, 2.75rem);
-  --text-hero--line-height: 1.04;
-  --text-hero--letter-spacing: -0.025em;
+  --text-hero--line-height: 1.08;
+  --text-hero--letter-spacing: -0.02em;
   --text-section: clamp(1.625rem, 1.2rem + 1vw, 1.9375rem);
-  --text-section--line-height: 1.12;
-  --text-section--letter-spacing: -0.02em;
+  --text-section--line-height: 1.15;
+  --text-section--letter-spacing: -0.015em;
 
-  --radius-xs: 3px;
+  --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
-  --radius-lg: 14px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
-  --shadow-card: 0 1px 2px rgb(23 45 56 / 0.05), 0 6px 18px -8px rgb(23 45 56 / 0.18);
-  --shadow-card-hover: 0 2px 4px rgb(23 45 56 / 0.06), 0 16px 32px -14px rgb(23 45 56 / 0.3);
-  --shadow-panel: 0 24px 60px -30px rgb(23 45 56 / 0.45);
+  --shadow-card: 0 1px 2px rgb(32 55 53 / 0.04), 0 4px 12px -4px rgb(32 55 53 / 0.08);
+  --shadow-card-hover: 0 2px 4px rgb(32 55 53 / 0.06), 0 12px 24px -8px rgb(32 55 53 / 0.14);
+  --shadow-panel: 0 20px 48px -20px rgb(32 55 53 / 0.25);
 }
 
 @layer base {
@@ -56,8 +84,8 @@
   }
 
   body {
-    background-color: var(--color-paper);
-    color: var(--color-ink);
+    background-color: var(--color-mineral);
+    color: var(--color-alloy);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -71,13 +99,13 @@
   }
 
   ::selection {
-    background-color: var(--color-copper);
-    color: var(--color-white);
+    background-color: var(--color-volt-tint);
+    color: var(--color-alloy);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-copper);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-volt-action);
+    outline-offset: 2px;
     border-radius: var(--radius-xs);
   }
 

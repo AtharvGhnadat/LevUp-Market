@@ -50,7 +50,7 @@ export function HeaderSearch() {
       </label>
       <Search
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 left-3.5 h-[18px] w-[18px] -translate-y-1/2 text-ink"
+        className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-muted"
         strokeWidth={2}
       />
       <input
@@ -74,9 +74,9 @@ export function HeaderSearch() {
         aria-controls={showPanel ? listId : undefined}
         aria-expanded={showPanel}
         placeholder="Search projects, technologies..."
-        className="h-10 w-[264px] rounded-md border border-line bg-white/70 pr-12 pl-10 text-[0.75rem] text-ink placeholder:text-muted transition-colors hover:border-ink/25 focus:border-ink/40 focus:bg-white focus:outline-none 2xl:w-[300px] [&::-webkit-search-cancel-button]:hidden"
+        className="h-10 w-[264px] rounded-md border border-line bg-white/80 pr-14 pl-9 text-xs text-alloy placeholder:text-muted/80 transition-colors hover:border-alloy/25 focus:border-volt-action focus:bg-white focus:ring-1 focus:ring-volt-action focus:outline-none 2xl:w-[300px] [&::-webkit-search-cancel-button]:hidden"
       />
-      <kbd className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 font-sans text-[0.6875rem] text-muted">
+      <kbd className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 rounded border border-line bg-mineral-deep px-1.5 py-0.5 font-mono text-[0.625rem] text-muted shadow-xs">
         {isMac ? "⌘ K" : "Ctrl K"}
       </kbd>
 
@@ -86,7 +86,7 @@ export function HeaderSearch() {
           className="absolute top-[calc(100%+8px)] right-0 z-50 w-[380px] overflow-hidden rounded-md border border-line bg-white shadow-panel"
         >
           <SearchResults query={query} results={results} />
-          <p className="border-t border-line bg-paper px-4 py-2 text-[0.6875rem] text-muted">
+          <p className="border-t border-line bg-mineral px-4 py-2 font-mono text-[0.6875rem] text-muted">
             {SEARCH_NOTE}
           </p>
         </div>

@@ -5,8 +5,8 @@ import { cn } from "@/lib/cn";
 import { to } from "@/lib/routes";
 
 export const navItemClass = cn(
-  "relative inline-flex h-10 items-center gap-1 whitespace-nowrap font-display text-[0.8125rem] font-bold tracking-[-0.01em] text-ink transition-colors hover:text-copper-ink",
-  "after:absolute after:inset-x-0 after:bottom-1 after:h-[2px] after:origin-left after:scale-x-0 after:rounded-full after:bg-copper after:transition-transform hover:after:scale-x-100",
+  "relative inline-flex h-10 items-center gap-1.5 whitespace-nowrap font-sans text-[0.875rem] font-medium tracking-[-0.01em] text-alloy transition-colors hover:text-volt-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action",
+  "after:absolute after:inset-x-0 after:bottom-1 after:h-[2px] after:origin-left after:scale-x-0 after:rounded-full after:bg-volt-action after:transition-transform hover:after:scale-x-100",
   "aria-[current=page]:after:scale-x-100",
 );
 
@@ -55,21 +55,21 @@ export function NavDropdown({ item, active }: { item: NavItem; active: boolean }
         {item.label}
         <ChevronDown
           aria-hidden="true"
-          className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
-          strokeWidth={2.5}
+          className={cn("h-3.5 w-3.5 transition-transform duration-150", open && "rotate-180")}
+          strokeWidth={2}
         />
       </button>
       <div
         id={menuId}
         hidden={!open}
-        className="absolute top-full left-0 z-50 mt-1 w-64 rounded-md border border-line bg-white p-1.5 shadow-panel"
+        className="absolute top-full left-0 z-50 mt-1.5 w-64 rounded-md border border-line bg-white p-1.5 shadow-panel"
       >
         <ul>
           {item.children?.map((child) => (
             <li key={child.href + child.label}>
               <a
                 href={to(child.href)}
-                className="block rounded-sm px-3 py-2 text-sm text-ink hover:bg-paper focus-visible:bg-paper"
+                className="block rounded-sm px-3 py-2 text-sm text-alloy transition-colors hover:bg-mineral focus-visible:bg-mineral focus-visible:outline-none"
               >
                 {child.label}
               </a>

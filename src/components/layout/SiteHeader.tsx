@@ -20,11 +20,11 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
   const { count } = useCart();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-sm">
-      <Container className="flex h-16 items-center gap-3 sm:h-[72px] sm:gap-6 lg:h-20">
+    <header className="sticky top-0 z-40 border-b border-line bg-mineral/95 backdrop-blur-sm transition-colors">
+      <Container className="flex h-16 items-center gap-3 sm:h-[72px] sm:gap-6 lg:h-[72px]">
         <Logo />
 
-        <nav aria-label="Primary" className="ml-4 hidden shrink-0 lg:block xl:ml-[30px]">
+        <nav aria-label="Primary" className="ml-4 hidden shrink-0 lg:block xl:ml-8">
           <ul className="flex items-center gap-5 xl:gap-6">
             {primaryNav.map((item) => {
               const active =
@@ -49,7 +49,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-0.5 sm:gap-3 xl:gap-5">
+        <div className="ml-auto flex items-center gap-1 sm:gap-3 xl:gap-4">
           <div className="hidden xl:block">
             <HeaderSearch />
           </div>
@@ -58,7 +58,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             onClick={() => setSearchOpen(true)}
             aria-haspopup="dialog"
             aria-label="Search projects"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-sm text-ink hover:bg-ink/5 xl:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action xl:hidden"
           >
             <Search aria-hidden="true" className="h-5 w-5" />
           </button>
@@ -67,21 +67,23 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             href={to("/cart")}
             aria-label={`Cart, ${count} ${count === 1 ? "item" : "items"}`}
             aria-current={currentPath === "/cart" ? "page" : undefined}
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-sm text-ink hover:bg-ink/5"
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action"
           >
-            <ShoppingCart aria-hidden="true" className="h-[22px] w-[22px]" strokeWidth={1.9} />
-            <span
-              aria-hidden="true"
-              className="absolute top-0.5 right-0 inline-flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-copper-action px-1 text-[0.625rem] font-bold text-white"
-            >
-              {count}
-            </span>
+            <ShoppingCart aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
+            {count > 0 && (
+              <span
+                aria-hidden="true"
+                className="absolute top-1 right-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-volt-action px-1 font-mono text-[0.625rem] font-bold text-white tabular-nums"
+              >
+                {count}
+              </span>
+            )}
           </a>
 
           <a
             href={to("/login")}
             aria-current={currentPath === "/login" ? "page" : undefined}
-            className="hidden h-[38px] shrink-0 items-center whitespace-nowrap rounded-md bg-ink px-5 font-display text-[0.8125rem] font-bold text-white transition-colors hover:bg-ink-soft sm:inline-flex"
+            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-md bg-alloy px-4 font-sans text-xs font-semibold text-white shadow-xs transition-colors hover:bg-alloy-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
           >
             Login / Sign Up
           </a>
@@ -92,7 +94,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             aria-label="Open menu"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-sm text-ink hover:bg-ink/5 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action lg:hidden"
           >
             <Menu aria-hidden="true" className="h-6 w-6" />
           </button>
