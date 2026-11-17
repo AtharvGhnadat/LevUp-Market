@@ -32,14 +32,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Typecheck — currently the only check available.
-      # ESLint will be added when configured in Stage C.
       - name: Type check
         run: pnpm typecheck
-        continue-on-error: false
 
-  build:
-    name: Build Verification
+  unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     needs: lint-and-typecheck
     steps:
@@ -60,37 +57,30 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run unit tests
+        run: pnpm test
+
+  build:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.34.3'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Build
         run: pnpm build
-
-  # Placeholder — will be enabled when Vitest is configured in Stage C
-  # test:
-  #   name: Unit Tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: pnpm/action-setup@v4
-  #       with: { version: '10.34.3' }
-  #     - uses: actions/setup-node@v4
-  #       with: { node-version: '22', cache: 'pnpm' }
-  #     - run: pnpm install --frozen-lockfile
-  #     - run: pnpm test:coverage
-
-  # Placeholder — will be enabled when Playwright is configured in Stage C
-  # e2e:
-  #   name: E2E Tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: pnpm/action-setup@v4
-  #       with: { version: '10.34.3' }
-  #     - uses: actions/setup-node@v4
-  #       with: { node-version: '22', cache: 'pnpm' }
-  #     - run: pnpm install --frozen-lockfile
-  #     - run: pnpm exec playwright install --with-deps chromium
-  #     - run: pnpm test:e2e
-  #     - uses: actions/upload-artifact@v4
-  #       if: failure()
-  #       with:
-  #         name: playwright-report
-  #         path: playwright-report/
