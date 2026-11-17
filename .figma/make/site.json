@@ -1,0 +1,11 @@
+{
+  "title": "LevUp Projects — Ready-made and custom engineering projects",
+  "description": "Buy documented software, AI, IoT, embedded, robotics and simulation project kits, or request a custom build with a fixed quote, payment plan and tracked delivery.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
