@@ -28,6 +28,7 @@ logs/
 ```
 
 **Example:**
+
 ```
 logs/development/application/2026/11/17/19/events.jsonl
 logs/development/errors/2026/11/17/19/events.jsonl
@@ -40,15 +41,15 @@ All folder names use **UTC** time. Timestamps within log events also use UTC ISO
 
 ## Categories
 
-| Category | Contents |
-|---|---|
-| `application` | General application events, page requests, feature usage |
-| `errors` | Caught and uncaught errors, stack traces |
-| `security` | Auth events, permission denials, rate limit hits, suspicious patterns |
-| `payments` | Payment order creation, status updates, webhook events |
-| `audit-exports` | Admin actions, data exports, sensitive operations |
-| `integrations` | Third-party API calls and responses (redacted) |
-| `background-jobs` | Scheduled tasks, batch operations |
+| Category          | Contents                                                              |
+| ----------------- | --------------------------------------------------------------------- |
+| `application`     | General application events, page requests, feature usage              |
+| `errors`          | Caught and uncaught errors, stack traces                              |
+| `security`        | Auth events, permission denials, rate limit hits, suspicious patterns |
+| `payments`        | Payment order creation, status updates, webhook events                |
+| `audit-exports`   | Admin actions, data exports, sensitive operations                     |
+| `integrations`    | Third-party API calls and responses (redacted)                        |
+| `background-jobs` | Scheduled tasks, batch operations                                     |
 
 ---
 
@@ -58,22 +59,22 @@ Each event is a single JSON object on one line (JSONL):
 
 ```jsonc
 {
-  "timestamp": "2026-11-17T14:00:00.000Z",    // ISO 8601 UTC
-  "level": "info",                              // debug | info | warn | error | fatal
-  "environment": "development",                 // development | staging | production
-  "service": "levup-web",                       // service identifier
-  "event_name": "catalog.view",                 // dot-namespaced event identifier
-  "message": "User viewed catalog page",        // human-readable message
-  "request_id": "req_abc123",                   // per-request unique ID
-  "correlation_id": "corr_xyz789",              // cross-service trace ID
-  "trace_id": "trace_def456",                   // distributed trace ID
-  "actor_id": "user_01JFGH...",                 // Supabase user ID, if authenticated
-  "resource_type": "catalog",                   // entity type affected
-  "resource_id": "esp32-smart-irrigation",      // entity ID
-  "duration_ms": 142,                           // operation duration
-  "error_code": null,                           // application error code
-  "application_version": "0.1.0",              // from package.json
-  "deployment_id": "dpl_vercel_abc123"          // deployment identifier
+  "timestamp": "2026-11-17T14:00:00.000Z", // ISO 8601 UTC
+  "level": "info", // debug | info | warn | error | fatal
+  "environment": "development", // development | staging | production
+  "service": "levup-web", // service identifier
+  "event_name": "catalog.view", // dot-namespaced event identifier
+  "message": "User viewed catalog page", // human-readable message
+  "request_id": "req_abc123", // per-request unique ID
+  "correlation_id": "corr_xyz789", // cross-service trace ID
+  "trace_id": "trace_def456", // distributed trace ID
+  "actor_id": "user_01JFGH...", // Supabase user ID, if authenticated
+  "resource_type": "catalog", // entity type affected
+  "resource_id": "esp32-smart-irrigation", // entity ID
+  "duration_ms": 142, // operation duration
+  "error_code": null, // application error code
+  "application_version": "0.1.0", // from package.json
+  "deployment_id": "dpl_vercel_abc123", // deployment identifier
 }
 ```
 
@@ -81,12 +82,12 @@ Each event is a single JSON object on one line (JSONL):
 
 ## Severity Levels
 
-| Level | When to use |
-|---|---|
-| `debug` | Detailed diagnostic information (dev only) |
-| `info` | Normal operational events |
-| `warn` | Unexpected but recoverable conditions |
-| `error` | Errors that affect a specific operation |
+| Level   | When to use                                    |
+| ------- | ---------------------------------------------- |
+| `debug` | Detailed diagnostic information (dev only)     |
+| `info`  | Normal operational events                      |
+| `warn`  | Unexpected but recoverable conditions          |
+| `error` | Errors that affect a specific operation        |
 | `fatal` | Errors that prevent the service from operating |
 
 ---

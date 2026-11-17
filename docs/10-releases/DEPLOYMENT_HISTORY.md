@@ -26,13 +26,14 @@
 
 ## History
 
-*No deployments have occurred. This file will be populated on first deployment.*
+_No deployments have occurred. This file will be populated on first deployment._
 
 ---
 
 ## Pre-deployment Checklist
 
 Before recording a deployment:
+
 - [ ] CI passed (lint, typecheck, test, build)
 - [ ] All environment variables confirmed in target environment
 - [ ] Database migrations applied and verified

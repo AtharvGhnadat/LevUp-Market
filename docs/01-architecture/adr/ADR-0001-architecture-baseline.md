@@ -1,10 +1,10 @@
 # ADR-0001: Architecture Baseline — Vite + React SPA, Planned Next.js Migration
 
-| Field | Value |
-|---|---|
-| Status | Accepted |
-| Date | 2026-11-17 |
-| Deciders | Atharv Ghanadat (owner) |
+| Field              | Value                       |
+| ------------------ | --------------------------- |
+| Status             | Accepted                    |
+| Date               | 2026-11-17                  |
+| Deciders           | Atharv Ghanadat (owner)     |
 | Ticket / Reference | Engineering foundation pass |
 
 ---
@@ -35,12 +35,15 @@ A separate ADR (ADR-0002) will document the Next.js migration decision once the 
 ## Alternatives Considered
 
 ### Option A: Immediate Next.js migration
+
 **Rejected.** Risk of visual regressions across 3 implemented pages and 20+ component files before the codebase is properly tested.
 
 ### Option B: Keep Vite permanently
+
 **Deferred.** Vite SPA cannot support SSR, API routes, Supabase server-side auth, or server-side payment webhook handling. It is not suitable for the production PRD. This option will be re-evaluated if the migration proves excessively risky.
 
 ### Option C: Migrate incrementally (selected path)
+
 Retain Vite for immediate iteration. Build Next.js scaffold in a separate branch. Migrate one route at a time with visual regression checks. Merge only when parity is confirmed.
 
 ---
@@ -48,15 +51,18 @@ Retain Vite for immediate iteration. Build Next.js scaffold in a separate branch
 ## Consequences
 
 ### Positive
+
 - Existing approved design is preserved without risk during the foundation phase.
 - Developers can continue working on the Vite codebase immediately.
 - The migration can be tested and validated before merging.
 
 ### Negative
+
 - Server-side features (auth, payments, API routes) cannot be added until the Next.js migration is complete.
 - Two parallel codebases will exist temporarily during migration.
 
 ### Neutral
+
 - The Figma Make-specific plugins in `vite.config.ts` will need to be cleaned up before or during migration.
 
 ---
@@ -64,5 +70,6 @@ Retain Vite for immediate iteration. Build Next.js scaffold in a separate branch
 ## Review Trigger
 
 This ADR should be revisited when:
+
 - The Next.js migration branch reaches parity with the Vite baseline.
 - A backend integration is required that cannot be implemented without server-side code.

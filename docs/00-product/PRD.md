@@ -1,58 +1,67 @@
 # Product Requirements Document (PRD) — LevUp Projects
 
-**Document Status:** Baseline / PRD Status Record  
-**Product Name:** LevUp Projects (formerly referenced historically in legacy specs as ProjectForge)  
-**Authoritative Source Assessment:** Missing from Repository  
-**Document Date:** 2026-11-17  
+> [!WARNING]
+> **DOCUMENT CLASSIFICATION: PROVISIONAL RECONCILIATION RECORD**  
+> **Status:** Unverified Baseline / Blocking Dependency Pending Original Document  
+> **Authoritative Source:** NOT FOUND IN REPOSITORY OR LOCAL ENVIRONMENT  
+> **Date:** 2026-11-17
 
 ---
 
-## 1. Authoritative Source Disclosure
+## 1. Authoritative Source Reconciliation & Blocking Dependency
 
-> [!IMPORTANT]
-> The formal standalone PRD document (`MASTER_PRD.md`) was **absent from the repository** upon cloning from GitHub (`https://github.com/AtharvGhnadat/LevUp-Market.git`).
-> In accordance with Engineering Governance instructions, this document explicitly records the PRD as **missing from the repository**. It does NOT fabricate a synthetic PRD pretending to be the historical original.
-> 
-> The requirements captured below are derived strictly from:
-> 1. The Master Repository Migration and Engineering Governance Specification
-> 2. The approved visual Figma Make implementation and codebase artifacts
-> 3. Route, metadata, and state contracts embedded in `src/data/`, `src/pages/`, `src/components/`, and `src/state/`
+During Phase 0 and Foundation Audit inspection, the canonical approved **ProjectForge / LevUp Website V1 Master PRD** (`MASTER_PRD.md`) was **not found** in the repository or local disk.
 
----
+In accordance with Master Repository Governance instructions:
 
-## 2. Product Vision and Core Value Proposition
-
-**LevUp Projects** is an engineering marketplace and project development platform designed primarily for engineering students, researchers, and technical builders in India. 
-
-The platform offers two primary business offerings:
-1. **Ready-made & Built-on-Order Engineering Project Kits**: Complete, documented kits across Software, AI/ML, IoT, Embedded Systems, Robotics, and Simulation. Delivered as digital assets (source code, schematics, reports, presentation slides) or hybrid packages with physical hardware kits.
-2. **Custom Project Build Requests**: Tailored engineering solutions with milestone-based payment schedules, verified technical specifications, fixed quotations, tracked delivery, and post-delivery revision entitlements.
+1. **This document is strictly PROVISIONAL.** It must NOT be treated as the authoritative product specification.
+2. Requirements captured here are derived solely from:
+   - The master governance instructions.
+   - Code-level route declarations, types, and mock data in `src/`.
+   - Figma Make layout structures and copywriting.
+3. **Reconciliation Status: BLOCKED.** Full reconciliation of feature scope, package tiers, pricing formulas, and student revision terms cannot be certified until the original approved Master PRD is supplied to the project.
+4. Developers and stakeholders must not invent requirements or treat provisional specs as approved business commitments.
 
 ---
 
-## 3. User Roles (V1 Target)
+## 2. Product Identity (Provisional Summary)
 
-The V1 system defines exactly two user roles:
-
-| Role | Description | Access Boundary |
-|---|---|---|
-| `STUDENT` / Customer | Engineering students or individual buyers | Public catalog, cart, checkout, customer dashboard (orders, custom requests, files, revisions, support) |
-| `ADMIN` | Internal LevUp operations, engineers, and administrators | Admin portal (catalog management, quotations, production tracking, QA approvals, deliverables, payments, refunds, audits) |
-
-> [!NOTE]
-> `/admin-login` is publicly discoverable but is **never** itself a security mechanism. Admin access strictly enforces server-side identity verification, an explicit email/user ID allowlist, and Multi-Factor Authentication (MFA).
+- **Public Brand Name**: **LevUp Projects**
+- **Brand Subtitle**: Engineering Projects & Development
+- **Historical Working Title**: "ProjectForge" (internal prototype name found in legacy references; deprecated from all user-facing material).
+- **Core Offering**:
+  1. Off-the-shelf and built-on-order engineering kits (Software, AI/ML, IoT, Embedded Systems, Robotics, Simulation).
+  2. Custom engineering project build requests with milestone financing.
+  3. Digital deliverable package (Source code, Circuit schematics/Gerbers, Technical documentation, Presentation slides).
+  4. Physical fulfillment (Microcontroller prototypes, sensor arrays, custom 3D printed enclosures).
 
 ---
 
-## 4. Platform Scope
+## 3. Provisional Role & Permission Model
 
-### 4.1 In Scope for V1 (Complete Web Application)
-- **Public Marketplace**: Storefront, catalog with multi-dimensional filtering, project details, package selection, add-on configuration, custom project intake form, cart, checkout, auth screens, static policy and informational pages.
-- **Customer Dashboard**: Student profile, active orders, custom request tracking, quotation review, milestone progress, secure authenticated file delivery, revision management, and support tickets.
-- **Admin Operations Portal**: Project catalog management, quotation review & issuance, order milestone updates, deliverable upload & QA verification, payment & refund reconciliation, audit trail.
-- **Backend & Infrastructure**: Supabase PostgreSQL database, Supabase Auth, Supabase Storage, Cashfree payment gateway integration (server-side only), structured application logging.
+| Role      | Access Scope                                                                                                                                 | Provisional Constraints                                                                                               |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `STUDENT` | Storefront, cart, checkout, dashboard (orders, custom requests, revision tickets, file downloads)                                            | Strict data isolation; access only to owned orders & signed deliverables.                                             |
+| `ADMIN`   | Admin portal (`/admin/*`), catalog management, quotation builder, order tracking, QA approval, deliverable staging, financial reconciliation | Strict server-side allowlist (`admin_users`) + MFA required. Hidden route `/admin-login` is NOT a security perimeter. |
 
-### 4.2 Out of Scope for V1
-- Mobile application (Android / iOS) — designated as **V2** milestone.
-- Public multi-vendor marketplace (third-party sellers uploading unvetted projects). All projects are curated or built directly by LevUp.
-- Direct live payment gateway in frontend without server-side verification.
+---
+
+## 4. Provisional Feature Inventory & Alignment
+
+| Domain   | Provisional Requirement                         | Source / Evidence                                           | Verification Status                                                    |
+| -------- | ----------------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Catalog  | 6 Engineering categories                        | `src/data/categories.ts`                                    | Aligned with Figma UI                                                  |
+| Catalog  | 12 Initial Demonstration Projects               | `src/data/catalog-projects.ts`                              | 12 projects present; prices in integer paise                           |
+| Detail   | 3-Tier Packages (Basic, Standard, Premium)      | `src/data/project-details.ts`                               | Detailed data present for 2/12 projects; 10/12 require data completion |
+| Detail   | Interactive Engineering Block Diagram           | `src/components/project-detail/EngineeringBlockDiagram.tsx` | Visual component implemented                                           |
+| Checkout | Server-side validated pricing                   | Governance requirement                                      | ⚠️ Mocked in client localStorage; needs Next.js API                    |
+| Payments | Cashfree Hosted Checkout + Webhook verification | Governance requirement                                      | ⚠️ Not implemented                                                     |
+| Delivery | Private deliverable storage with signed URLs    | Governance requirement                                      | ⚠️ Not implemented                                                     |
+
+---
+
+## 5. Next Steps for PRD Reconciliation
+
+1. Request the original `MASTER_PRD.md` file from product ownership.
+2. Diff provisional requirements against the official specification.
+3. Update `docs/00-product/REQUIREMENTS_TRACEABILITY.md` and `docs/00-product/FEATURE_INVENTORY.md` to reflect certified requirements.

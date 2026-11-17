@@ -2,8 +2,8 @@
 
 ## Supported Versions
 
-| Version | Supported |
-|---|---|
+| Version                   | Supported             |
+| ------------------------- | --------------------- |
 | Unreleased pre-production | ✅ Active development |
 
 ---
@@ -18,6 +18,7 @@ Report security concerns privately to:
 **Subject line:** `[SECURITY] LevUp Projects — <brief description>`
 
 Include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -40,11 +41,13 @@ You will receive an acknowledgement within **48 hours**.
 ## Responsible Disclosure
 
 We ask that you:
+
 - Give us reasonable time to investigate and patch before public disclosure.
 - Avoid accessing or modifying other users' data.
 - Not perform denial-of-service attacks.
 
 We commit to:
+
 - Acknowledging your report promptly.
 - Keeping you informed of progress.
 - Crediting you in security advisories (if desired).

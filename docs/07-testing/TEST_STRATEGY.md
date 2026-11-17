@@ -14,30 +14,31 @@
 
 ## Testing Layers
 
-| Layer | Framework | Scope | Status |
-|---|---|---|---|
-| Unit | Vitest + React Testing Library | Individual components, utilities, state logic | ⚠️ Not yet set up |
-| Integration | Vitest | Multi-component flows, data transformations | ⚠️ Not yet set up |
-| End-to-end | Playwright | Full user journeys in a real browser | ⚠️ Not yet set up |
-| Visual regression | Playwright screenshots | Catch unintended design changes | ⚠️ Planned |
+| Layer             | Framework                      | Scope                                         | Status            |
+| ----------------- | ------------------------------ | --------------------------------------------- | ----------------- |
+| Unit              | Vitest + React Testing Library | Individual components, utilities, state logic | ⚠️ Not yet set up |
+| Integration       | Vitest                         | Multi-component flows, data transformations   | ⚠️ Not yet set up |
+| End-to-end        | Playwright                     | Full user journeys in a real browser          | ⚠️ Not yet set up |
+| Visual regression | Playwright screenshots         | Catch unintended design changes               | ⚠️ Planned        |
 
 ---
 
 ## Coverage Policy
 
-| Category | Minimum target | Priority |
-|---|---|---|
-| Utility functions (`src/lib/`) | 90% | High |
-| State logic (`src/catalog/`, `src/state/`) | 80% | High |
-| UI components (critical paths) | 60% | Medium |
-| Pages (integration) | Key user flows | Medium |
-| E2E (critical journeys) | Defined below | High |
+| Category                                   | Minimum target | Priority |
+| ------------------------------------------ | -------------- | -------- |
+| Utility functions (`src/lib/`)             | 90%            | High     |
+| State logic (`src/catalog/`, `src/state/`) | 80%            | High     |
+| UI components (critical paths)             | 60%            | Medium   |
+| Pages (integration)                        | Key user flows | Medium   |
+| E2E (critical journeys)                    | Defined below  | High     |
 
 ---
 
 ## Priority Test Cases
 
 ### Unit
+
 - `src/lib/format.ts` — currency formatter (paise → INR)
 - `src/lib/cn.ts` — class merge utility
 - `src/lib/routes.ts` — base URL handling
@@ -45,6 +46,7 @@
 - `src/state/cart.tsx` — add, remove, duplicate handling, localStorage
 
 ### E2E (Playwright)
+
 - Home page renders all 7 sections
 - Project catalog loads and filters by category
 - Project detail page renders for a known slug

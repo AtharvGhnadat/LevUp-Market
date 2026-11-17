@@ -5,7 +5,6 @@ import {
   catalogUrlParams,
   emptyCatalogFilters,
   filterCatalog,
-  hasCatalogFilters,
   parseCatalogUrl,
   sortCatalog,
   type CatalogFilters,

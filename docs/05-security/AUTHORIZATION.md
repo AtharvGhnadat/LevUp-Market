@@ -2,7 +2,7 @@
 
 **Document Status:** Baseline  
 **Model:** Role-Based Access Control (RBAC) + Row-Level Security (RLS)  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 
@@ -28,13 +28,13 @@
 
 ## 2. Resource Permission Matrix
 
-| Resource | Anonymous | Student Buyer | Staff / Admin |
-|---|---|---|---|
-| Public Catalog (`/projects`) | Read | Read | Read / Write |
-| Project Detail & Diagrams | Read | Read | Read / Write |
-| Shopping Cart | Read / Write (Local) | Read / Write | Read / Write |
-| Personal Orders & Invoices | None | Read (Own only) | Read (All) |
-| Download Deliverable Files | None | Read (Entitled only) | Read (All) / Upload |
-| Submit Revision Request | None | Create (Entitled only) | Review / Resolve |
-| Admin Operations Portal | None | None | Full Access |
-| Financial Reconciliation Logs | None | None | Read / Process |
+| Resource                      | Anonymous            | Student Buyer          | Staff / Admin       |
+| ----------------------------- | -------------------- | ---------------------- | ------------------- |
+| Public Catalog (`/projects`)  | Read                 | Read                   | Read / Write        |
+| Project Detail & Diagrams     | Read                 | Read                   | Read / Write        |
+| Shopping Cart                 | Read / Write (Local) | Read / Write           | Read / Write        |
+| Personal Orders & Invoices    | None                 | Read (Own only)        | Read (All)          |
+| Download Deliverable Files    | None                 | Read (Entitled only)   | Read (All) / Upload |
+| Submit Revision Request       | None                 | Create (Entitled only) | Review / Resolve    |
+| Admin Operations Portal       | None                 | None                   | Full Access         |
+| Financial Reconciliation Logs | None                 | None                   | Read / Process      |

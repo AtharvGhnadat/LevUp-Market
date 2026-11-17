@@ -3,7 +3,7 @@
 **Document Status:** Baseline  
 **Approved Brand Name:** LevUp Projects  
 **Brand Subtitle:** Engineering Projects & Development  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 
@@ -12,6 +12,7 @@
 LevUp Projects is an engineering project marketplace and custom development laboratory. The visual identity conveys **precision engineering, industrial durability, and academic excellence**.
 
 ### 1.1 Brand Composition Rule (60 / 30 / 10)
+
 - **60% Primary Surface**: Paper (`#F7F8F5`) — warm, calm, non-glare engineering paper background.
 - **30% Structural Ink**: Deep Slate Ink (`#172D38`) — authoritative dark tone for typography, technical diagrams, and high-contrast structural sections.
 - **10% Brand Accent**: Copper (`#D97736`) / Action Copper (`#B95B21`) — technical heat, copper circuit wiring, high-visibility interactive calls to action.
@@ -23,7 +24,9 @@ LevUp Projects is an engineering project marketplace and custom development labo
 The LevUp Projects logo is defined in `src/components/brand/Logo.tsx`.
 
 ### 2.1 Logo Geometry (Isometric Engineering Block)
+
 The logo mark represents an **isometric technical cube** comprising 6 precise SVG paths:
+
 - Top Facet: `#E8955A` (illuminated copper surface)
 - Left Facet: `#D97736` (mid-tone copper body)
 - Right Facet: `#A9531F` (deep shadowed copper side)
@@ -32,7 +35,9 @@ The logo mark represents an **isometric technical cube** comprising 6 precise SV
 - Reflection Inset: `#F7F8F5` at `55%` opacity
 
 ### 2.2 Strict Logo Protection Rules
+
 > [!CAUTION]
+>
 > - **NEVER redraw, re-render, regenerate, or replace the logo mark geometry.**
 > - **NEVER apply drop shadows or glow filters to the logo mark.**
 > - **NEVER substitute a generated AI logo or different font family.**

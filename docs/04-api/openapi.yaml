@@ -47,7 +47,7 @@ paths:
             type: integer
             default: 12
       responses:
-        '200':
+        "200":
           description: Filtered list of projects
           content:
             application/json:
@@ -57,7 +57,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/CatalogProject'
+                      $ref: "#/components/schemas/CatalogProject"
                   total:
                     type: integer
                   page:
@@ -91,7 +91,7 @@ paths:
                 shipping_address:
                   type: object
       responses:
-        '201':
+        "201":
           description: Order created; payment session ready
           content:
             application/json:
@@ -126,9 +126,9 @@ paths:
             schema:
               type: object
       responses:
-        '200':
+        "200":
           description: Webhook acknowledged & processed
-        '401':
+        "401":
           description: Invalid HMAC signature
 
 components:

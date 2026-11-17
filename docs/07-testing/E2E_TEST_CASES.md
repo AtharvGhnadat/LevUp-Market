@@ -2,13 +2,14 @@
 
 **Document Status:** Baseline  
 **Framework:** Playwright  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 
 ## 1. Critical User Journeys (E2E)
 
 ### E2E-01: Public Catalog Discovery & Navigation
+
 1. Navigate to `/`.
 2. Verify all 7 home sections are rendered (Hero, Benefit Strip, Category Grid, Featured Projects, Custom Banner, How It Works, Trust Section).
 3. Click "Explore Projects" in header.
@@ -19,6 +20,7 @@
 8. Verify navigation to `/projects/:slug` with correct title, price, and tabs.
 
 ### E2E-02: Package Configuration & Cart Addition
+
 1. Navigate to `/projects/esp32-smart-irrigation-system`.
 2. Click "Premium" package card.
 3. Verify price summary reflects Premium tier pricing.
@@ -29,6 +31,7 @@
 8. Verify announcement toast appears.
 
 ### E2E-03: Planned Route Graceful Handling
+
 1. Navigate to `/checkout` or `/about`.
 2. Verify page loads `PlannedRoutePage` with honest "not built yet" message and path display.
 3. Verify page does NOT crash, throw uncaught React errors, or display an unstyled 404.

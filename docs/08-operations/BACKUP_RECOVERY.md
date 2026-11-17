@@ -2,7 +2,7 @@
 
 **Document Status:** Baseline  
 **Target RPO:** 1 Hour | **Target RTO:** 4 Hours  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 

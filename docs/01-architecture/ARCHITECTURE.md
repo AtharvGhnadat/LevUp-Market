@@ -48,29 +48,29 @@ No server. No database. No authentication. No payments.
 
 ### Component Responsibilities
 
-| Component | Responsibility |
-|---|---|
-| **Next.js App Router** | Page rendering (RSC + client components), middleware, API routes |
-| **Supabase Auth** | JWT-based authentication, session management, OAuth providers |
-| **Supabase PostgreSQL** | Persistent data: orders, products, users, payments, audit log |
-| **Supabase Storage** | Secure file upload and delivery of project deliverables |
-| **Supabase Realtime** | Order status updates, support ticket notifications (where justified) |
-| **Cashfree** | Payment order creation, hosted checkout, webhook processing — server-side only |
-| **Vercel** | Hosting, CDN, edge functions, preview deployments |
-| **GitHub Actions** | CI: lint, typecheck, test, build, security scan |
+| Component               | Responsibility                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------ |
+| **Next.js App Router**  | Page rendering (RSC + client components), middleware, API routes               |
+| **Supabase Auth**       | JWT-based authentication, session management, OAuth providers                  |
+| **Supabase PostgreSQL** | Persistent data: orders, products, users, payments, audit log                  |
+| **Supabase Storage**    | Secure file upload and delivery of project deliverables                        |
+| **Supabase Realtime**   | Order status updates, support ticket notifications (where justified)           |
+| **Cashfree**            | Payment order creation, hosted checkout, webhook processing — server-side only |
+| **Vercel**              | Hosting, CDN, edge functions, preview deployments                              |
+| **GitHub Actions**      | CI: lint, typecheck, test, build, security scan                                |
 
 ---
 
 ## Security Boundaries
 
-| Boundary | Rule |
-|---|---|
-| Cashfree Client Secret | Server-side environment variable only. Never in client bundle. |
-| Supabase Service Role Key | Server-side only. Never exposed to browser. |
-| Webhook endpoints | Verify signature against raw body before processing. |
-| Admin portal | Server-side identity verification + MFA required. Hidden route is not security. |
-| File delivery | Signed URLs with expiry. Direct public access is not permitted. |
-| Row-level security | Enabled on all Supabase tables. No table is publicly readable without an explicit policy. |
+| Boundary                  | Rule                                                                                      |
+| ------------------------- | ----------------------------------------------------------------------------------------- |
+| Cashfree Client Secret    | Server-side environment variable only. Never in client bundle.                            |
+| Supabase Service Role Key | Server-side only. Never exposed to browser.                                               |
+| Webhook endpoints         | Verify signature against raw body before processing.                                      |
+| Admin portal              | Server-side identity verification + MFA required. Hidden route is not security.           |
+| File delivery             | Signed URLs with expiry. Direct public access is not permitted.                           |
+| Row-level security        | Enabled on all Supabase tables. No table is publicly readable without an explicit policy. |
 
 ---
 

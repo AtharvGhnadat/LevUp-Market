@@ -1,7 +1,7 @@
 # Frontend Architecture — LevUp Projects
 
 **Document Status:** Baseline  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 
@@ -10,6 +10,7 @@
 The existing frontend is an approved **React 19 Single Page Application** built with **Vite 8**, **TypeScript 5.7**, and **Tailwind CSS v4**.
 
 It incorporates:
+
 - Fully responsive design matching 1440px desktop reference down to 375px mobile.
 - Custom path-switch routing in `src/App.tsx` mapped to PRD routes.
 - Tailwind CSS v4 design tokens declared in `src/index.css` `@theme {}`.
@@ -85,6 +86,7 @@ src/
 ## 4. Next.js Migration Strategy
 
 As established in [ADR-0001](adr/ADR-0001-architecture-baseline.md), the frontend will transition to Next.js App Router without altering the visual presentation:
+
 1. Re-export existing components directly into Next.js App Router client components (`"use client"`).
 2. Replace `src/pages/HomePage.tsx` with `app/page.tsx`.
 3. Replace `src/pages/ProjectsPage.tsx` with `app/projects/page.tsx`.

@@ -21,28 +21,28 @@ main (protected)
 
 ## Rules
 
-| Rule | Detail |
-|---|---|
-| `main` is protected | No direct pushes. All changes via PR. |
-| One concern per branch | Do not mix feature work with refactoring. |
-| Short-lived branches | Merge within days, not weeks. |
-| No force pushes | Never `git push --force` to `main` or shared branches. |
-| Delete after merge | Clean up merged branches from origin. |
-| No commit to `main` | Even admins should merge via PR. |
+| Rule                   | Detail                                                 |
+| ---------------------- | ------------------------------------------------------ |
+| `main` is protected    | No direct pushes. All changes via PR.                  |
+| One concern per branch | Do not mix feature work with refactoring.              |
+| Short-lived branches   | Merge within days, not weeks.                          |
+| No force pushes        | Never `git push --force` to `main` or shared branches. |
+| Delete after merge     | Clean up merged branches from origin.                  |
+| No commit to `main`    | Even admins should merge via PR.                       |
 
 ---
 
 ## Naming Conventions
 
-| Pattern | Example |
-|---|---|
-| `feat/<short-noun>` | `feat/auth-login-page` |
-| `fix/<symptom>` | `fix/catalog-pagination-offset` |
-| `docs/<topic>` | `docs/cashfree-integration` |
-| `refactor/<module>` | `refactor/catalog-state` |
-| `test/<scope>` | `test/homepage-unit` |
-| `chore/<task>` | `chore/eslint-setup` |
-| `hotfix/<issue>` | `hotfix/checkout-redirect-loop` |
+| Pattern             | Example                         |
+| ------------------- | ------------------------------- |
+| `feat/<short-noun>` | `feat/auth-login-page`          |
+| `fix/<symptom>`     | `fix/catalog-pagination-offset` |
+| `docs/<topic>`      | `docs/cashfree-integration`     |
+| `refactor/<module>` | `refactor/catalog-state`        |
+| `test/<scope>`      | `test/homepage-unit`            |
+| `chore/<task>`      | `chore/eslint-setup`            |
+| `hotfix/<issue>`    | `hotfix/checkout-redirect-loop` |
 
 Use lowercase, hyphens only, no slashes beyond the prefix.
 

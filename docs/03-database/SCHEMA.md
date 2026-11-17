@@ -2,7 +2,7 @@
 
 **Document Status:** Baseline / Proposed PostgreSQL Schema  
 **Database Engine:** PostgreSQL 16 (via Supabase)  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 

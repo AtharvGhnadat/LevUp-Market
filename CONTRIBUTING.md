@@ -6,18 +6,19 @@ Thank you for contributing. This document explains the branching strategy, commi
 
 ## Branching Strategy
 
-| Branch prefix | Purpose | Example |
-|---|---|---|
-| `main` | Stable, deployable baseline | — |
-| `feat/<feature>` | New user-facing features | `feat/auth-login-page` |
-| `fix/<issue>` | Bug fixes | `fix/catalog-pagination-offset` |
-| `docs/<topic>` | Documentation only | `docs/api-conventions` |
-| `refactor/<module>` | Internal refactoring, no behavior change | `refactor/catalog-state` |
-| `test/<module>` | Test additions or fixes | `test/homepage-sections` |
-| `chore/<task>` | Tooling, build, CI, dependencies | `chore/eslint-setup` |
-| `hotfix/<issue>` | Critical production fixes branched from `main` | `hotfix/checkout-redirect` |
+| Branch prefix       | Purpose                                        | Example                         |
+| ------------------- | ---------------------------------------------- | ------------------------------- |
+| `main`              | Stable, deployable baseline                    | —                               |
+| `feat/<feature>`    | New user-facing features                       | `feat/auth-login-page`          |
+| `fix/<issue>`       | Bug fixes                                      | `fix/catalog-pagination-offset` |
+| `docs/<topic>`      | Documentation only                             | `docs/api-conventions`          |
+| `refactor/<module>` | Internal refactoring, no behavior change       | `refactor/catalog-state`        |
+| `test/<module>`     | Test additions or fixes                        | `test/homepage-sections`        |
+| `chore/<task>`      | Tooling, build, CI, dependencies               | `chore/eslint-setup`            |
+| `hotfix/<issue>`    | Critical production fixes branched from `main` | `hotfix/checkout-redirect`      |
 
 **Rules:**
+
 - Never commit directly to `main`.
 - Branch from `main` (or the current integration branch) for each task.
 - One logical change per branch.
@@ -39,18 +40,18 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Types
 
-| Type | When to use |
-|---|---|
-| `feat` | New feature or capability |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, whitespace — no logic change |
-| `refactor` | Restructuring without behavior change |
-| `test` | Adding or fixing tests |
-| `chore` | Build process, tooling, CI, dependencies |
-| `perf` | Performance improvement |
-| `ci` | CI configuration changes |
-| `revert` | Revert a previous commit |
+| Type       | When to use                              |
+| ---------- | ---------------------------------------- |
+| `feat`     | New feature or capability                |
+| `fix`      | Bug fix                                  |
+| `docs`     | Documentation only                       |
+| `style`    | Formatting, whitespace — no logic change |
+| `refactor` | Restructuring without behavior change    |
+| `test`     | Adding or fixing tests                   |
+| `chore`    | Build process, tooling, CI, dependencies |
+| `perf`     | Performance improvement                  |
+| `ci`       | CI configuration changes                 |
+| `revert`   | Revert a previous commit                 |
 
 ### Examples
 
@@ -94,12 +95,14 @@ See [docs/09-development/CODING_STANDARDS.md](docs/09-development/CODING_STANDAR
 ## Design Preservation
 
 **The existing approved Figma design must be preserved.** If a code change affects:
+
 - Color tokens
 - Typography
 - Component layout or behavior
 - Brand assets (logo, favicon)
 
 …then the change must be:
+
 1. Discussed and approved before implementation.
 2. Documented in `docs/02-design-system/DESIGN_CHANGELOG.md`.
 3. Validated with screenshots at matching viewport sizes.

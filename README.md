@@ -37,12 +37,12 @@ Then open [http://localhost:8443](http://localhost:8443).
 
 ### Available Scripts
 
-| Script | Description |
-|---|---|
-| `pnpm dev` | Start Vite development server on port 8443 |
-| `pnpm build` | Production build to `dist/` |
-| `pnpm preview` | Preview production build |
-| `pnpm format` | Format code with oxfmt |
+| Script         | Description                                |
+| -------------- | ------------------------------------------ |
+| `pnpm dev`     | Start Vite development server on port 8443 |
+| `pnpm build`   | Production build to `dist/`                |
+| `pnpm preview` | Preview production build                   |
+| `pnpm format`  | Format code with oxfmt                     |
 
 > Additional scripts (lint, typecheck, test) will be added in `chore/production-engineering-foundation`.
 
@@ -75,13 +75,13 @@ See [docs/01-architecture/ARCHITECTURE.md](docs/01-architecture/ARCHITECTURE.md)
 
 ## Brand
 
-| Token | Value |
-|---|---|
-| Primary background | `#F7F8F5` (paper) |
-| Primary text / dark | `#172D38` (ink) |
-| Brand accent | `#D97736` (copper) |
-| Display font | Manrope Variable |
-| Body font | Inter Variable |
+| Token               | Value              |
+| ------------------- | ------------------ |
+| Primary background  | `#F7F8F5` (paper)  |
+| Primary text / dark | `#172D38` (ink)    |
+| Brand accent        | `#D97736` (copper) |
+| Display font        | Manrope Variable   |
+| Body font           | Inter Variable     |
 
 See [docs/02-design-system/COLOR_TOKENS.md](docs/02-design-system/COLOR_TOKENS.md) for the full token set.
 
@@ -89,19 +89,19 @@ See [docs/02-design-system/COLOR_TOKENS.md](docs/02-design-system/COLOR_TOKENS.m
 
 ## Documentation
 
-| Directory | Contents |
-|---|---|
-| [docs/00-product](docs/00-product/) | Product requirements, scope, feature inventory |
-| [docs/01-architecture](docs/01-architecture/) | Architecture decisions, tech stack, system context |
-| [docs/02-design-system](docs/02-design-system/) | Brand, tokens, typography, components |
-| [docs/03-database](docs/03-database/) | Schema, data dictionary, RLS policies |
-| [docs/04-api](docs/04-api/) | OpenAPI spec, conventions, error handling |
-| [docs/05-security](docs/05-security/) | Threat model, auth, secret management |
-| [docs/06-payments](docs/06-payments/) | Cashfree integration, payment lifecycle |
-| [docs/07-testing](docs/07-testing/) | Test strategy, coverage policy |
-| [docs/08-operations](docs/08-operations/) | Logging, observability, deployment runbook |
-| [docs/09-development](docs/09-development/) | Developer setup, coding standards, branching |
-| [docs/10-releases](docs/10-releases/) | Release checklist, rollback, deployment history |
+| Directory                                       | Contents                                           |
+| ----------------------------------------------- | -------------------------------------------------- |
+| [docs/00-product](docs/00-product/)             | Product requirements, scope, feature inventory     |
+| [docs/01-architecture](docs/01-architecture/)   | Architecture decisions, tech stack, system context |
+| [docs/02-design-system](docs/02-design-system/) | Brand, tokens, typography, components              |
+| [docs/03-database](docs/03-database/)           | Schema, data dictionary, RLS policies              |
+| [docs/04-api](docs/04-api/)                     | OpenAPI spec, conventions, error handling          |
+| [docs/05-security](docs/05-security/)           | Threat model, auth, secret management              |
+| [docs/06-payments](docs/06-payments/)           | Cashfree integration, payment lifecycle            |
+| [docs/07-testing](docs/07-testing/)             | Test strategy, coverage policy                     |
+| [docs/08-operations](docs/08-operations/)       | Logging, observability, deployment runbook         |
+| [docs/09-development](docs/09-development/)     | Developer setup, coding standards, branching       |
+| [docs/10-releases](docs/10-releases/)           | Release checklist, rollback, deployment history    |
 
 ---
 

@@ -1,7 +1,7 @@
 # Deployment Architecture — LevUp Projects
 
 **Document Status:** Baseline  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 
@@ -39,11 +39,11 @@ graph TD
 
 ## 2. Environments
 
-| Environment | Branch | URL Pattern | Database Instance | Cashfree Mode |
-|---|---|---|---|---|
-| **Local Development** | feature branches | `http://localhost:8443` (Vite) / `http://localhost:3000` (Next.js) | Supabase Local / Dev project | Sandbox |
-| **Preview / Staging** | `chore/*`, `feat/*`, `fix/*` PRs | `https://levup-market-git-*.vercel.app` | Supabase Staging project | Sandbox |
-| **Production** | `main` (tagged releases only) | `https://levupprojects.com` / `https://levup-market.vercel.app` | Supabase Production project | Production (after merchant approval) |
+| Environment           | Branch                           | URL Pattern                                                        | Database Instance            | Cashfree Mode                        |
+| --------------------- | -------------------------------- | ------------------------------------------------------------------ | ---------------------------- | ------------------------------------ |
+| **Local Development** | feature branches                 | `http://localhost:8443` (Vite) / `http://localhost:3000` (Next.js) | Supabase Local / Dev project | Sandbox                              |
+| **Preview / Staging** | `chore/*`, `feat/*`, `fix/*` PRs | `https://levup-market-git-*.vercel.app`                            | Supabase Staging project     | Sandbox                              |
+| **Production**        | `main` (tagged releases only)    | `https://levupprojects.com` / `https://levup-market.vercel.app`    | Supabase Production project  | Production (after merchant approval) |
 
 ---
 

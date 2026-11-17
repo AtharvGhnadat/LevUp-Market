@@ -2,7 +2,7 @@
 
 **Document Status:** Baseline  
 **Migration Tooling:** Supabase CLI / Versioned SQL Migrations  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 

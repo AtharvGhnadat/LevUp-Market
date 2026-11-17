@@ -1,7 +1,7 @@
 # Product Scope — LevUp Projects
 
 **Document Status:** Approved Baseline  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 
@@ -35,6 +35,7 @@
 ## 2. V1 Module Breakdown
 
 ### 2.1 Public Marketplace Storefront
+
 - **Home Page** (`/`): Hero CTA, benefit strip, category grid (6 domains), featured projects, custom project banner, how-it-works 4-step workflow, trust section, sticky header, full footer.
 - **Catalog** (`/projects`): Filter panel (category, delivery type, project type, difficulty, tech stack, deliverables, customization, price range), sort options, view toggle (grid/list), active filter chips, pagination.
 - **Project Detail** (`/projects/:slug`): Multi-image gallery, interactive package selector (Basic, Standard, Premium), add-on configurator, price calculation summary, interactive block diagram, multi-tab specifications (Overview, Components, Learning Outcomes, Tech Stack, Documentation, FAQs), revision entitlement terms.
@@ -44,6 +45,7 @@
 - **Information & Legal Disclosures** (`/about`, `/contact`, `/faq`, `/terms`, `/privacy`, `/refund-policy`, `/shipping-policy`, `/license`, `/academic-use`, `/pricing`).
 
 ### 2.2 Customer Dashboard (`/dashboard/*`)
+
 - **Overview & Profile**: Active projects, recent orders, notifications.
 - **Orders**: Order history, order details, milestone tracking, tracking physical shipments (courier AWB).
 - **Deliverables & Downloads**: Secure signed URLs for authorized file downloads (source code, schematics, reports).
@@ -52,6 +54,7 @@
 - **Support**: Project inquiry, delivery issues, ticket management.
 
 ### 2.3 Admin Portal (`/admin/*`)
+
 - **Authentication**: Verified staff login + allowlist + MFA.
 - **Catalog Management**: Add/edit/archive projects, configure tiers and pricing in paise.
 - **Quotation Management**: Ingest custom requests, formulate milestone breakdowns, issue binding quotes.

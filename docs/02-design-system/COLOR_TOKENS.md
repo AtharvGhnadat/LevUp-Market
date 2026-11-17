@@ -1,100 +1,69 @@
-# Color Tokens — LevUp Projects Design System
+# Color Tokens & Brand System Comparison — LevUp Projects
 
-**Status:** Active  
-**Last reviewed:** 2026-11-17  
-**Source file:** `src/index.css` (`@theme {}` block)
-
-> [!IMPORTANT]
-> These tokens are the authoritative design definition. Do not alter any token value without an approved design decision documented in [DESIGN_CHANGELOG.md](DESIGN_CHANGELOG.md).
+**Document Status:** Comparative Audit & Controlled Migration Proposal  
+**Last Reviewed:** 2026-11-17
 
 ---
 
-## Brand Composition
+## 1. Approved Brand Identity vs. Actual Figma Source Tokens
 
-The 60/30/10 composition rule:
+The approved brand specifications define the **Alloy & Volt** design system with a 60/30/10 composition:
 
-| Role | Token | Hex | Percentage |
-|---|---|---|---|
-| Background / surfaces | `paper` | `#F7F8F5` | 60% |
-| Text / dark elements | `ink` | `#172D38` | 30% |
-| Accent / action | `copper` | `#D97736` | 10% |
-
----
-
-## Full Token Reference
-
-### Surface Tokens
-
-| CSS variable | Tailwind class | Hex value | Usage |
-|---|---|---|---|
-| `--color-paper` | `bg-paper` / `text-paper` | `#F7F8F5` | Primary page background |
-| `--color-paper-deep` | `bg-paper-deep` | `#F0F1EC` | Cards, secondary surfaces |
-| `--color-white` | `bg-white` / `text-white` | `#FFFFFF` | Pure white overlays |
-
-### Ink (Dark) Tokens
-
-| CSS variable | Tailwind class | Hex value | Usage |
-|---|---|---|---|
-| `--color-ink` | `bg-ink` / `text-ink` | `#172D38` | Primary text, dark backgrounds |
-| `--color-ink-soft` | `bg-ink-soft` / `text-ink-soft` | `#20404E` | Hover state for ink elements |
-| `--color-ink-line` | `border-ink-line` | `#2F4D5B` | Dark surface borders |
-
-### Copper (Accent) Tokens
-
-| CSS variable | Tailwind class | Hex value | Usage |
-|---|---|---|---|
-| `--color-copper` | `text-copper` | `#D97736` | Brand accent, highlights |
-| `--color-copper-action` | `bg-copper-action` | `#B95B21` | CTA button fill (WCAG AA white contrast) |
-| `--color-copper-action-hover` | `bg-copper-action-hover` | `#A9531F` | CTA button hover |
-| `--color-copper-ink` | `text-copper-ink` | `#A9531F` | Copper text on light backgrounds |
-| `--color-copper-tint` | `bg-copper-tint` | `#FBEEE4` | Light copper surface / chip background |
-
-### Utility Tokens
-
-| CSS variable | Tailwind class | Hex value | Usage |
-|---|---|---|---|
-| `--color-line` | `border-line` | `#E4E9E8` | Standard dividers and borders |
-| `--color-muted` | `text-muted` | `#65737B` | Secondary / subdued text on light surfaces |
-| `--color-muted-on-ink` | `text-muted-on-ink` | `#A9B8BF` | Secondary text on dark surfaces |
-| `--color-success` | `text-success` | `#547A6D` | Success states |
+| Role                          | Approved Specification | Approved Hex | Actual Figma Make Token (`src/index.css`) | Actual Hex | Delta & Visual Impact                                                                                                                                               |
+| ----------------------------- | ---------------------- | ------------ | ----------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **60% Background Surface**    | **Mineral**            | `#F1F2EC`    | `--color-paper`                           | `#F7F8F5`  | Figma token is slightly brighter off-white (+4% luminance). `paper-deep` is `#F0F1EC` (nearly identical to Mineral).                                                |
+| **30% Structural Dark / Ink** | **Alloy**              | `#203735`    | `--color-ink`                             | `#172D38`  | Figma token is slightly cooler slate-blue (Hue 200° vs Hue 175° for Alloy).                                                                                         |
+| **10% Action / Accent**       | **Volt**               | `#E56B3F`    | `--color-copper`                          | `#D97736`  | Figma base token is deeper burnt copper (-12% saturation). Figma also added `--color-copper-action` (`#B95B21`) to pass WCAG AA contrast for white text on buttons. |
 
 ---
 
-## Accessibility Notes
+## 2. Approved Master SVG Logo Geometry
 
-- White text on `copper-action` (`#B95B21`): **WCAG AA** compliant (contrast ratio ≈ 4.9:1).
-- White text on `copper` (`#D97736`): **does NOT meet WCAG AA** — do not use white text on the base copper token.
-- White text on `ink` (`#172D38`): **WCAG AAA** compliant.
-- Black/ink text on `paper` (`#F7F8F5`): **WCAG AAA** compliant.
+The master SVG logo is preserved in `src/components/brand/Logo.tsx` as an inline isometric engineering block:
 
----
+```xml
+<svg viewBox="0 0 40 44" aria-hidden="true" className="...">
+  <!-- Facet 1: Top illuminated copper facet -->
+  <path d="M20 2 38 12 20 22 2 12Z" fill="#E8955A" />
+  <!-- Facet 2: Left mid-tone copper body -->
+  <path d="M2 12 20 22v20L2 32Z" fill="#D97736" />
+  <!-- Facet 3: Right shadowed copper facet -->
+  <path d="M38 12 20 22v20l18-10Z" fill="#A9531F" />
+  <!-- Base Shadow: Ink shadow with 18% opacity -->
+  <path d="M2 12 20 22v20L2 32Z" fill="#172D38" fillOpacity=".18" />
+  <!-- Technical Notch -->
+  <path d="M26 24.5 32 21v7l-6 3.5Z" fill="#172D38" />
+  <!-- Reflection highlight -->
+  <path d="M8 22.5 14 26v5l-6-3.5Z" fill="#F7F8F5" fillOpacity=".55" />
+</svg>
+```
 
-## Relationship to Master Brand Prompt
-
-The master engineering prompt specifies:
-- Mineral: `#F1F2EC`
-- Alloy: `#203735`
-- Volt: `#E56B3F`
-
-The implemented tokens are a refinement of these values, optimised for accessibility and visual consistency in the Figma Make output. **The implemented values are the authoritative source** unless a design decision explicitly changes them.
-
----
-
-## Shadows
-
-| CSS variable | Usage |
-|---|---|
-| `--shadow-card` | Standard card elevation |
-| `--shadow-card-hover` | Card hover state |
-| `--shadow-panel` | Modal / drawer overlay |
+> [!CAUTION]
+> **GOVERNANCE RULE: The master SVG logo geometry must NEVER be redrawn, regenerated, or replaced.**
 
 ---
 
-## Radius Scale
+## 3. Controlled Design Token Migration Plan
 
-| CSS variable | Value | Usage |
-|---|---|---|
-| `--radius-xs` | `3px` | Focus rings |
-| `--radius-sm` | `6px` | Chips, badges |
-| `--radius-md` | `8px` | Buttons |
-| `--radius-lg` | `14px` | Cards, panels |
+To avoid unintended visual regressions across the approved Figma Make UI, the migration to exact Mineral/Alloy/Volt values must be executed in a controlled, non-destructive sequence:
+
+### Phase 1: Preserve Baseline (Current)
+
+- Retain existing `--color-paper` (`#F7F8F5`), `--color-ink` (`#172D38`), and `--color-copper` (`#D97736`) tokens in `src/index.css`.
+- Ensure all 3 implemented pages (`HomePage`, `ProjectsPage`, `ProjectDetailPage`) render identically to the approved Figma Make preview.
+
+### Phase 2: Dual Token Mapping (Stage E Migration)
+
+- Introduce alias tokens in `src/index.css`:
+  ```css
+  --color-mineral: #f1f2ec;
+  --color-alloy: #203735;
+  --color-volt: #e56b3f;
+  --color-volt-action: #c44c20; /* High contrast button variant */
+  ```
+- Map `--color-paper` -> `--color-mineral`, `--color-ink` -> `--color-alloy`, `--color-copper` -> `--color-volt`.
+- Execute automated visual regression screenshot comparisons with Playwright before cutting over.
+
+### Phase 3: Brand Certification
+
+- Certify WCAG AA contrast for all button states and typography with the new tokens before closing migration.

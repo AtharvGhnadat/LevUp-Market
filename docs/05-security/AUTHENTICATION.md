@@ -2,18 +2,20 @@
 
 **Document Status:** Baseline  
 **Identity Provider:** Supabase Auth  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-17
 
 ---
 
 ## 1. Authentication Mechanisms
 
 ### 1.1 Customer (Student) Authentication
+
 - **Methods**: Email + Password or Email Magic Link / OTP.
 - **Session Tokens**: JWT access tokens stored in `httpOnly`, `SameSite=Lax`, `Secure` cookies.
 - **Token Expiration**: Access token expires in 1 hour; refresh token rotated every 7 days.
 
 ### 1.2 Administrative Authentication
+
 - **Access Boundary**: Accessible via `/admin-login`.
 - **Identity Enforcement**:
   1. Successful authentication with Supabase Auth credentials.

@@ -6,11 +6,11 @@
 
 ## Prerequisites
 
-| Tool | Version | Installation |
-|---|---|---|
-| Git | 2.40+ | [git-scm.com](https://git-scm.com/) |
-| Node.js | 22+ | Via [mise](https://mise.jdx.dev/) or [nvm](https://github.com/nvm-sh/nvm) |
-| pnpm | 10.34.3+ | `npm install -g pnpm` or via mise |
+| Tool    | Version  | Installation                                                              |
+| ------- | -------- | ------------------------------------------------------------------------- |
+| Git     | 2.40+    | [git-scm.com](https://git-scm.com/)                                       |
+| Node.js | 22+      | Via [mise](https://mise.jdx.dev/) or [nvm](https://github.com/nvm-sh/nvm) |
+| pnpm    | 10.34.3+ | `npm install -g pnpm` or via mise                                         |
 
 > [!TIP]
 > The project includes `.mise.toml` which pins Node.js 22 and pnpm 10.34.3. Install [mise](https://mise.jdx.dev/) and run `mise install` in the project root to get exact versions automatically.
@@ -61,12 +61,12 @@ Hot module replacement is active. Changes to `src/` files are reflected immediat
 
 ## Available Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start Vite dev server (port 8443) |
-| `pnpm build` | Build for production → `dist/` |
+| Command        | Description                        |
+| -------------- | ---------------------------------- |
+| `pnpm dev`     | Start Vite dev server (port 8443)  |
+| `pnpm build`   | Build for production → `dist/`     |
 | `pnpm preview` | Serve the production build locally |
-| `pnpm format` | Format code with oxfmt |
+| `pnpm format`  | Format code with oxfmt             |
 
 > Additional scripts (lint, typecheck, test, e2e) will be added during Stage C.
 
@@ -77,8 +77,8 @@ Hot module replacement is active. Changes to `src/` files are reflected immediat
 The `@` alias maps to `src/`:
 
 ```typescript
-import { cn } from '@/lib/cn'           // → src/lib/cn.ts
-import { Logo } from '@/components/brand/Logo'  // → src/components/brand/Logo.tsx
+import { cn } from "@/lib/cn"; // → src/lib/cn.ts
+import { Logo } from "@/components/brand/Logo"; // → src/components/brand/Logo.tsx
 ```
 
 ---
@@ -99,6 +99,7 @@ This project uses Tailwind CSS v4 via `@tailwindcss/vite`. Key differences from 
 See [BRANCHING.md](BRANCHING.md) for the full branching strategy.
 
 Quick summary:
+
 1. Never commit directly to `main`.
 2. Create a branch: `git checkout -b feat/your-feature`
 3. Use Conventional Commits: `feat(scope): description`
@@ -109,10 +110,13 @@ Quick summary:
 ## Troubleshooting
 
 ### "Module not found" errors
+
 Ensure `pnpm install` completed without errors. Check that the `@` alias is working in `tsconfig.json`.
 
 ### Port 8443 already in use
+
 Set a different port: `PORT=3000 pnpm dev`
 
 ### TypeScript errors in IDE but build passes
+
 Ensure your editor is using the workspace TypeScript version (`typescript` from `node_modules`), not a global TypeScript installation.
