@@ -1,0 +1,162 @@
+openapi: 3.1.0
+info:
+  title: LevUp Projects API
+  description: Authoritative REST API specification for LevUp Projects engineering marketplace.
+  version: 1.0.0
+servers:
+  - url: https://levupprojects.com/api
+    description: Production Server
+  - url: http://localhost:8443/api
+    description: Local Development
+
+paths:
+  /catalog/projects:
+    get:
+      summary: List catalog projects with filtering and pagination
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: difficulty
+          in: query
+          schema:
+            type: string
+            enum: [beginner, intermediate, advanced]
+        - name: delivery
+          in: query
+          schema:
+            type: string
+            enum: [digital, physical, hybrid]
+        - name: min_price
+          in: query
+          schema:
+            type: integer
+        - name: max_price
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 12
+      responses:
+        "200":
+          description: Filtered list of projects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CatalogProject"
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  limit:
+                    type: integer
+
+  /orders/create:
+    post:
+      summary: Create a new order snapshot
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [project_id, package_name]
+              properties:
+                project_id:
+                  type: string
+                  example: LP-1001
+                package_name:
+                  type: string
+                  enum: [Basic, Standard, Premium]
+                selected_add_on_ids:
+                  type: array
+                  items:
+                    type: string
+                shipping_address:
+                  type: object
+      responses:
+        "201":
+          description: Order created; payment session ready
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order_id:
+                    type: string
+                  total_paise:
+                    type: integer
+                  payment_session_id:
+                    type: string
+
+  /webhooks/cashfree:
+    post:
+      summary: Ingest signed Cashfree payment notification
+      parameters:
+        - name: x-webhook-signature
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-webhook-timestamp
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Webhook acknowledged & processed
+        "401":
+          description: Invalid HMAC signature
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CatalogProject:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        title:
+          type: string
+        summary:
+          type: string
+        category:
+          type: string
+        project_type:
+          type: string
+        delivery_type:
+          type: string
+        difficulty:
+          type: string
+        starting_price_paise:
+          type: integer
