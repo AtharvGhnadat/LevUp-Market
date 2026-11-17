@@ -1,7 +1,6 @@
 /**
  * DEMONSTRATION DATA — illustrates the listing format until the published
- * catalog is connected. Not purchasable. Prices are integer minor units (paise).
- * No ratings or discounts are shown because none are verified.
+ * catalog is connected. Prices are integer minor units (paise).
  */
 import { catalogProjects, catalogDeliveryLabels, projectTypeLabels } from "./catalog-projects";
 
@@ -11,8 +10,9 @@ export type DemoProject = {
   slug: string;
   title: string;
   categorySlug: string;
-  /** Short category chip shown on cards, e.g. "AI/ML". */
+  /** Short category chip shown on cards, e.g. "AI/ML", "Embedded". */
   categoryLabel: string;
+  description?: string;
   stack: string[];
   /** Hardware + Software, Software, ... */
   typeLabel: string;
@@ -33,43 +33,60 @@ export const deliveryModeLabel: Record<DeliveryMode, string> = {
 
 export const demoProjects: DemoProject[] = [
   {
-    slug: "smart-greenhouse-monitoring-system",
-    title: "Smart Greenhouse Monitoring System",
-    categorySlug: "iot-electronics",
-    categoryLabel: "IoT",
-    stack: ["ESP32", "Soil & climate sensors", "MQTT"],
+    slug: "autonomous-obstacle-avoidance-rover",
+    title: "Autonomous Obstacle Avoidance Robot",
+    categorySlug: "embedded-systems",
+    categoryLabel: "Embedded",
+    description: "Arduino based robot with ultrasonic sensing and real-time control.",
+    stack: ["Arduino", "Ultrasonic sensor", "Motor driver"],
     typeLabel: "Hardware + Software",
-    deliveryMode: "hybrid",
-    basePrice: 499900,
-    imageId: "photo-1524486361537-8ad15938e1a3",
-    imageAlt: "Rows of plants growing inside a glass greenhouse",
-    focus: "50% 60%",
+    deliveryMode: "physical",
+    basePrice: 249900,
+    imageId: "photo-1678225867994-e7a5b071ebfd",
+    imageAlt: "Small wheeled robot with ultrasonic sensors and exposed electronics",
+    focus: "50% 50%",
   },
   {
-    slug: "real-time-object-detection-yolov8",
-    title: "Real-Time Object Detection Using YOLOv8",
-    categorySlug: "artificial-intelligence-ml",
-    categoryLabel: "AI/ML",
-    stack: ["Python", "YOLOv8", "OpenCV"],
+    slug: "inventory-management-web-application",
+    title: "Student Project Management System",
+    categorySlug: "software-development",
+    categoryLabel: "Software",
+    description: "Web application to manage projects, submissions and evaluations.",
+    stack: ["React", "TypeScript", "Node.js"],
     typeLabel: "Software",
     deliveryMode: "digital",
-    basePrice: 399900,
-    imageId: "photo-1602951172321-fe0aa8865e6b",
-    imageAlt: "Cars in city traffic, the kind of scene the detector labels",
-    focus: "50% 55%",
+    basePrice: 499900,
+    imageId: "photo-1551288049-bebda4e38f71",
+    imageAlt: "Student project management system interface on laptop screen",
+    focus: "50% 50%",
   },
   {
-    slug: "arduino-robotic-arm-object-handling",
-    title: "Arduino Based Robotic Arm with Object Handling",
-    categorySlug: "robotics",
-    categoryLabel: "Robotics",
-    stack: ["Arduino", "Servo control", "C++"],
+    slug: "smart-home-automation",
+    title: "Smart Home Automation (using ESP32)",
+    categorySlug: "iot-electronics",
+    categoryLabel: "IoT",
+    description: "Control lights, fans and appliances via web and mobile interface.",
+    stack: ["ESP32", "Relays", "MQTT"],
     typeLabel: "Hardware + Software",
     deliveryMode: "hybrid",
-    basePrice: 599900,
-    imageId: "photo-1655393001768-d946c97d6fd1",
-    imageAlt: "Articulated robotic arm on a display stand",
-    focus: "50% 45%",
+    basePrice: 399900,
+    imageId: "photo-1631378297854-185cff6b0986",
+    imageAlt: "Microcontroller prototype with sensors and wiring",
+    focus: "50% 50%",
+  },
+  {
+    slug: "arduino-robotic-arm",
+    title: "Quadcopter Flight Controller (Academic Build)",
+    categorySlug: "robotics",
+    categoryLabel: "Robotics",
+    description: "A stable and customizable drone platform for academic use.",
+    stack: ["Arduino", "Sensors", "Telemetry"],
+    typeLabel: "Hardware + Software",
+    deliveryMode: "hybrid",
+    basePrice: 699900,
+    imageId: "photo-1527977966376-1c8408f9f108",
+    imageAlt: "Quadcopter flight controller academic build on workbench",
+    focus: "50% 50%",
   },
 ];
 
@@ -93,6 +110,7 @@ export function searchDemoProjects(query: string): DemoProject[] {
       title: project.title,
       categorySlug: project.category,
       categoryLabel: project.categoryLabel,
+      description: project.summary,
       stack: project.technologies,
       typeLabel: `${projectTypeLabels[project.projectType]} · ${catalogDeliveryLabels[project.deliveryType]}`,
       deliveryMode: project.deliveryType,

@@ -1,76 +1,73 @@
-import type { LucideIcon } from "lucide-react";
-import { Box, ChevronRight, CreditCard, Search, Settings, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Code2, FileText, Layers, Package } from "lucide-react";
+import { Fragment } from "react";
 import { Container } from "@/components/ui/Container";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 
-const steps: Array<{ icon: LucideIcon; title: string; body: [string, string] }> = [
+const steps = [
   {
-    icon: Search,
-    title: "Discover or Request",
-    body: ["Choose a ready-made project", "or submit your requirements."],
+    num: "1",
+    icon: FileText,
+    title: "1. Choose or Request",
+    body: "Explore ready projects or submit your requirement.",
   },
   {
-    icon: SlidersHorizontal,
-    title: "Configure & Get a Quote",
-    body: ["Select a package, add-ons or", "receive a custom quotation."],
+    num: "2",
+    icon: Layers,
+    title: "2. Get a Plan & Quote",
+    body: "Receive a detailed plan, timeline and cost.",
   },
   {
-    icon: CreditCard,
-    title: "Make Payment",
-    body: ["Pay securely — full, milestone", "or advance + balance."],
+    num: "3",
+    icon: Code2,
+    title: "3. Development",
+    body: "We build, test and share progress updates.",
   },
   {
-    icon: Settings,
-    title: "Development & Updates",
-    body: ["Track progress, share feedback", "and manage revisions."],
-  },
-  {
-    icon: Box,
-    title: "Receive & Review",
-    body: ["Get digital files or hardware", "delivered and finalize the order."],
+    num: "4",
+    icon: Package,
+    title: "4. Deliver & Support",
+    body: "Get the final project with source code, docs and revisions.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" aria-labelledby="how-title" className="scroll-mt-24 pt-6 pb-8">
+    <section id="how-it-works" aria-labelledby="how-title" className="scroll-mt-24 py-10 sm:py-14">
       <Container>
-        <Eyebrow align="center" className="text-[0.625rem]">
-          How It Works
-        </Eyebrow>
-        <h2
-          id="how-title"
-          className="mt-1.5 text-center font-display text-[1.75rem] leading-tight font-extrabold tracking-[-0.02em] text-ink"
-        >
-          A Simple &amp; Transparent Process
-        </h2>
-        <p className="mt-1.5 text-center text-[0.75rem] text-ink/80">
-          From project selection to final delivery, we keep it clear, structured and hassle-free.
+        <div className="flex items-center justify-center gap-3">
+          <span className="h-0.5 w-6 bg-volt-action" aria-hidden="true" />
+          <h2
+            id="how-title"
+            className="font-display text-2xl font-extrabold text-alloy sm:text-3xl"
+          >
+            How LevUp Projects Works
+          </h2>
+          <span className="h-0.5 w-6 bg-volt-action" aria-hidden="true" />
+        </div>
+        <p className="mt-2 text-center font-sans text-sm text-muted sm:text-base">
+          A simple and transparent process from idea to delivery.
         </p>
 
-        <ol className="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0">
-          {steps.map(({ icon: Icon, title, body }, i) => (
-            <li key={title} className="relative lg:pr-4">
-              <div className="flex items-center gap-[21px]">
-                <span className="inline-flex h-[31px] w-[31px] shrink-0 items-center justify-center rounded-full bg-copper-action font-display text-[0.75rem] font-bold text-white">
-                  {String(i + 1).padStart(2, "0")}
+        <ol className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:flex lg:items-start lg:justify-between lg:gap-3">
+          {steps.map((step, idx) => (
+            <Fragment key={step.title}>
+              <li className="flex flex-1 flex-col items-center text-center">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#F9ECE5] text-volt-action shadow-xs">
+                  <step.icon aria-hidden="true" className="h-6 w-6" strokeWidth={1.75} />
                 </span>
-                <Icon aria-hidden="true" className="h-[30px] w-[30px] text-ink" strokeWidth={1.5} />
-              </div>
-              <h3 className="mt-2 font-display text-[0.875rem] font-bold text-ink lg:pl-[52px]">
-                {title}
-              </h3>
-              <p className="mt-1.5 border-b border-line pb-3 text-[0.75rem] leading-[1.45] text-ink/80 lg:pl-[52px] lg:pr-2">
-                {body[0]} {body[1]}
-              </p>
-              {i < steps.length - 1 && (
-                <ChevronRight
+                <h3 className="mt-4 font-display text-base font-bold text-alloy">{step.title}</h3>
+                <p className="mt-1.5 max-w-[210px] font-sans text-xs leading-relaxed text-muted sm:text-sm">
+                  {step.body}
+                </p>
+              </li>
+              {idx < steps.length - 1 && (
+                <div
                   aria-hidden="true"
-                  className="absolute top-[6px] right-[30px] hidden h-5 w-5 text-ink lg:block"
-                  strokeWidth={2}
-                />
+                  className="hidden self-center lg:flex items-center justify-center pt-2 text-muted/40"
+                >
+                  <ArrowRight className="h-5 w-5" strokeWidth={1.75} />
+                </div>
               )}
-            </li>
+            </Fragment>
           ))}
         </ol>
       </Container>

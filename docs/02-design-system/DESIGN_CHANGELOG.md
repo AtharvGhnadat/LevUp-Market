@@ -7,6 +7,63 @@
 
 ## History
 
+### [2026-11-17] Stage 2 — Homepage Design Refactoring
+
+**Changed by:** Principal Product Designer, Senior Frontend Engineer  
+**Approved by:** Atharv Ghanadat (User Request — Stage 2 Scope & Approved Mockup Reference)  
+**Affects:** Homepage Layout, HeroSection, BenefitStrip, HowItWorks, CategoryGrid, FeaturedProjects, FeaturedProjectCard, CustomProjectBanner
+
+#### What changed
+
+1. **Hero Redesign (`HeroSection.tsx`):**
+   - Removed diagonal `clip-path` wedge polygon, copper slash gradient, and hand-drawn SVG scribble underline.
+   - Refactored headline: _"Academic Projects Built, Delivered and Supported."_ with Volt accent on `Supported.`.
+   - Added kicker: `— ENGINEERING PROJECTS MARKETPLACE`.
+   - Streamlined 3 key value bullets: Source Code & Documentation, Working Implementation, Revisions & Support.
+   - Restored authentic engineering showcase: framed workshop photograph with 3 floating pill badges (Hardware Projects, Software Projects, Hybrid Solutions).
+   - Standardized CTAs: `Explore Projects` (Volt primary) and `Request Custom Project` (Alloy outline).
+2. **Marketplace Assurance & Scale Strip (`BenefitStrip.tsx`):**
+   - Transformed into a clean, 4-pillar assurance strip directly below Hero: `500+ Projects & Solutions`, `Engineering Focus (ECE, CSE, EEE, ME & more)`, `End-to-End Support (Build · Modify · Deliver)`, `Student Friendly (Academic & Competition Ready)`.
+   - Elevated onto light mineral canvas with subtle borders and circular Volt icon badges.
+3. **Transparent Delivery Flow (`HowItWorks.tsx`):**
+   - Positioned cleanly under the assurance strip.
+   - Implemented 4-step sequence: `1. Choose or Request`, `2. Get a Plan & Quote`, `3. Development`, `4. Deliver & Support`.
+   - Added centered Volt-accented header and directional arrows connecting steps on desktop.
+4. **Scannable Domain Exploration (`CategoryGrid.tsx`):**
+   - Replaced oversized photo cards with a compact, 7-tile horizontal responsive grid matching approved mockup: IoT Systems, Software Projects, Embedded Systems, Robotics, AI / ML Projects, Electronics Projects, and Hybrid Solutions.
+   - Added header with `View All Categories` action.
+5. **Featured Projects Commercial Grid (`FeaturedProjects.tsx`, `FeaturedProjectCard.tsx`):**
+   - Replaced 2-column sidebar layout with a clean 4-column commerce grid.
+   - Linked to real catalog projects: Autonomous Obstacle Avoidance Robot (₹2,499), Student Project Management System (₹4,999), Smart Home Automation (₹3,999), and Quadcopter Flight Controller (₹6,999).
+   - Standardized cards: category pill badge top-left on image, tabular prices, circular detail action buttons, and keyboard accessibility.
+6. **Custom Project Call-to-Action (`CustomProjectBanner.tsx`):**
+   - Removed diagonal polygon cutouts.
+   - Refactored into a solid Alloy card with Volt highlights, 3 core capabilities (Project Design & Development, Milestone-Based Progress, Full Documentation & Support), and primary CTA.
+7. **Redundancy Elimination (`HomePage.tsx`):**
+   - Removed duplicate `TrustSection` invocation as its guarantees are now cleanly incorporated into `BenefitStrip` and `HowItWorks`.
+
+#### Why
+
+Aligns homepage composition directly with the user-approved reference mockup and Unslop principles, transforming the storefront into an authentic, accessible engineering marketplace.
+
+#### Files changed
+
+- `src/sections/home/HeroSection.tsx`
+- `src/sections/home/BenefitStrip.tsx`
+- `src/sections/home/HowItWorks.tsx`
+- `src/sections/home/CategoryGrid.tsx`
+- `src/sections/home/FeaturedProjects.tsx`
+- `src/components/project/FeaturedProjectCard.tsx`
+- `src/sections/home/CustomProjectBanner.tsx`
+- `src/pages/HomePage.tsx`
+- `src/data/demo-projects.ts`
+- `e2e/catalog.spec.ts`
+- `scripts/capture-stage2-baseline.mjs`
+- `scripts/capture-stage2-after.mjs`
+- `docs/02-design-system/screenshots/stage2/*`
+
+---
+
 ### [2026-11-17] Stage 1 — Global Design Tokens, Typography, Navigation & Accessibility Refinement
 
 **Changed by:** Principal Product Designer, Design Systems Architect  

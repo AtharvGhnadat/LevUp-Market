@@ -44,6 +44,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Changed
 
+- Stage 2 Homepage Refactoring: Transformed homepage layout, hero composition, category grid, featured projects, how-it-works process, and custom banner to match the approved Unslop reference mockup
+- Hero Section: Replaced diagonal clip-path wedge, copper slash gradient, and hand-drawn underline with authentic workshop showcase, floating project badges, and clean display typography
+- Value Assurance Strip: Consolidated duplicate marketing strips into one clear 4-pillar marketplace metric strip (`500+ Projects`, `Engineering Focus`, `End-to-End Support`, `Student Friendly`)
+- How It Works: Implemented 4-step transparent delivery sequence (`Choose or Request`, `Plan & Quote`, `Development`, `Deliver & Support`)
+- Category Grid: Converted into a compact 7-tile scannable layout directly linking to active catalog domains
+- Featured Projects: Normalized into 4-column commerce cards with real catalog items, prices in paise/INR, category pill badges, and detail actions
+- Custom Project Banner: Refactored into a high-contrast Alloy callout with milestone progress pillars and direct custom project CTA
 - Stage 1 Design Tokens: Implemented Mineral (`#F1F2EC`), Alloy (`#203735`), Volt (`#E56B3F`), and accessible variants VoltAction (`#B95B21`) and VoltText (`#A44E1A`) in `src/index.css`
 - Navigation & Chrome: Refined `SiteHeader.tsx`, `SiteFooter.tsx`, `NavDropdown.tsx`, and `HeaderSearch.tsx` to align with 4px spacing, nested radii, and accessible contrast
 - Button Primitive: Standardized `src/components/ui/Button.tsx` with 8px radius, touch-target sizing (`sm`, `md`, `lg`), and active press micro-interaction
