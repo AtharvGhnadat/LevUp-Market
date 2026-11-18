@@ -56,9 +56,19 @@ export default function App() {
               <ProjectsPage />
             </Suspense>
           ) : path.startsWith("/projects/") ? (
-            <Suspense fallback={<PageLoading />}>
-              <ProjectDetailPage slug={decodeURIComponent(path.slice("/projects/".length))} />
-            </Suspense>
+            (() => {
+              try {
+                const slug = decodeURIComponent(path.slice("/projects/".length)).trim();
+                if (!slug) return <PlannedRoutePage path={path} />;
+                return (
+                  <Suspense fallback={<PageLoading />}>
+                    <ProjectDetailPage slug={slug} />
+                  </Suspense>
+                );
+              } catch {
+                return <PlannedRoutePage path={path} />;
+              }
+            })()
           ) : path === "/custom-project" ? (
             <Suspense fallback={<PageLoading />}>
               <CustomProjectPage />
@@ -71,7 +81,7 @@ export default function App() {
             <Suspense fallback={<PageLoading />}>
               <CheckoutPage />
             </Suspense>
-          ) : path === "/checkout/return" || path.startsWith("/checkout/return") ? (
+          ) : path === "/checkout/return" ? (
             <Suspense fallback={<PageLoading />}>
               <CheckoutReturnPage />
             </Suspense>

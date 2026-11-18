@@ -60,14 +60,18 @@ describe("custom-project-state validation", () => {
     expect(errors).toEqual({});
   });
 
-  it("rejects past target delivery dates and invalid email/phone", () => {
+  it("rejects invalid categories, invalid budgets, past dates and malformed phone numbers", () => {
     const state: CustomProjectFormState = {
       ...validState(),
+      category: "unrecognized-category",
+      budgetRange: "fake-budget",
       targetDeliveryDate: "2026-11-10",
       contactEmail: "invalid-email",
       contactPhone: "12345",
     };
     const errors = validateCustomProjectForm(state, new Date("2026-11-18"));
+    expect(errors.category).toMatch(/valid engineering category/i);
+    expect(errors.budgetRange).toMatch(/expected budget range/i);
     expect(errors.targetDeliveryDate).toMatch(/past/i);
     expect(errors.contactEmail).toMatch(/valid email/i);
     expect(errors.contactPhone).toMatch(/10-digit/i);
@@ -125,6 +129,10 @@ describe("custom-project-state attachments, prefill, draft, and export", () => {
     const loaded = loadCustomProjectDraft(mockStorage);
     expect(loaded?.state.title).toBe(state.title);
     expect(loaded?.savedAt).toBe(savedAt);
+
+    // Test TTL expiry (older than 7 days)
+    const eightDaysLater = new Date("2026-11-26T13:00:00Z");
+    expect(loadCustomProjectDraft(mockStorage, eightDaysLater)).toBeNull();
 
     clearCustomProjectDraft(mockStorage);
     expect(loadCustomProjectDraft(mockStorage)).toBeNull();

@@ -289,6 +289,8 @@ export function todayIsoDate(now = new Date()): string {
   return `${year}-${month}-${day}`;
 }
 
+export const DRAFT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
 export function validateCustomProjectForm(
   state: CustomProjectFormState,
   now = new Date(),
@@ -299,8 +301,13 @@ export function validateCustomProjectForm(
     errors.title = "Enter a clear project title (at least 5 characters).";
   }
 
-  if (!state.category) {
-    errors.category = "Select an engineering category.";
+  const validCategories = new Set(categoryOptions.map((c) => c.slug));
+  if (!state.category || !validCategories.has(state.category)) {
+    errors.category = "Select a valid engineering category.";
+  }
+
+  if (!["software", "hardware", "hybrid"].includes(state.classification)) {
+    errors.classification = "Select a valid project classification.";
   }
 
   if (state.requirements.trim().length < 30) {
@@ -313,12 +320,18 @@ export function validateCustomProjectForm(
       "List the core expected functionality or user/system outcomes (at least 15 characters).";
   }
 
-  if (!state.budgetRange) {
+  const validBudgets = new Set(budgetRangeOptions.map((b) => b.value));
+  if (!state.budgetRange || !validBudgets.has(state.budgetRange)) {
     errors.budgetRange = "Select an expected budget range or choose 'Need engineering estimate'.";
   }
 
   if (!state.targetDeliveryDate) {
     errors.targetDeliveryDate = "Choose a target delivery date.";
+  } else if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(state.targetDeliveryDate) ||
+    isNaN(Date.parse(state.targetDeliveryDate))
+  ) {
+    errors.targetDeliveryDate = "Enter a valid calendar date (YYYY-MM-DD).";
   } else if (state.targetDeliveryDate < todayIsoDate(now)) {
     errors.targetDeliveryDate = "Target delivery date cannot be in the past.";
   }
@@ -339,14 +352,17 @@ export function validateCustomProjectForm(
   }
 
   const digits = state.contactPhone.replace(/\D/g, "");
-  if (digits.length < 10 || digits.length > 15) {
+  if (digits.length !== 10) {
     errors.contactPhone = "Enter a valid 10-digit mobile number.";
   }
 
   return errors;
 }
 
-export function loadCustomProjectDraft(storage: Pick<Storage, "getItem"> | null): {
+export function loadCustomProjectDraft(
+  storage: Pick<Storage, "getItem" | "removeItem"> | null,
+  now = new Date(),
+): {
   state: CustomProjectFormState;
   savedAt: string;
 } | null {
@@ -355,10 +371,21 @@ export function loadCustomProjectDraft(storage: Pick<Storage, "getItem"> | null)
     const raw = storage.getItem(DRAFT_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as {
+      version?: number;
       state?: Partial<CustomProjectFormState>;
       savedAt?: string;
     };
     if (!parsed || typeof parsed !== "object" || !parsed.state) return null;
+
+    // Validate version and TTL expiry (Codex A2)
+    if (parsed.savedAt) {
+      const savedTime = Date.parse(parsed.savedAt);
+      if (isNaN(savedTime) || now.getTime() - savedTime > DRAFT_MAX_AGE_MS) {
+        storage.removeItem(DRAFT_STORAGE_KEY);
+        return null;
+      }
+    }
+
     return {
       state: { ...emptyCustomProjectForm, ...parsed.state },
       savedAt: typeof parsed.savedAt === "string" ? parsed.savedAt : "",
@@ -376,7 +403,7 @@ export function saveCustomProjectDraft(
   if (!storage) return null;
   try {
     const savedAt = now.toISOString();
-    storage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({ state, savedAt }));
+    storage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({ version: 1, state, savedAt }));
     return savedAt;
   } catch {
     return null;

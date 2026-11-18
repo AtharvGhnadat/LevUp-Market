@@ -59,14 +59,16 @@ function getInitialFormState(): {
 } {
   const prefill = parseCustomProjectUrlPrefill(window.location.search);
   const hasPrefill = Object.keys(prefill).length > 0;
-  if (hasPrefill) {
+  const saved = loadCustomProjectDraft(window.localStorage);
+
+  if (hasPrefill && !saved) {
     return {
       form: { ...emptyCustomProjectForm, ...prefill },
       draftRestored: false,
       savedAt: "",
     };
   }
-  const saved = loadCustomProjectDraft(window.localStorage);
+
   if (saved) {
     return {
       form: saved.state,
@@ -74,6 +76,7 @@ function getInitialFormState(): {
       savedAt: saved.savedAt,
     };
   }
+
   return {
     form: { ...emptyCustomProjectForm },
     draftRestored: false,
@@ -93,6 +96,9 @@ export function CustomProjectPage() {
 
   const errorBannerRef = useRef<HTMLDivElement>(null);
   const pageTopRef = useRef<HTMLDivElement>(null);
+  const reviewHeadingRef = useRef<HTMLHeadingElement>(null);
+  const submittedHeadingRef = useRef<HTMLHeadingElement>(null);
+  const editHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -227,6 +233,7 @@ export function CustomProjectPage() {
     setErrors({});
     setPhase("review");
     pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => reviewHeadingRef.current?.focus(), 50);
   };
 
   const handleConfirmPrototype = () => {
@@ -235,6 +242,13 @@ export function CustomProjectPage() {
     setDraftRestored(false);
     setPhase("submitted");
     pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => submittedHeadingRef.current?.focus(), 50);
+  };
+
+  const handleBackToEdit = () => {
+    setPhase("edit");
+    pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => editHeadingRef.current?.focus(), 50);
   };
 
   const handleClearDraft = () => {
@@ -279,7 +293,11 @@ export function CustomProjectPage() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
               <Eyebrow>Engineering Requisition</Eyebrow>
-              <h1 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-alloy sm:text-4xl">
+              <h1
+                ref={editHeadingRef}
+                tabIndex={-1}
+                className="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-alloy outline-none sm:text-4xl"
+              >
                 Request a Custom Project
               </h1>
               <p className="mt-3 font-sans text-sm leading-relaxed text-muted sm:text-base">
@@ -1034,7 +1052,11 @@ export function CustomProjectPage() {
                   <span className="font-mono text-xs font-medium text-volt-text">
                     Pre-submission review
                   </span>
-                  <h2 className="mt-1 font-display text-2xl font-semibold text-alloy">
+                  <h2
+                    ref={reviewHeadingRef}
+                    tabIndex={-1}
+                    className="mt-1 font-display text-2xl font-semibold text-alloy outline-none"
+                  >
                     Review Your Engineering Requisition
                   </h2>
                   <p className="mt-1 text-xs text-muted sm:text-sm">
@@ -1042,7 +1064,7 @@ export function CustomProjectPage() {
                     confirming.
                   </p>
                 </div>
-                <Button type="button" variant="outline" size="md" onClick={() => setPhase("edit")}>
+                <Button type="button" variant="outline" size="md" onClick={handleBackToEdit}>
                   <ArrowLeft aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
                   Edit Specification
                 </Button>
@@ -1164,12 +1186,7 @@ export function CustomProjectPage() {
                 </div>
 
                 <div className="flex flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:justify-end">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="lg"
-                    onClick={() => setPhase("edit")}
-                  >
+                  <Button type="button" variant="outline" size="lg" onClick={handleBackToEdit}>
                     Back to Edit
                   </Button>
                   <Button
@@ -1197,7 +1214,11 @@ export function CustomProjectPage() {
               <span className="mt-4 block font-mono text-xs font-medium text-volt-text">
                 Frontend prototype confirmation · Not sent to server
               </span>
-              <h2 className="mt-1.5 font-display text-2xl font-semibold text-alloy">
+              <h2
+                ref={submittedHeadingRef}
+                tabIndex={-1}
+                className="mt-1.5 font-display text-2xl font-semibold text-alloy outline-none"
+              >
                 Requisition Specification Prepared
               </h2>
               <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
