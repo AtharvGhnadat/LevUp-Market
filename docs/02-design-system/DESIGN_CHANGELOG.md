@@ -7,6 +7,28 @@
 
 ## History
 
+### [2026-11-18] Stage E — Custom Project Development Requisition Interface
+
+**Changed by:** Principal Product Designer, Design Systems Architect, Senior Frontend Engineer  
+**Approved by:** Atharv Ghanadat (Stage 3 Finalization & Stage E Authorization)  
+**Methodology Credit:** Unslop by Damir Sokolovsky ([@heydamir](https://x.com/heydamir)), CC BY 4.0  
+**Affects:** `src/pages/CustomProjectPage.tsx`, `src/custom-project/custom-project-state.ts`, `src/App.tsx`, `e2e/custom-project.spec.ts`, `scripts/capture-stage-e.mjs`
+
+#### What changed
+
+1. **6-Stage Assembly Spine Workflow (`CustomProjectPage.tsx`):**
+   - Implemented the full custom-development progression rail (`01 Submit Requirements` → `02 Feasibility Review` → `03 Quotation` → `04 Acceptance` → `05 Development` → `06 Delivery`) using The LevUp Assembly Spine motif.
+2. **Engineering Requisition Form & Classification Awareness:**
+   - Structured 4 numbered specification panels (`01 Scope & Project Classification`, `02 Requirements & Technical Specification`, `03 Deliverables, Budget Range & Target Date`, `04 Reference Files & Contact Information`) alongside a sticky Requisition Summary rail.
+   - Dynamically shows hardware specification fields, circuit schematics, and Bill of Materials (BOM) options only for `hardware` and `hybrid` classifications so software-only projects never require hardware artifacts.
+   - Supports catalog modification prefill via `/custom-project?project=<slug>&type=change-quote`.
+   - Includes client-side validation with accessible error summaries (`role="alert"`, `aria-invalid`, `aria-describedby`), attachment validation (type, 10 MB size limit, max 5 files), and automatic localStorage draft preservation.
+3. **Honest Prototype Boundary:**
+   - Explicitly labels the interactive experience as a frontend prototype with no live backend connected; never fabricates quotations, prices, timelines, or server ticket IDs.
+   - Includes a read-only **Review Specification** step and a confirmation screen offering local JSON specification export.
+
+---
+
 ### [2026-11-18] Stage 3 — Full-Application Brand-Led Unslop Transformation (Stages A–D, F)
 
 **Changed by:** Principal Product Designer, Design Systems Architect, Senior Frontend Engineer  

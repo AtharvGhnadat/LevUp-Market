@@ -14,6 +14,8 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
+- Stage E Custom Project Requisition Experience (`src/pages/CustomProjectPage.tsx`, `src/custom-project/custom-project-state.ts`): Interactive engineering requisition workflow covering scope & classification (software, hardware, hybrid), detailed functional & conditional hardware specifications, budget range, target delivery date, staged reference file attachments, classification-aware deliverables, local draft preservation, review step, and honest frontend prototype confirmation with JSON specification export
+- Stage E Test Coverage: Added unit tests (`src/custom-project/custom-project-state.test.ts`), Playwright E2E tests (`e2e/custom-project.spec.ts`), and responsive capture script (`scripts/capture-stage-e.mjs`)
 - Cashfree Payment Gateway Integration: Installed `@cashfreepayments/cashfree-js` v1.0.7 for modal checkout
 - Server-side Cashfree API Service (`src/server/cashfree.ts`): Order creation and verification handlers with merchant credentials
 - Client Cashfree SDK Service (`src/lib/cashfree.ts`): SDK loader, order launcher, and verification utilities

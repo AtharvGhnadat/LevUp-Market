@@ -25,6 +25,11 @@ const CheckoutReturnPage = lazy(() =>
     default: module.CheckoutReturnPage,
   })),
 );
+const CustomProjectPage = lazy(() =>
+  import("@/pages/CustomProjectPage").then((module) => ({
+    default: module.CustomProjectPage,
+  })),
+);
 
 /**
  * Minimal path switch for the public shell. Maps 1:1 onto the Next.js App Router
@@ -53,6 +58,10 @@ export default function App() {
           ) : path.startsWith("/projects/") ? (
             <Suspense fallback={<PageLoading />}>
               <ProjectDetailPage slug={decodeURIComponent(path.slice("/projects/".length))} />
+            </Suspense>
+          ) : path === "/custom-project" ? (
+            <Suspense fallback={<PageLoading />}>
+              <CustomProjectPage />
             </Suspense>
           ) : path === "/cart" ? (
             <Suspense fallback={<PageLoading />}>
