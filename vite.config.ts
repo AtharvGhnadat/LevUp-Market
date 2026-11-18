@@ -7,6 +7,68 @@ import path from "node:path";
 import siteConfiguration from "./.figma/make/site.json";
 
 // Vite config — https://vitejs.dev/config/
+
+/** Development API endpoints for Cashfree PG sandbox operations */
+function cashfreeApiPlugin(): Plugin {
+  return {
+    name: "cashfree-api-plugin",
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = req.url?.split("?")[0];
+        if (url === "/api/payments/cashfree/create-order" && req.method === "POST") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk.toString("utf8");
+          });
+          req.on("end", async () => {
+            try {
+              const params = JSON.parse(body || "{}");
+              const { createCashfreeOrder } = await import("./src/server/cashfree");
+              const order = await createCashfreeOrder(params);
+              res.setHeader("Content-Type", "application/json");
+              res.statusCode = 200;
+              res.end(JSON.stringify(order));
+            } catch (err) {
+              const message = err instanceof Error ? err.message : String(err);
+              res.setHeader("Content-Type", "application/json");
+              res.statusCode = 500;
+              res.end(JSON.stringify({ error: message }));
+            }
+          });
+          return;
+        }
+
+        if (url === "/api/payments/cashfree/verify-order" && req.method === "GET") {
+          const query = new URL(req.url || "", "http://" + (req.headers.host || "localhost"))
+            .searchParams;
+          const orderId = query.get("order_id");
+          if (!orderId) {
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: "Missing order_id parameter" }));
+            return;
+          }
+          try {
+            const { verifyCashfreeOrder } = await import("./src/server/cashfree");
+            const result = await verifyCashfreeOrder(orderId);
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 200;
+            res.end(JSON.stringify(result));
+          } catch (err) {
+            const message = err instanceof Error ? err.message : String(err);
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 500;
+            res.end(JSON.stringify({ error: message }));
+          }
+          return;
+        }
+
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
   const emitSourcemaps = mode === "development";
@@ -20,6 +82,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       tailwindcss(),
+      cashfreeApiPlugin(),
       figmaSiteConfiguration(siteConfiguration),
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),

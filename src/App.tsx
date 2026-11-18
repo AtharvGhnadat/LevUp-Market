@@ -14,6 +14,17 @@ const ProjectDetailPage = lazy(() =>
     default: module.ProjectDetailPage,
   })),
 );
+const CartPage = lazy(() =>
+  import("@/pages/CartPage").then((module) => ({ default: module.CartPage })),
+);
+const CheckoutPage = lazy(() =>
+  import("@/pages/CheckoutPage").then((module) => ({ default: module.CheckoutPage })),
+);
+const CheckoutReturnPage = lazy(() =>
+  import("@/pages/CheckoutReturnPage").then((module) => ({
+    default: module.CheckoutReturnPage,
+  })),
+);
 
 /**
  * Minimal path switch for the public shell. Maps 1:1 onto the Next.js App Router
@@ -43,6 +54,18 @@ export default function App() {
             <Suspense fallback={<PageLoading />}>
               <ProjectDetailPage slug={decodeURIComponent(path.slice("/projects/".length))} />
             </Suspense>
+          ) : path === "/cart" ? (
+            <Suspense fallback={<PageLoading />}>
+              <CartPage />
+            </Suspense>
+          ) : path === "/checkout" ? (
+            <Suspense fallback={<PageLoading />}>
+              <CheckoutPage />
+            </Suspense>
+          ) : path === "/checkout/return" || path.startsWith("/checkout/return") ? (
+            <Suspense fallback={<PageLoading />}>
+              <CheckoutReturnPage />
+            </Suspense>
           ) : (
             <PlannedRoutePage path={path} />
           )}
@@ -56,7 +79,7 @@ export default function App() {
 function PageLoading() {
   return (
     <div className="mx-auto w-full max-w-[1348px] px-5 py-20 sm:px-8" role="status">
-      <p className="text-sm text-muted">Loading project library…</p>
+      <p className="text-sm text-muted">Loading page content…</p>
       <div className="mt-6 h-2 w-48 animate-pulse rounded-full bg-paper-deep" />
     </div>
   );

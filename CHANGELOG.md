@@ -14,6 +14,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
+- Cashfree Payment Gateway Integration: Installed `@cashfreepayments/cashfree-js` v1.0.7 for modal checkout
+- Server-side Cashfree API Service (`src/server/cashfree.ts`): Order creation and verification handlers with merchant credentials
+- Client Cashfree SDK Service (`src/lib/cashfree.ts`): SDK loader, order launcher, and verification utilities
+- Dedicated Checkout Experience (`src/pages/CheckoutPage.tsx`): Student billing form, order breakdown, and Cashfree payment trigger
+- Return URL Handler (`src/pages/CheckoutReturnPage.tsx`): Automated payment status verification, receipt display, and deliverable file download unlocking
+- Cart Page (`src/pages/CartPage.tsx`): Interactive shopping cart management with direct checkout transition
 - Design branch `design/unslop-foundation` for professional Unslop design transformation
 - Unslop Visual Audit Report `docs/02-design-system/UNSLOP_AUDIT.md` and Design Direction `docs/02-design-system/DESIGN_DIRECTION.md`
 - Typography packages `@fontsource/ibm-plex-sans` and `@fontsource/ibm-plex-mono` for interface text and technical metadata
