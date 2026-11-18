@@ -92,7 +92,7 @@ export function HeroSection() {
                 alt="Assembled robotic project with microcontroller and yellow drive wheels on an engineering workbench"
                 loading="eager"
                 decoding="async"
-                className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
+                className="h-full w-full object-cover object-center"
               />
 
               {/* Floating Pill Badges */}

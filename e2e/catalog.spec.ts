@@ -22,13 +22,14 @@ test.describe("Storefront & Catalog Flow", () => {
     await expect(heroTitle).toContainText("Supported.");
 
     // Verify value/benefit assurance strip
-    await expect(page.getByText("500+")).toBeVisible();
-    await expect(page.getByText("Engineering Focus")).toBeVisible();
+    await expect(page.getByText("Source Code & Documentation").first()).toBeVisible();
+    await expect(page.getByText("Digital & Hardware Delivery").first()).toBeVisible();
 
     // Verify How It Works section
     await expect(page.locator("#how-title")).toContainText("How LevUp Projects Works");
-    await expect(page.getByText("1. Choose or Request")).toBeVisible();
-    await expect(page.getByText("4. Deliver & Support")).toBeVisible();
+    await expect(page.getByText("1. Explore Projects")).toBeVisible();
+    await expect(page.getByText("4. Receive Delivery")).toBeVisible();
+    await expect(page.getByText("1. Submit Requirements")).toBeVisible();
 
     // Verify Category Grid
     await expect(page.locator("#categories-title")).toContainText("Explore Project Categories");

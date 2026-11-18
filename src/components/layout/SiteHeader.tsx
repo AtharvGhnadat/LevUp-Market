@@ -49,8 +49,8 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 sm:gap-3 xl:gap-4">
-          <div className="hidden xl:block">
+        <div className="ml-auto flex items-center gap-1 sm:gap-2.5 xl:gap-3">
+          <div className="hidden 2xl:block">
             <HeaderSearch />
           </div>
           <button
@@ -58,7 +58,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             onClick={() => setSearchOpen(true)}
             aria-haspopup="dialog"
             aria-label="Search projects"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action xl:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action 2xl:hidden"
           >
             <Search aria-hidden="true" className="h-5 w-5" />
           </button>
@@ -83,9 +83,15 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
           <a
             href={to("/login")}
             aria-current={currentPath === "/login" ? "page" : undefined}
-            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-md bg-alloy px-4 font-sans text-xs font-semibold text-white shadow-xs transition-colors hover:bg-alloy-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
+            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-md border border-alloy/20 bg-transparent px-4 font-sans text-xs font-semibold text-alloy shadow-xs transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
           >
-            Login / Sign Up
+            Sign In
+          </a>
+          <a
+            href={to("/register")}
+            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-md bg-volt-action px-4 font-sans text-xs font-semibold text-white shadow-xs transition-colors hover:bg-volt-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
+          >
+            Get Started
           </a>
 
           <button

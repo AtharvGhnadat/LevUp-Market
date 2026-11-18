@@ -50,6 +50,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Changed
 
+- Stage 2 Homepage Refinement: Aligned homepage structure, header, footer, process flows, and benefit assurances directly with the approved reference image and Unslop design direction
+- Dual-Journey How It Works: Implemented distinct customer flows for ready-made projects (`Explore Projects` → `Choose Package` → `Secure Checkout` → `Receive Delivery`) and custom development (`Submit Requirements` → `Review Quotation` → `Track Development` → `Receive Project`)
+- Restrained Benefit Assurances: Updated benefit strip to approved labels (`Source Code & Documentation`, `Digital & Hardware Delivery`, `Technical Support & Revisions`, `Student Friendly`) with package-dependent deliverable descriptions
+- Header & Footer Parity: Added `Sign In` and `Get Started` actions to header, and added social icons and 4-column structure to footer with _"Made for Engineers, by Engineers"_ signature
+- Overflow Prevention: Eliminated 1280px viewport overflow, guaranteeing 0px horizontal scroll at 1440px, 1280px, 768px, and 390px viewports
 - Stage 2 Homepage Refactoring: Transformed homepage layout, hero composition, category grid, featured projects, how-it-works process, and custom banner to match the approved Unslop reference mockup
 - Hero Section: Replaced diagonal clip-path wedge, copper slash gradient, and hand-drawn underline with authentic workshop showcase, floating project badges, and clean display typography
 - Value Assurance Strip: Consolidated duplicate marketing strips into one clear 4-pillar marketplace metric strip (`500+ Projects`, `Engineering Focus`, `End-to-End Support`, `Student Friendly`)

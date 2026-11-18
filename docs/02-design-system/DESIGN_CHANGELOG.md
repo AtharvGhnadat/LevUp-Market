@@ -7,6 +7,37 @@
 
 ## History
 
+### [2026-11-18] Stage 2 — Homepage Visual Layout & Reference Refinement
+
+**Changed by:** Principal Product Designer, Senior Frontend Engineer  
+**Approved by:** Atharv Ghanadat (User Request — Stage 2 Implementation Approval & Reference Alignment)  
+**Affects:** Homepage Layout, SiteHeader, SiteFooter, BenefitStrip, HowItWorks, HeroSection, e2e/catalog.spec.ts
+
+#### What changed
+
+1. **Header Navigation Refinement (`SiteHeader.tsx`):**
+   - Updated header actions to feature subtle `Sign In` button and primary Volt `Get Started` button directly matching the approved mockup layout.
+   - Guarded horizontal overflow at 1280px by switching inline search to search modal trigger below 1536px, achieving 0px horizontal scroll across all target viewports.
+2. **Benefit Strip Restrained Presentation (`BenefitStrip.tsx`):**
+   - Applied approved accurate labels: `Source Code & Documentation`, `Digital & Hardware Delivery`, `Technical Support & Revisions`, `Student Friendly`.
+   - Updated supporting copy to accurately reflect package-dependent deliverables and revisions without overclaiming.
+3. **Dual Customer Journey Process Flow (`HowItWorks.tsx`):**
+   - Structured two distinct customer journeys per architectural specification:
+     - Ready-Made Projects: `1. Explore Projects` → `2. Choose Package` → `3. Secure Checkout` → `4. Receive Delivery`.
+     - Custom Development: `1. Submit Requirements` → `2. Review Quotation` → `3. Track Development` → `4. Receive Project`.
+   - Connected steps with directional transitions and restrained Volt icon badges.
+4. **Site Footer Layout (`SiteFooter.tsx`):**
+   - Rebuilt footer columns matching reference structure: Explore, Services, Resources, and Company.
+   - Added brand social icons (YouTube, GitHub, LinkedIn, Instagram) as accessible SVG links.
+   - Added platform tagline: _"Made for Engineers, by Engineers."_
+5. **E2E & Responsive Verification:**
+   - Captured full-page screenshots at 1440px, 1280px, 768px, and 390px with zero horizontal overflow.
+   - Verified mobile navigation drawer at 390px.
+   - Programmatically verified WCAG 2.1 AA/AAA contrast across all color tokens.
+   - All unit tests (35/35) and Playwright E2E tests (5/5) passing 100%.
+
+---
+
 ### [2026-11-17] Stage 2 — Homepage Design Refactoring
 
 **Changed by:** Principal Product Designer, Senior Frontend Engineer  

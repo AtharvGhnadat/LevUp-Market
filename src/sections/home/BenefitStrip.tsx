@@ -1,24 +1,24 @@
-import { Award, GraduationCap, Users, Zap } from "lucide-react";
+import { Code2, GraduationCap, Package, Zap } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 
 const stats = [
   {
-    icon: Users,
-    title: "500+",
-    body: "Projects & Solutions",
+    icon: Code2,
+    title: "Source Code & Documentation",
+    body: "Complete source files included with applicable packages",
   },
   {
-    icon: GraduationCap,
-    title: "Engineering Focus",
-    body: "ECE, CSE, EEE, ME & more",
+    icon: Package,
+    title: "Digital & Hardware Delivery",
+    body: "Instant digital or physical shipment by project type",
   },
   {
     icon: Zap,
-    title: "End-to-End Support",
-    body: "Build · Modify · Deliver",
+    title: "Technical Support & Revisions",
+    body: "Post-delivery assistance as defined in your package",
   },
   {
-    icon: Award,
+    icon: GraduationCap,
     title: "Student Friendly",
     body: "Academic & Competition Ready",
   },
@@ -27,7 +27,7 @@ const stats = [
 export function BenefitStrip() {
   return (
     <section
-      aria-label="Key marketplace assurances and scale"
+      aria-label="Key marketplace assurances"
       className="border-y border-line bg-white/70 py-6 sm:py-7"
     >
       <Container>
