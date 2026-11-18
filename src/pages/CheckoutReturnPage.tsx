@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { AlertCircle, ArrowRight, CheckCircle2, Clock, Download, FileCode } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowRight,
+  CheckCircle2,
+  Clock,
+  Download,
+  FileCode,
+  Info,
+} from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { formatPrice } from "@/lib/format";
@@ -11,6 +19,7 @@ export function CheckoutReturnPage() {
   const [loading, setLoading] = useState(true);
   const [orderData, setOrderData] = useState<OrderVerificationResult | null>(null);
   const [error, setError] = useState("");
+  const [downloadNotice, setDownloadNotice] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -109,10 +118,26 @@ export function CheckoutReturnPage() {
 
               {/* Unlocked Deliverables section */}
               <div className="mt-6 border-t border-line pt-6">
-                <h2 className="flex items-center gap-2 font-display text-sm font-semibold text-alloy">
-                  <FileCode className="h-4 w-4 text-volt-text" strokeWidth={1.75} />
-                  <span>Unlocked Project Assets</span>
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="flex items-center gap-2 font-display text-sm font-semibold text-alloy">
+                    <FileCode className="h-4 w-4 text-volt-text" strokeWidth={1.75} />
+                    <span>Unlocked Project Assets</span>
+                  </h2>
+                  <span className="font-mono text-[0.6875rem] font-medium text-muted">
+                    Sandbox Preview
+                  </span>
+                </div>
+
+                {downloadNotice && (
+                  <div
+                    className="mt-3 flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50/80 p-3 text-xs text-blue-800"
+                    role="status"
+                  >
+                    <Info className="h-4 w-4 shrink-0 text-blue-600" />
+                    <span>{downloadNotice}</span>
+                  </div>
+                )}
+
                 <div className="mt-3 space-y-2">
                   <div className="flex items-center justify-between rounded-lg border border-line bg-white p-3 text-xs">
                     <div>
@@ -125,7 +150,11 @@ export function CheckoutReturnPage() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => alert("Sandbox: Project archive download initiated.")}
+                      onClick={() =>
+                        setDownloadNotice(
+                          "Sandbox Preview: Source code download simulated. Production fulfillment connects to verified repository releases.",
+                        )
+                      }
                       className="inline-flex items-center gap-1.5 rounded-lg bg-volt-action px-3 py-1.5 text-xs font-semibold text-white transition-colors duration-150 hover:bg-volt-action-hover"
                     >
                       <Download className="h-3.5 w-3.5" strokeWidth={1.75} />
@@ -141,7 +170,11 @@ export function CheckoutReturnPage() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => alert("Sandbox: Documentation download initiated.")}
+                      onClick={() =>
+                        setDownloadNotice(
+                          "Sandbox Preview: Technical documentation download simulated. Production fulfillment provides signed PDF delivery.",
+                        )
+                      }
                       className="inline-flex items-center gap-1.5 rounded-lg bg-alloy px-3 py-1.5 text-xs font-semibold text-white transition-colors duration-150 hover:bg-alloy-soft"
                     >
                       <Download className="h-3.5 w-3.5" strokeWidth={1.75} />

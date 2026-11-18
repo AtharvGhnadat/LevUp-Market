@@ -15,7 +15,36 @@ function cashfreeApiPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url?.split("?")[0];
+
+        // Public payment status endpoint (S1)
+        if (url === "/api/payments/cashfree/status" && req.method === "GET") {
+          const { isCashfreePaymentsEnabled } = await import("./src/server/cashfree");
+          res.setHeader("Content-Type", "application/json");
+          res.statusCode = 200;
+          res.end(
+            JSON.stringify({
+              enabled: isCashfreePaymentsEnabled(),
+              environment: process.env.CASHFREE_ENV || "sandbox",
+              rotationStatus: "PENDING_NOT_CONFIRMED",
+            }),
+          );
+          return;
+        }
+
         if (url === "/api/payments/cashfree/create-order" && req.method === "POST") {
+          const { isCashfreePaymentsEnabled } = await import("./src/server/cashfree");
+          if (!isCashfreePaymentsEnabled()) {
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 503;
+            res.end(
+              JSON.stringify({
+                error: "Payment processing is currently disabled.",
+                code: "PAYMENTS_DISABLED",
+              }),
+            );
+            return;
+          }
+
           let body = "";
           req.on("data", (chunk) => {
             body += chunk.toString("utf8");
@@ -29,23 +58,40 @@ function cashfreeApiPlugin(): Plugin {
               res.statusCode = 200;
               res.end(JSON.stringify(order));
             } catch (err) {
-              const message = err instanceof Error ? err.message : String(err);
               res.setHeader("Content-Type", "application/json");
-              res.statusCode = 500;
-              res.end(JSON.stringify({ error: message }));
+              res.statusCode = 400;
+              res.end(
+                JSON.stringify({
+                  error: "Payment order creation failed.",
+                  code: "CREATE_ORDER_FAILED",
+                }),
+              );
             }
           });
           return;
         }
 
         if (url === "/api/payments/cashfree/verify-order" && req.method === "GET") {
+          const { isCashfreePaymentsEnabled } = await import("./src/server/cashfree");
+          if (!isCashfreePaymentsEnabled()) {
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 503;
+            res.end(
+              JSON.stringify({
+                error: "Payment processing is currently disabled.",
+                code: "PAYMENTS_DISABLED",
+              }),
+            );
+            return;
+          }
+
           const query = new URL(req.url || "", "http://" + (req.headers.host || "localhost"))
             .searchParams;
           const orderId = query.get("order_id");
           if (!orderId) {
             res.setHeader("Content-Type", "application/json");
             res.statusCode = 400;
-            res.end(JSON.stringify({ error: "Missing order_id parameter" }));
+            res.end(JSON.stringify({ error: "Missing order_id parameter", code: "INVALID_PARAM" }));
             return;
           }
           try {
@@ -55,10 +101,14 @@ function cashfreeApiPlugin(): Plugin {
             res.statusCode = 200;
             res.end(JSON.stringify(result));
           } catch (err) {
-            const message = err instanceof Error ? err.message : String(err);
             res.setHeader("Content-Type", "application/json");
             res.statusCode = 500;
-            res.end(JSON.stringify({ error: message }));
+            res.end(
+              JSON.stringify({
+                error: "Payment verification failed.",
+                code: "VERIFY_ORDER_FAILED",
+              }),
+            );
           }
           return;
         }

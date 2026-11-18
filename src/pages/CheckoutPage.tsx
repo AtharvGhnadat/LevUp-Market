@@ -1,9 +1,16 @@
-import { useState } from "react";
-import { ArrowLeft, CheckCircle2, Lock, PackageCheck, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Lock,
+  PackageCheck,
+  ShieldAlert,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { formatPrice } from "@/lib/format";
-import { launchCashfreeCheckout } from "@/lib/cashfree";
+import { getPaymentGatewayStatus, launchCashfreeCheckout } from "@/lib/cashfree";
 import { to } from "@/lib/routes";
 import { useCart } from "@/state/cart";
 
@@ -15,6 +22,19 @@ export function CheckoutPage() {
   const [collegeName, setCollegeName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [gatewayEnabled, setGatewayEnabled] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    getPaymentGatewayStatus().then((status) => {
+      if (mounted) {
+        setGatewayEnabled(status.enabled);
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Determine total amount from cart or default sample project if cart is empty
   const cartTotalPaise = items.reduce((sum, item) => {
@@ -59,12 +79,24 @@ export function CheckoutPage() {
       return;
     }
 
+    if (!gatewayEnabled) {
+      setErrorMessage(
+        "Cashfree payments are currently paused pending credential rotation and security review. Test orders cannot be placed at this time.",
+      );
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       const primaryProject = checkoutItems[0];
       await launchCashfreeCheckout({
         orderAmount: totalRupees,
+        items: checkoutItems.map((item) => ({
+          slug: item.slug,
+          packageName: item.configuration?.packageName,
+          addOnIds: item.configuration?.selectedAddOnIds,
+        })),
         customerDetails: {
           customerId: `cust_${cleanPhone.slice(-6)}_${Date.now().toString().slice(-4)}`,
           customerName: customerName.trim(),
@@ -192,7 +224,7 @@ export function CheckoutPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-medium text-alloy">Payment Gateway</span>
                     <span className="inline-flex items-center gap-1 rounded-sm bg-volt-tint px-2 py-0.5 font-mono text-[0.6875rem] font-medium text-volt-text">
-                      Cashfree Sandbox
+                      Cashfree Sandbox {gatewayEnabled ? "(Active)" : "(Paused)"}
                     </span>
                   </div>
                   <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted">
@@ -206,6 +238,17 @@ export function CheckoutPage() {
                       Net Banking
                     </span>
                   </div>
+
+                  {!gatewayEnabled && (
+                    <div className="mt-3.5 flex items-start gap-2.5 rounded-md border border-amber-200 bg-amber-50/90 p-3 text-xs text-amber-900">
+                      <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+                      <div>
+                        <strong className="font-semibold">Payments Paused:</strong> Credential
+                        rotation is pending confirmation. Gateway requests are disabled across all
+                        environments.
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-4">
@@ -213,7 +256,7 @@ export function CheckoutPage() {
                     type="submit"
                     variant="primary"
                     size="lg"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !gatewayEnabled}
                     className="w-full justify-center text-sm"
                   >
                     {isSubmitting ? (
@@ -221,6 +264,8 @@ export function CheckoutPage() {
                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                         Connecting to Cashfree Gateway…
                       </span>
+                    ) : !gatewayEnabled ? (
+                      "Payments Paused (Rotation Pending)"
                     ) : (
                       `Pay ${formatPrice(totalPaise)} via Cashfree`
                     )}

@@ -24,8 +24,9 @@ test.describe("Cashfree Checkout & Return Flow", () => {
     await expect(page.getByRole("heading", { name: "Order Summary" })).toBeVisible();
     await expect(page.getByText("Total Amount")).toBeVisible();
 
-    // Verify Cashfree testing badge
-    await expect(page.getByText("Cashfree Sandbox")).toBeVisible();
+    // Verify Cashfree testing badge and paused status
+    await expect(page.getByText(/Cashfree Sandbox/i)).toBeVisible();
+    await expect(page.getByText(/Payments Paused/i).first()).toBeVisible();
   });
 
   test("return URL handler displays verified order state with deliverables", async ({ page }) => {
