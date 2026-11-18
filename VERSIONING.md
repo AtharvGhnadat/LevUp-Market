@@ -19,19 +19,19 @@ This project uses [Semantic Versioning 2.0.0](https://semver.org/): `MAJOR.MINOR
 
 ## Planned Release Milestones
 
-| Version  | Milestone                                                                     |
-| -------- | ----------------------------------------------------------------------------- |
-| `v0.1.0` | Engineering foundation complete: CI, linting, testing, logging infrastructure |
-| `v0.2.0` | Next.js migration complete with visual parity confirmed                       |
-| `v0.3.0` | Supabase integration: auth, database, storage                                 |
-| `v0.4.0` | Cashfree payment integration (sandbox verified)                               |
-| `v0.5.0` | Customer dashboard complete                                                   |
-| `v0.6.0` | Admin portal complete                                                         |
-| `v1.0.0` | First production release: all PRD features, security review, load tested      |
+| Version  | Milestone                                                                               | Status                                                            |
+| -------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `v0.1.0` | Engineering foundation complete: CI, linting, testing, logging infrastructure on `main` | Merge candidate (PR #1 open against `main`)                       |
+| `v0.2.0` | Storefront design, Stage E custom requisition, Supabase schema, Cashfree sandbox (Vite) | Conditional on PR #1, PR #2, PR #3 merges & rotation confirmation |
+| `v0.3.0` | Next.js App Router migration complete with full visual parity and SSR                   | Planned roadmap phase                                             |
+| `v0.4.0` | Live Cashfree payments & transactional order fulfillment (merchant rotation verified)   | Blocked on confirmed credential rotation                          |
+| `v0.5.0` | Customer dashboard complete                                                             | Planned roadmap phase                                             |
+| `v0.6.0` | Admin portal complete                                                                   | Planned roadmap phase                                             |
+| `v1.0.0` | First production release: all PRD features, security review, load tested                | Planned production milestone                                      |
 
 > [!CAUTION]
 > Do not tag a version unless it has been tested and verified. Never fabricate version history.
-> Historical SemVer tags are deferred until cleaned commit history (`d48a990`..`7ddb92a`), branch synchronization, and pending Cashfree credential rotation are verified. See [docs/10-releases/VERSION_HISTORY.md](docs/10-releases/VERSION_HISTORY.md) for the proposed post-cleanup tag-to-commit mapping.
+> SemVer tags are applied only to verified commits on `main` after PR merge, CI pass, and credential clearance. Historical SemVer tags remain deferred pending PR merge progression (`Foundation PR #1` → `Design` → `Stage E` → `Remediation`) and confirmed Cashfree credential rotation. See [docs/10-releases/VERSION_HISTORY.md](docs/10-releases/VERSION_HISTORY.md) for post-cleanup milestone mapping.
 
 ## Git Tagging
 

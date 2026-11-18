@@ -28,24 +28,26 @@ _This is the initial baseline. No prior baseline exists._
 
 ## Architectural State Summary
 
-| Concern            | Current state                            | Target state                  |
-| ------------------ | ---------------------------------------- | ----------------------------- |
-| Frontend framework | Vite 8 + React 19 SPA                    | Next.js App Router            |
-| Routing            | Custom `window.location.pathname` switch | Next.js file-system routing   |
-| Backend            | None                                     | Supabase + Next.js API routes |
-| Database           | None                                     | Supabase PostgreSQL           |
-| Authentication     | None                                     | Supabase Auth                 |
-| File storage       | None                                     | Supabase Storage              |
-| Payments           | None                                     | Cashfree (server-side only)   |
-| Deployment         | Not deployed                             | Vercel                        |
-| CI/CD              | None                                     | GitHub Actions                |
-| Monitoring         | None                                     | Sentry + Lighthouse CI        |
+The table below describes the repository starting baseline (`78b2142`), current branch stack development status, and long-term production target:
+
+| Concern            | Baseline (`78b2142`)                     | Current Stack Status (Development/Staging)                         | Target State                  |
+| ------------------ | ---------------------------------------- | ------------------------------------------------------------------ | ----------------------------- |
+| Frontend framework | Vite 8 + React 19 SPA                    | Vite 8 + React 19 SPA (Unslop design system + Stage E requisition) | Next.js App Router            |
+| Routing            | Custom `window.location.pathname` switch | Custom guarded client routing with subpath `to()` support          | Next.js file-system routing   |
+| Backend            | None                                     | Vite server middleware (development only; payments gated off)      | Supabase + Next.js API routes |
+| Database           | None                                     | Supabase PostgreSQL migrations (initial schema + RLS hardening)    | Supabase PostgreSQL           |
+| Authentication     | None                                     | Supabase Auth client scaffolding (fail-closed in unconfigured env) | Supabase Auth                 |
+| File storage       | None                                     | Local prototype metadata staging (up to 5 files / 10MB)            | Supabase Storage              |
+| Payments           | None                                     | Cashfree SDK + server gateway (gated disabled; rotation pending)   | Cashfree (server-side only)   |
+| Deployment         | Not deployed                             | Figma Make static adapter / preview                                | Vercel                        |
+| CI/CD              | None                                     | GitHub Actions CI (lint, format, typecheck, vitest, build, E2E)    | GitHub Actions                |
+| Monitoring         | None                                     | Structured hourly partitioned file logger (`src/lib/logger.ts`)    | Sentry + Lighthouse CI        |
 
 ---
 
 ## Migration Compatibility
 
-There are **no existing integrations** that could break during the Next.js migration. All data is currently static TypeScript. Component files will be preserved and reused in the new App Router structure.
+Baseline components and data are static TypeScript. Downstream stacked branches introduce clean module boundaries (`src/lib/supabase.ts`, `src/server/cashfree.ts`, `src/custom-project/`) designed for straightforward re-export or migration into Next.js App Router route handlers without architectural regressions. All private backend operations remain isolated from client bundles.
 
 ---
 

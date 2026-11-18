@@ -12,10 +12,26 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Security & Remediation (`2026-11-18` — Codex Review Findings Remediation)
+
+- **Cashfree Server Enablement Gate (S1):** Introduced explicit `CASHFREE_PAYMENTS_ENABLED` server-side control (defaulting to `false`); payment creation and verification fail closed with HTTP 503 and zero upstream network requests when disabled.
+- **Authoritative Catalog Pricing & Input Validation (S2):** Implemented server-side catalog price resolution and client price validation in `src/server/cashfree.ts`; rejects price tampering attempts, invalid items, and empty carts. Added bounded validation for customer name, RFC email, and phone.
+- **Safe Response Allowlisting (S3):** Sanitized verification response to return strictly allowlisted fields (`order_id`, `order_status`, `order_amount`, `order_currency`, `payment_time`), stripping provider diagnostics, PII, and bank account metadata. Enforced strict alphanumeric regex validation on order IDs.
+- **Idempotency Readiness (S4):** Added `idempotencyKey` caching in order creation service to eliminate duplicate payment sessions on retry.
+- **Diagnostic Error Redaction (S5):** Replaced raw provider error text and dynamic log interpolation with sanitized, correlation-indexed generic error messages.
+- **Database RLS & Privileges Hardening (S6, S7):** Added `supabase/migrations/20261118000002_security_hardening.sql`: parameterless `public.is_admin()` bound strictly to caller `auth.uid()`, constrained order and order item creation to `draft` and `pending_payment` states, and restricted client audit logging to permitted action enumerations.
+- **Supabase Clean-Environment Initialization (A1):** Eliminated eager module-level client instantiation in `src/lib/supabase.ts` and `src/server/supabase-admin.ts`; implemented lazy getters and transparent fail-closed proxies with zero unhandled exceptions on import in clean CI environments. Added synthetic test fixtures and unconfigured failure assertions.
+- **Line Ending & Formatting Stabilization (Q1):** Configured `.gitattributes` (`* text=auto eol=lf`) and `.prettierrc` (`endOfLine: "auto"`), eliminating 87 spurious Windows CRLF format failures while maintaining 100% first-party code formatting coverage.
+- **CI Workflow Stabilization (Q2):** Updated `.github/workflows/ci.yml` to trigger on `design/**` branch pushes, stacked base PR targets, and added a dedicated Playwright Chromium E2E job.
+- **Requisition Experience & Focus Accessibility (A2, A4, A6):** Added programmatic focus shifting in `CustomProjectPage.tsx` across edit, review, and confirmation phases; implemented 7-day TTL and shape validation on local drafts; prevented silent prefill draft overwrites; added strict category, budget, date, and 10-digit phone validation.
+- **Safe Route Decoding (A3):** Guarded `decodeURIComponent` in `src/App.tsx` detail route matching against malformed URI strings; restricted return route matching to exact `/checkout/return`; updated client return URL to respect base path deployment.
+- **Prototype Reality Labeling (A5):** Replaced browser alerts with accessible status notices and explicit prototype labels on `CheckoutReturnPage.tsx`.
+- **Status Hold:** Cashfree merchant sandbox credential rotation remains **PENDING / NOT YET CONFIRMED**.
+
 ### Security
 
 - **Cashfree Credential Remediation (`2026-11-18`):** Removed hardcoded sandbox App ID and Client Secret fallbacks from `src/server/cashfree.ts`, enforced fail-closed server environment variable validation (`CASHFREE_APP_ID`, `CASHFREE_CLIENT_SECRET`), rejected placeholder values, and added synthetic-credential & missing-credential unit tests in `src/server/cashfree.test.ts`
-- **Local Git History Cleanup:** Rewrote unpublished local commits `2895c12`..`ad7a4ad` into cleaned replacements `d48a990`..`7ddb92a` with zero changes to Stage 2, Supabase, Stage 3, or Stage E application code; preserved `main`, `origin/design/unslop-foundation` (`544f62e`), and PR #1 untouched
+- **Local Git History Cleanup:** Rewrote unpublished local commits `2895c12`..`ad7a4ad` into cleaned replacements `d48a990`..`7ddb92a` with zero changes to Stage 2, Supabase, Stage 3, or Stage E application code; preserved `main`, `origin/design/unslop-foundation` (`cc020b2`), and PR #1 untouched
 - **Blocker Retained:** Exposed Cashfree sandbox credential rotation is marked **PENDING / NOT YET CONFIRMED**; live or sandbox payment activation remains blocked until merchant-dashboard rotation is independently confirmed
 
 ### Added
@@ -26,7 +42,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Server-side Cashfree API Service (`src/server/cashfree.ts`): Order creation and verification handlers with merchant credentials
 - Client Cashfree SDK Service (`src/lib/cashfree.ts`): SDK loader, order launcher, and verification utilities
 - Dedicated Checkout Experience (`src/pages/CheckoutPage.tsx`): Student billing form, order breakdown, and Cashfree payment trigger
-- Return URL Handler (`src/pages/CheckoutReturnPage.tsx`): Automated payment status verification, receipt display, and deliverable file download unlocking
+- Return URL Handler (`src/pages/CheckoutReturnPage.tsx`): Automated payment status verification, receipt display, and simulated prototype deliverable download actions (live file delivery reserved for student dashboard in future stage)
 - Cart Page (`src/pages/CartPage.tsx`): Interactive shopping cart management with direct checkout transition
 - Design branch `design/unslop-foundation` for professional Unslop design transformation
 - Unslop Visual Audit Report `docs/02-design-system/UNSLOP_AUDIT.md` and Design Direction `docs/02-design-system/DESIGN_DIRECTION.md`
