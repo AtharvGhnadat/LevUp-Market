@@ -9,21 +9,18 @@ export function FeaturedProjects() {
     <section id="featured" aria-labelledby="featured-title" className="py-8 sm:py-10">
       <Container>
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <span className="h-0.5 w-6 bg-volt-action" aria-hidden="true" />
-            <h2
-              id="featured-title"
-              className="font-display text-xl font-extrabold text-alloy sm:text-2xl"
-            >
-              Featured Projects
-            </h2>
-          </div>
+          <h2
+            id="featured-title"
+            className="font-display text-xl font-semibold tracking-[-0.015em] text-alloy sm:text-2xl"
+          >
+            Featured Projects
+          </h2>
           <a
             href={to("/projects")}
-            className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-volt-action hover:underline sm:text-sm"
+            className="inline-flex items-center gap-1.5 font-sans text-xs font-medium text-volt-text transition-colors duration-150 hover:underline sm:text-sm"
           >
             <span>View All Projects</span>
-            <ArrowRight aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
+            <ArrowRight aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
           </a>
         </div>
 

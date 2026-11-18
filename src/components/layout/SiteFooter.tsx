@@ -129,16 +129,16 @@ export function SiteFooter() {
             <nav key={group.title} aria-labelledby={`footer-${group.title}`}>
               <h2
                 id={`footer-${group.title}`}
-                className="font-sans text-xs font-semibold tracking-wider text-white/60 uppercase"
+                className="font-display text-xs font-semibold text-white"
               >
                 {group.title}
               </h2>
-              <ul className="mt-3.5 space-y-2.5">
+              <ul className="mt-3 space-y-2.5">
                 {group.links.map((link) => (
                   <li key={link.label}>
                     <a
                       href={to(link.href)}
-                      className="font-sans text-xs text-white/80 transition-colors hover:text-volt focus-visible:underline focus-visible:outline-none"
+                      className="font-sans text-xs text-muted-on-alloy transition-colors duration-150 hover:text-white focus-visible:underline focus-visible:outline-none"
                     >
                       {link.label}
                     </a>
@@ -150,12 +150,10 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="font-sans text-xs text-white/60">
+          <p className="font-sans text-xs text-muted-on-alloy">
             © {new Date().getFullYear()} LevUp Projects. All rights reserved.
           </p>
-          <p className="font-sans text-xs text-white/40 italic">
-            Made for Engineers, by Engineers.
-          </p>
+          <p className="font-sans text-xs text-muted-on-alloy">Made for Engineers, by Engineers.</p>
         </div>
       </Container>
     </footer>

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** Section label: short copper rule followed by an uppercase caption. */
+/** Section label: short caliper rule followed by a sentence-case mono caption. */
 export function Eyebrow({
   children,
   tone = "light",
@@ -16,13 +16,13 @@ export function Eyebrow({
   return (
     <p
       className={cn(
-        "flex items-center gap-3 font-sans text-eyebrow font-medium uppercase",
-        tone === "light" ? "text-ink" : "text-white/90",
+        "flex items-center gap-2.5 font-mono text-xs font-medium tracking-[0.01em]",
+        tone === "light" ? "text-muted" : "text-muted-on-alloy",
         align === "center" && "justify-center",
         className,
       )}
     >
-      <span aria-hidden="true" className="h-[2px] w-7 shrink-0 rounded-full bg-copper" />
+      <span aria-hidden="true" className="h-[2px] w-6 shrink-0 rounded-full bg-volt-action" />
       <span>{children}</span>
     </p>
   );

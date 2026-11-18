@@ -128,7 +128,8 @@ function ProjectOverview({ project }: { project: ProjectDetail }) {
             <li key={feature} className="flex gap-2 text-[0.8125rem] text-ink">
               <Check
                 aria-hidden="true"
-                className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-copper text-white"
+                className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-volt-action p-0.5 text-white"
+                strokeWidth={2}
               />
               {feature}
             </li>
@@ -183,7 +184,7 @@ function SectionHeading({
   return (
     <h2
       className={cn(
-        "mb-3 border-l-[3px] border-copper pl-3 font-display text-[1rem] font-extrabold text-ink",
+        "mb-3 border-l-2 border-volt-action pl-3 font-display text-[1rem] font-semibold text-ink",
         className,
       )}
     >

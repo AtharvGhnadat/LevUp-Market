@@ -38,14 +38,12 @@ export function OrderPriceSummary({
       </dl>
       <div className="mt-3 flex items-end justify-between gap-4 border-t border-line pt-3">
         <div>
-          <p className="font-display text-[0.875rem] font-extrabold text-ink">
-            Configuration Total
-          </p>
-          <p className="text-[0.625rem] text-muted">Before shipping and applicable taxes</p>
+          <p className="font-display text-[0.875rem] font-semibold text-ink">Configuration Total</p>
+          <p className="text-[0.6875rem] text-muted">Before shipping and applicable taxes</p>
         </div>
         <p
           data-testid="configuration-total"
-          className="font-display text-[1.65rem] font-extrabold text-copper tabular-nums"
+          className="font-display text-[1.65rem] font-semibold text-volt-text tabular-nums"
         >
           {formatPrice(configurationTotal)}
         </p>

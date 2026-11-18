@@ -58,21 +58,18 @@ export function CategoryGrid() {
     >
       <Container>
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <span className="h-0.5 w-6 bg-volt-action" aria-hidden="true" />
-            <h2
-              id="categories-title"
-              className="font-display text-xl font-extrabold text-alloy sm:text-2xl"
-            >
-              Explore Project Categories
-            </h2>
-          </div>
+          <h2
+            id="categories-title"
+            className="font-display text-xl font-semibold tracking-[-0.015em] text-alloy sm:text-2xl"
+          >
+            Explore Project Categories
+          </h2>
           <a
             href={to("/projects")}
-            className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-volt-action hover:underline sm:text-sm"
+            className="inline-flex items-center gap-1.5 font-sans text-xs font-medium text-volt-text transition-colors duration-150 hover:underline sm:text-sm"
           >
             <span>View All Categories</span>
-            <ArrowRight aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
+            <ArrowRight aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
           </a>
         </div>
 
@@ -81,14 +78,14 @@ export function CategoryGrid() {
             <li key={c.name}>
               <a
                 href={to(c.href)}
-                className="group flex flex-col items-center justify-center rounded-lg border border-line bg-white p-4 text-center shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-volt hover:shadow-card-hover sm:p-5"
+                className="group flex flex-col items-center justify-center rounded-xl border border-line bg-white p-4 text-center shadow-card transition-[transform,border-color,box-shadow] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-volt-action/60 hover:shadow-card-hover sm:p-5"
               >
                 <c.icon
                   aria-hidden="true"
-                  className="h-7 w-7 text-alloy transition-colors duration-200 group-hover:text-volt-action sm:h-8 sm:w-8"
-                  strokeWidth={1.75}
+                  className="h-7 w-7 text-muted transition-colors duration-150 group-hover:text-volt-text sm:h-8 sm:w-8"
+                  strokeWidth={1.5}
                 />
-                <span className="mt-3 font-display text-xs font-bold leading-tight text-alloy sm:text-sm">
+                <span className="mt-3 font-display text-xs font-medium leading-tight text-alloy sm:text-sm">
                   {c.name}
                 </span>
               </a>

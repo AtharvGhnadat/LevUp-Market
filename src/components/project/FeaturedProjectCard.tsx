@@ -8,8 +8,8 @@ export function FeaturedProjectCard({ project }: { project: DemoProject }) {
   const href = to(`/projects/${project.slug}`);
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-volt hover:shadow-card-hover">
-      {/* Card Image with category pill */}
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white shadow-card transition-[transform,border-color,box-shadow] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-volt-action/60 hover:shadow-card-hover">
+      {/* Card Image with category tag */}
       <div className="relative aspect-[16/10] overflow-hidden bg-mineral">
         <img
           src={unsplash(project.imageId, 600)}
@@ -19,17 +19,17 @@ export function FeaturedProjectCard({ project }: { project: DemoProject }) {
           loading="lazy"
           decoding="async"
           style={{ objectPosition: project.focus || "50% 50%" }}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          className="h-full w-full object-cover"
         />
-        {/* Category Pill Badge */}
-        <span className="pointer-events-none absolute top-3 left-3 rounded-full border border-line/60 bg-white/95 px-2.5 py-0.5 font-sans text-xs font-semibold text-alloy shadow-xs backdrop-blur-xs">
+        {/* Category Tag */}
+        <span className="pointer-events-none absolute top-3 left-3 rounded-md border border-line/60 bg-white/95 px-2.5 py-1 font-sans text-xs font-medium text-alloy shadow-xs backdrop-blur-xs">
           {project.categoryLabel}
         </span>
       </div>
 
       {/* Card Content */}
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <h3 className="font-display text-base font-bold leading-snug text-alloy transition-colors group-hover:text-volt-action">
+        <h3 className="font-display text-base font-semibold leading-snug text-alloy transition-colors duration-150 group-hover:text-volt-text">
           <a href={href} className="after:absolute after:inset-0 focus-visible:outline-none">
             {project.title}
           </a>
@@ -41,17 +41,17 @@ export function FeaturedProjectCard({ project }: { project: DemoProject }) {
         </p>
 
         {/* Pricing & Detail Action */}
-        <div className="mt-auto flex items-center justify-between pt-4 border-t border-line/60">
-          <p className="font-display text-lg font-extrabold text-alloy tabular-nums">
+        <div className="mt-auto flex items-center justify-between border-t border-line/60 pt-4">
+          <p className="font-display text-lg font-semibold text-alloy tabular-nums">
             <span className="sr-only">Base price</span>
             {formatPrice(project.basePrice)}
           </p>
 
           <span
             aria-hidden="true"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-volt-action/40 text-volt-action transition-all duration-200 group-hover:border-volt-action group-hover:bg-volt-action group-hover:text-white shadow-xs"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-volt-action/40 text-volt-text transition-colors duration-150 group-hover:border-volt-action group-hover:bg-volt-action group-hover:text-white"
           >
-            <ArrowRight className="h-4 w-4" strokeWidth={2.25} />
+            <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
           </span>
         </div>
       </div>

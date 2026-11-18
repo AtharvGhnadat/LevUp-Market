@@ -25,7 +25,7 @@ test.describe("Cashfree Checkout & Return Flow", () => {
     await expect(page.getByText("Total Amount")).toBeVisible();
 
     // Verify Cashfree testing badge
-    await expect(page.getByText("Cashfree Sandbox Testing")).toBeVisible();
+    await expect(page.getByText("Cashfree Sandbox")).toBeVisible();
   });
 
   test("return URL handler displays verified order state with deliverables", async ({ page }) => {
@@ -47,11 +47,9 @@ test.describe("Cashfree Checkout & Return Flow", () => {
     await page.goto("/checkout/return?order_id=LP_test_return_12345");
 
     // Verify verified success screen
-    await expect(
-      page.getByRole("heading", { name: "Order Successfully Completed!" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Order Confirmed" })).toBeVisible();
     await expect(page.getByText("LP_test_return_12345")).toBeVisible();
-    await expect(page.getByText("Your Unlocked Project Assets:")).toBeVisible();
+    await expect(page.getByText("Unlocked Project Assets")).toBeVisible();
     await expect(page.getByText("Full Source Code & Libraries (.zip)")).toBeVisible();
   });
 });

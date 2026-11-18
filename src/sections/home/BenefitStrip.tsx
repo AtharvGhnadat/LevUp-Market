@@ -28,22 +28,20 @@ export function BenefitStrip() {
   return (
     <section
       aria-label="Key marketplace assurances"
-      className="border-y border-line bg-white/70 py-6 sm:py-7"
+      className="border-y border-line bg-white/80 py-6"
     >
       <Container>
-        <ul className="grid grid-cols-2 gap-6 sm:gap-8 lg:grid-cols-4 lg:items-center">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 lg:items-center">
           {stats.map(({ icon: Icon, title, body }) => (
-            <li key={title} className="flex items-center gap-3.5 sm:gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-volt/10 text-volt-action">
-                <Icon aria-hidden="true" className="h-5 w-5" strokeWidth={2} />
+            <li key={title} className="flex items-start gap-3 sm:items-center sm:gap-4">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-volt-tint text-volt-text">
+                <Icon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.75} />
               </span>
               <div>
-                <span className="block font-display text-sm font-bold text-alloy leading-tight sm:text-base">
+                <span className="block font-display text-sm font-semibold leading-tight text-alloy">
                   {title}
                 </span>
-                <span className="mt-0.5 block font-sans text-xs font-medium text-muted">
-                  {body}
-                </span>
+                <span className="mt-1 block font-sans text-xs leading-snug text-muted">{body}</span>
               </div>
             </li>
           ))}

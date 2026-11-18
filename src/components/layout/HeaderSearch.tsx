@@ -51,7 +51,7 @@ export function HeaderSearch() {
       <Search
         aria-hidden="true"
         className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-muted"
-        strokeWidth={2}
+        strokeWidth={1.75}
       />
       <input
         ref={inputRef}
@@ -73,8 +73,8 @@ export function HeaderSearch() {
         }}
         aria-controls={showPanel ? listId : undefined}
         aria-expanded={showPanel}
-        placeholder="Search projects, technologies..."
-        className="h-10 w-[264px] rounded-md border border-line bg-white/80 pr-14 pl-9 text-xs text-alloy placeholder:text-muted/80 transition-colors hover:border-alloy/25 focus:border-volt-action focus:bg-white focus:ring-1 focus:ring-volt-action focus:outline-none 2xl:w-[300px] [&::-webkit-search-cancel-button]:hidden"
+        placeholder="Search projects"
+        className="h-10 w-[264px] rounded-lg border border-line bg-white/80 pr-14 pl-9 text-xs text-alloy placeholder:text-muted/80 transition-colors duration-150 hover:border-alloy/25 focus:border-volt-action focus:bg-white focus:ring-1 focus:ring-volt-action focus:outline-none 2xl:w-[300px] [&::-webkit-search-cancel-button]:hidden"
       />
       <kbd className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 rounded border border-line bg-mineral-deep px-1.5 py-0.5 font-mono text-[0.625rem] text-muted shadow-xs">
         {isMac ? "⌘ K" : "Ctrl K"}

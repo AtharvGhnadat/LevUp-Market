@@ -7,6 +7,36 @@
 
 ## History
 
+### [2026-11-18] Stage 3 — Full-Application Brand-Led Unslop Transformation (Stages A–D, F)
+
+**Changed by:** Principal Product Designer, Design Systems Architect, Senior Frontend Engineer  
+**Approved by:** Atharv Ghanadat (Master Design Directive — Unslop Transformation)  
+**Methodology Credit:** Unslop by Damir Sokolovsky ([@heydamir](https://x.com/heydamir)), CC BY 4.0  
+**Affects:** Global UI Primitives (`Button`, `Eyebrow`), Navigation & Footer (`SiteHeader`, `NavDropdown`, `HeaderSearch`, `SiteFooter`), Homepage (`HeroSection`, `BenefitStrip`, `HowItWorks`, `CategoryGrid`, `FeaturedProjects`, `FeaturedProjectCard`, `CustomProjectBanner`), Catalog (`ProjectsPage`, `CatalogProjectCard`), Project Detail (`ProjectDetailPage`, `ProjectMetadata`, `PackageSelector`, `OrderPriceSummary`, `AddOnConfigurator`, `ProjectInformationTabs`, `EngineeringBlockDiagram`, `RelatedProjects`), Cart & Checkout (`CartPage`, `CheckoutPage`, `CheckoutReturnPage`, `PlannedRoutePage`)
+
+#### What changed
+
+1. **Global Primitives & Type Discipline (Stage A):**
+   - Enforced Unslop weight ceiling (400–600): replaced `font-extrabold` / `font-bold` across headings, buttons, and pricing with `font-semibold` and `font-medium`.
+   - Removed negative letter spacing on sub-16px controls (`Button.tsx`, `NavDropdown.tsx`) and converted uppercase tracked section eyebrows (`Eyebrow.tsx`) and footer headers (`SiteFooter.tsx`) to sentence case.
+   - Standardized control radius to 8px (`rounded-lg`), cards to 12px (`rounded-xl`), and nested badge radii to 6–8px.
+   - Standardized Lucide icon strokes to `1.75` (and `1.5` for 28px category icons) and replaced `transition-all` + `hover:scale` card animations with targeted 150ms transitions using `cubic-bezier(0.22, 1, 0.36, 1)`.
+2. **Navigation Chrome & Assembly Spine Homepage Polish (Stage B):**
+   - `SiteHeader.tsx`: Quieted header chrome by styling `Sign In` as a clean text link next to the single `Get Started` button; shortened inline search placeholder to `"Search projects"`.
+   - `HowItWorks.tsx`: Implemented **The LevUp Assembly Spine** — twin structured progression tracks for Ready-Made Projects and Custom Development with continuous hairline spine rails connecting numbered `Step 01`–`Step 04` caliper nodes.
+   - `HeroSection.tsx`: Switched `"Supported."` accent from raw Volt (`2.87:1`) to accessible `VoltText` (`#A44E1A`, `5.06:1` WCAG AA) and aligned floating domain callouts to nested 8px radii.
+   - `SiteFooter.tsx`: Removed `italic` styling and boosted muted contrast on Alloy to `#A2B5B3`.
+3. **Catalog & Project Details Refinement (Stages C & D):**
+   - Removed decorative `Sparkles` icon and uppercase badges on `ProjectsPage.tsx` and `CatalogProjectCard.tsx`.
+   - Fixed WCAG AA price contrast on `CatalogProjectCard`, `ProjectMetadata`, and `OrderPriceSummary` by migrating from raw `text-copper` (`#E56B3F`) to accessible `text-volt-text` (`#A44E1A`) with `tabular-nums`.
+   - Fixed `ProjectDetailPage` desktop container padding, repaired the `ProjectMetadata` share icon button clipping, and refactored `EngineeringBlockDiagram` so all four system blocks render without horizontal clipping on desktop.
+4. **Cart & Checkout Accuracy & Polish (Stage F):**
+   - Removed `Sparkles` icon, exclamation marks (`"Order Confirmed"`), mixed currency formatting (`₹0` via `formatPrice(0)`), and hardware-only assumptions in `CartPage` and `CheckoutPage` so deliverables accurately reflect package tier and project type.
+5. **Verification:**
+   - Verified 0px horizontal overflow across all 4 core routes (`/`, `/projects`, `/projects/:slug`, `/checkout`) × 4 viewports (1440px, 1280px, 768px, 390px) via `scripts/capture-unslop-polish.mjs`.
+
+---
+
 ### [2026-11-18] Stage 2 — Homepage Visual Layout & Reference Refinement
 
 **Changed by:** Principal Product Designer, Senior Frontend Engineer  

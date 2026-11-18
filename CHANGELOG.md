@@ -50,6 +50,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Changed
 
+- Stage 3 Full-Application Unslop Transformation (Passes A–I): Applied Damir Sokolovsky's Unslop methodology (CC BY 4.0) across shared primitives, navigation, homepage, catalog, project details, cart, and checkout flows
+- Assembly Spine Process Visualization (`HowItWorks.tsx`): Upgraded ready-made and custom development journeys with continuous hairline Assembly Spine progression rails and numbered caliper steps
+- Quiet Navigation Chrome (`SiteHeader.tsx`, `NavDropdown.tsx`, `HeaderSearch.tsx`, `SiteFooter.tsx`): Simplified `Sign In` to a quiet text link alongside `Get Started`, standardized icons to 1.75 stroke, converted uppercase tracked headers to sentence case, and removed italic low-contrast footer text
+- WCAG Contrast & Type Discipline: Reduced ultra-heavy `font-extrabold` headings to `font-semibold` (400–600 weight ceiling), replaced inaccessible raw Volt text/prices on light surfaces with accessible `VoltText` (`#A44E1A`, 5.06:1 AA), removed `Sparkles` decorative icons, and fixed `ProjectDetailPage` diagram clipping and share button sizing
 - Stage 2 Homepage Refinement: Aligned homepage structure, header, footer, process flows, and benefit assurances directly with the approved reference image and Unslop design direction
 - Dual-Journey How It Works: Implemented distinct customer flows for ready-made projects (`Explore Projects` → `Choose Package` → `Secure Checkout` → `Receive Delivery`) and custom development (`Submit Requirements` → `Review Quotation` → `Track Development` → `Receive Project`)
 - Restrained Benefit Assurances: Updated benefit strip to approved labels (`Source Code & Documentation`, `Digital & Hardware Delivery`, `Technical Support & Revisions`, `Student Friendly`) with package-dependent deliverable descriptions

@@ -24,12 +24,12 @@ export function RelatedProjects({ project }: { project: ProjectDetail }) {
       <div className="flex items-center justify-between gap-4">
         <h2
           id="related-title"
-          className="border-l-8 border-copper pl-3 font-display text-[1.25rem] font-extrabold text-ink"
+          className="font-display text-xl font-semibold tracking-[-0.015em] text-ink"
         >
           Related Projects
         </h2>
         <ButtonLink href={to("/projects")} variant="outline-copper" size="md">
-          View All <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          View All <ArrowRight aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
         </ButtonLink>
       </div>
       <ul className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">

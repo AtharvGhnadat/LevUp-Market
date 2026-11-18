@@ -1,7 +1,6 @@
 import { Box, Code2, Gauge, Headphones, Share2 } from "lucide-react";
 import type { ProjectDetail } from "@/data/project-details";
 import { catalogDeliveryLabels, difficultyLabels } from "@/data/catalog-projects";
-import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/format";
 
 export function ProjectMetadata({ project }: { project: ProjectDetail }) {
@@ -30,26 +29,24 @@ export function ProjectMetadata({ project }: { project: ProjectDetail }) {
             </li>
           ))}
         </ul>
-        <Button
+        <button
           type="button"
-          variant="outline"
-          size="md"
           onClick={copyLink}
-          className="h-9 w-9 shrink-0 px-0"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-alloy/25 bg-white text-alloy shadow-xs transition-colors duration-150 hover:bg-mineral focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action"
           aria-label="Copy project link"
         >
-          <Share2 aria-hidden="true" className="h-4 w-4" />
-        </Button>
+          <Share2 aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
+        </button>
       </div>
 
-      <h1 className="mt-4 max-w-xl font-display text-[2rem] leading-[1.12] font-extrabold tracking-[-0.025em] text-ink lg:text-[2.25rem]">
+      <h1 className="mt-4 max-w-xl font-display text-[2rem] leading-[1.12] font-semibold tracking-[-0.025em] text-ink lg:text-[2.25rem]">
         {project.displayTitle}
       </h1>
       <p className="mt-3 max-w-xl text-[0.9375rem] leading-[1.55] text-ink/85">
         {project.description}
       </p>
 
-      <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-sm bg-line sm:grid-cols-4">
+      <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
         <MetadataItem
           icon={Gauge}
           label={difficultyLabels[project.catalog.difficulty]}
@@ -74,10 +71,8 @@ export function ProjectMetadata({ project }: { project: ProjectDetail }) {
 
       <div className="mt-4 flex items-end gap-3 border-t border-line pt-3">
         <div>
-          <p className="text-[0.625rem] font-medium tracking-[0.07em] text-muted uppercase">
-            Packages from
-          </p>
-          <p className="font-display text-[1.75rem] font-extrabold text-copper tabular-nums">
+          <p className="text-[0.6875rem] font-medium text-muted">Packages from</p>
+          <p className="font-display text-[1.75rem] font-semibold text-volt-text tabular-nums">
             {formatPrice(project.packages[0].price)}
           </p>
         </div>
@@ -100,8 +95,8 @@ function MetadataItem({
 }) {
   return (
     <div className="bg-white px-2 py-3 text-center">
-      <Icon aria-hidden="true" className="mx-auto h-5 w-5 text-ink" strokeWidth={1.65} />
-      <dt className="mt-1.5 font-display text-[0.72rem] font-bold text-ink">{label}</dt>
+      <Icon aria-hidden="true" className="mx-auto h-5 w-5 text-muted" strokeWidth={1.75} />
+      <dt className="mt-1.5 font-display text-[0.75rem] font-semibold text-ink">{label}</dt>
       <dd className="text-[0.6875rem] text-muted">{detail}</dd>
     </div>
   );

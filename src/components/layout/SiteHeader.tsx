@@ -49,7 +49,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 sm:gap-2.5 xl:gap-3">
+        <div className="ml-auto flex items-center gap-1 sm:gap-2 xl:gap-3">
           <div className="hidden 2xl:block">
             <HeaderSearch />
           </div>
@@ -58,22 +58,22 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             onClick={() => setSearchOpen(true)}
             aria-haspopup="dialog"
             aria-label="Search projects"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action 2xl:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-alloy transition-colors duration-150 hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action 2xl:hidden"
           >
-            <Search aria-hidden="true" className="h-5 w-5" />
+            <Search aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.75} />
           </button>
 
           <a
             href={to("/cart")}
             aria-label={`Cart, ${count} ${count === 1 ? "item" : "items"}`}
             aria-current={currentPath === "/cart" ? "page" : undefined}
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action"
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg text-alloy transition-colors duration-150 hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action"
           >
-            <ShoppingCart aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
+            <ShoppingCart aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.75} />
             {count > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute top-1 right-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-volt-action px-1 font-mono text-[0.625rem] font-bold text-white tabular-nums"
+                className="absolute top-1 right-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-volt-action px-1 font-mono text-[0.625rem] font-medium text-white tabular-nums"
               >
                 {count}
               </span>
@@ -83,13 +83,13 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
           <a
             href={to("/login")}
             aria-current={currentPath === "/login" ? "page" : undefined}
-            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-md border border-alloy/20 bg-transparent px-4 font-sans text-xs font-semibold text-alloy shadow-xs transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
+            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-lg px-3 font-sans text-sm font-medium text-alloy transition-colors duration-150 hover:bg-alloy/5 hover:text-volt-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
           >
             Sign In
           </a>
           <a
             href={to("/register")}
-            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-md bg-volt-action px-4 font-sans text-xs font-semibold text-white shadow-xs transition-colors hover:bg-volt-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
+            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-lg bg-volt-action px-4 font-display text-sm font-semibold text-white shadow-xs transition-colors duration-150 hover:bg-volt-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
           >
             Get Started
           </a>
@@ -100,9 +100,9 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             aria-label="Open menu"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-alloy hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-alloy transition-colors duration-150 hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action lg:hidden"
           >
-            <Menu aria-hidden="true" className="h-6 w-6" />
+            <Menu aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
           </button>
         </div>
       </Container>

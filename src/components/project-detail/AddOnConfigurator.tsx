@@ -16,8 +16,8 @@ export function AddOnConfigurator({
   const eligible = addOns.filter((item) => item.eligiblePackageIds.includes(selectedPackage.id));
 
   return (
-    <fieldset className="rounded-md border border-copper/15 bg-copper-tint/55 p-3">
-      <legend className="px-1 font-display text-[0.9375rem] font-extrabold text-ink">
+    <fieldset className="rounded-lg border border-volt-action/15 bg-volt-tint/55 p-3">
+      <legend className="px-1 font-display text-[0.9375rem] font-semibold text-ink">
         Add Additional Deliverables
       </legend>
       <div className="mt-1 space-y-1">

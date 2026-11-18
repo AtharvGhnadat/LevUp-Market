@@ -54,16 +54,16 @@ export function PlannedRoutePage({ path }: { path: string }) {
     <section className="border-b border-line bg-paper">
       <Container className="py-24 sm:py-32">
         <div className="max-w-2xl">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-sm bg-ink text-copper">
-            <Construction aria-hidden="true" className="h-5 w-5" />
+          <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-ink text-volt">
+            <Construction aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
           </span>
           <p className="mt-8 font-mono text-sm text-muted">{path}</p>
-          <h1 className="mt-2 text-section font-extrabold text-ink">
+          <h1 className="mt-2 text-section font-semibold text-ink">
             {info ? info.title : "Page not found"}
           </h1>
-          <p className="mt-5 text-lg leading-relaxed text-muted">
+          <p className="mt-4 text-base leading-relaxed text-muted">
             {info
-              ? "This page is part of the LevUp Projects V1 plan and is not available yet. Accounts, checkout and orders are not active, so nothing on this site can take payment."
+              ? "This page is part of the LevUp Projects V1 roadmap and is not published yet."
               : "This address doesn’t match any LevUp Projects page."}
           </p>
           {query && (

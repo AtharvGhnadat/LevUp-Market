@@ -29,7 +29,7 @@ export function ProjectDetailPage({ slug }: { slug: string }) {
     return (
       <div className="mx-auto max-w-[1440px] px-5 py-20 text-center sm:px-8">
         <p className="text-sm text-copper-ink">Project unavailable</p>
-        <h1 className="mt-2 font-display text-3xl font-extrabold text-ink">Project not found</h1>
+        <h1 className="mt-2 font-display text-3xl font-semibold text-ink">Project not found</h1>
         <p className="mt-3 text-muted">
           This project is not part of the current demonstration catalog.
         </p>
@@ -42,7 +42,7 @@ export function ProjectDetailPage({ slug }: { slug: string }) {
 
   return (
     <div className="bg-paper">
-      <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 xl:px-0">
+      <div className="mx-auto w-full max-w-[1348px] px-5 sm:px-8">
         <ProjectBreadcrumb project={project} />
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-[minmax(0,38fr)_minmax(0,34fr)_minmax(350px,28fr)] xl:gap-7">

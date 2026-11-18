@@ -1,4 +1,4 @@
-import { ArrowRight, Grid2X2, List, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+import { ArrowRight, Grid2X2, List, Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   activeFilterCount,
@@ -122,7 +122,7 @@ export function ProjectsPage() {
           <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <Eyebrow>Project Library</Eyebrow>
-              <h1 className="mt-3 font-display text-[2rem] leading-tight font-extrabold tracking-[-0.025em] text-ink sm:text-[2.5rem]">
+              <h1 className="mt-3 font-display text-[2rem] leading-tight font-semibold tracking-[-0.025em] text-ink sm:text-[2.5rem]">
                 Explore Engineering Projects
               </h1>
               <p className="mt-4 max-w-3xl text-[0.9375rem] leading-[1.7] text-muted">
@@ -165,8 +165,8 @@ export function ProjectsPage() {
                 type="search"
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
-                placeholder="Search projects, technologies, tools or project ID"
-                className="h-12 w-full rounded-sm border border-line bg-white pr-12 pl-12 text-sm text-ink shadow-card placeholder:text-muted focus:border-ink/40 focus:outline-none"
+                placeholder="Search projects, stack or ID"
+                className="h-12 w-full rounded-lg border border-line bg-white pr-12 pl-12 text-sm text-ink shadow-card placeholder:text-muted focus:border-volt-action focus:outline-none"
               />
               {searchInput && (
                 <button
@@ -219,9 +219,9 @@ export function ProjectsPage() {
 
           <div className="grid gap-7 lg:grid-cols-[276px_minmax(0,1fr)]">
             <aside className="hidden lg:block" aria-label="Catalog filters">
-              <div className="sticky top-24 rounded-md border border-line bg-white px-5 shadow-card">
+              <div className="sticky top-24 rounded-xl border border-line bg-white px-5 shadow-card">
                 <div className="flex h-14 items-center justify-between border-b border-line">
-                  <h2 className="font-display text-[0.9375rem] font-extrabold text-ink">
+                  <h2 className="font-display text-[0.9375rem] font-semibold text-ink">
                     Filter Projects
                   </h2>
                   {filterCount > 0 && (
@@ -316,7 +316,9 @@ export function ProjectsPage() {
 function ResultCount({ count, page }: { count: number; page: number }) {
   return (
     <p className="text-sm text-muted" aria-live="polite">
-      <strong className="font-display text-base font-extrabold text-ink">{count}</strong>{" "}
+      <strong className="font-display text-base font-semibold text-ink tabular-nums">
+        {count}
+      </strong>{" "}
       {count === 1 ? "project" : "projects"} found
       {count > PAGE_SIZE && <span className="hidden sm:inline"> · Page {page}</span>}
     </p>
@@ -338,7 +340,7 @@ function CatalogSort({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value as CatalogSortValue)}
-        className="h-10 rounded-sm border border-line bg-white px-3 text-sm font-medium text-ink focus:border-ink/40 focus:outline-none"
+        className="h-10 rounded-lg border border-line bg-white px-3 text-sm font-medium text-ink focus:border-volt-action focus:outline-none"
         aria-label="Sort projects"
       >
         <option value="recommended">Recommended</option>
@@ -360,7 +362,7 @@ function ViewToggle({
 }) {
   return (
     <div
-      className="hidden rounded-sm border border-line bg-white p-1 sm:flex"
+      className="hidden rounded-lg border border-line bg-white p-1 sm:flex"
       role="group"
       aria-label="Project view"
     >
@@ -369,24 +371,24 @@ function ViewToggle({
         onClick={() => onChange("grid")}
         aria-pressed={view === "grid"}
         className={cn(
-          "inline-flex h-8 w-8 items-center justify-center rounded-xs",
+          "inline-flex h-8 w-8 items-center justify-center rounded-sm transition-colors duration-150",
           view === "grid" ? "bg-ink text-white" : "text-muted hover:text-ink",
         )}
         aria-label="Grid view"
       >
-        <Grid2X2 aria-hidden="true" className="h-4 w-4" />
+        <Grid2X2 aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
       </button>
       <button
         type="button"
         onClick={() => onChange("list")}
         aria-pressed={view === "list"}
         className={cn(
-          "inline-flex h-8 w-8 items-center justify-center rounded-xs",
+          "inline-flex h-8 w-8 items-center justify-center rounded-sm transition-colors duration-150",
           view === "list" ? "bg-ink text-white" : "text-muted hover:text-ink",
         )}
         aria-label="List view"
       >
-        <List aria-hidden="true" className="h-4 w-4" />
+        <List aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
       </button>
     </div>
   );
@@ -396,17 +398,14 @@ function CatalogCustomProjectCTA() {
   return (
     <section className="bg-paper pb-10 sm:pb-14">
       <Container>
-        <div className="relative overflow-hidden rounded-lg bg-ink px-6 py-9 text-white sm:px-10 lg:flex lg:items-center lg:justify-between lg:px-14 lg:py-10">
-          <div aria-hidden="true" className="absolute top-0 right-0 h-full w-1.5 bg-copper" />
+        <div className="relative overflow-hidden rounded-2xl bg-ink px-6 py-9 text-white sm:px-10 lg:flex lg:items-center lg:justify-between lg:px-14 lg:py-10">
+          <div aria-hidden="true" className="absolute top-0 right-0 h-full w-1.5 bg-volt" />
           <div className="relative max-w-2xl">
-            <p className="flex items-center gap-2 text-[0.6875rem] font-semibold tracking-[0.08em] text-copper uppercase">
-              <Sparkles aria-hidden="true" className="h-4 w-4" />
-              Custom development
-            </p>
-            <h2 className="mt-3 font-display text-[1.65rem] font-extrabold tracking-[-0.02em] sm:text-[2rem]">
+            <p className="font-mono text-xs font-medium text-volt">Custom development</p>
+            <h2 className="mt-2 font-display text-[1.65rem] font-semibold tracking-[-0.02em] sm:text-[2rem]">
               Didn&apos;t find the project you need?
             </h2>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/75">
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-on-alloy">
               Submit your requirements, preferred technologies, budget range and deadline. We will
               review feasibility and prepare a versioned quotation before any work or payment
               begins.
@@ -418,7 +417,7 @@ function CatalogCustomProjectCTA() {
             className="relative mt-7 w-full lg:mt-0 lg:w-auto"
           >
             Request Custom Project
-            <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            <ArrowRight aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
           </ButtonLink>
         </div>
       </Container>
