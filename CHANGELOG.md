@@ -12,6 +12,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Security
+
+- **Cashfree Credential Remediation (`2026-11-18`):** Removed hardcoded sandbox App ID and Client Secret fallbacks from `src/server/cashfree.ts`, enforced fail-closed server environment variable validation (`CASHFREE_APP_ID`, `CASHFREE_CLIENT_SECRET`), rejected placeholder values, and added synthetic-credential & missing-credential unit tests in `src/server/cashfree.test.ts`
+- **Local Git History Cleanup:** Rewrote unpublished local commits `2895c12`..`ad7a4ad` into cleaned replacements `d48a990`..`7ddb92a` with zero changes to Stage 2, Supabase, Stage 3, or Stage E application code; preserved `main`, `origin/design/unslop-foundation` (`544f62e`), and PR #1 untouched
+- **Blocker Retained:** Exposed Cashfree sandbox credential rotation is marked **PENDING / NOT YET CONFIRMED**; live or sandbox payment activation remains blocked until merchant-dashboard rotation is independently confirmed
+
 ### Added
 
 - Stage E Custom Project Requisition Experience (`src/pages/CustomProjectPage.tsx`, `src/custom-project/custom-project-state.ts`): Interactive engineering requisition workflow covering scope & classification (software, hardware, hybrid), detailed functional & conditional hardware specifications, budget range, target delivery date, staged reference file attachments, classification-aware deliverables, local draft preservation, review step, and honest frontend prototype confirmation with JSON specification export

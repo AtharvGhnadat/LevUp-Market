@@ -31,6 +31,7 @@ This project uses [Semantic Versioning 2.0.0](https://semver.org/): `MAJOR.MINOR
 
 > [!CAUTION]
 > Do not tag a version unless it has been tested and verified. Never fabricate version history.
+> Historical SemVer tags are deferred until cleaned commit history (`d48a990`..`7ddb92a`), branch synchronization, and pending Cashfree credential rotation are verified. See [docs/10-releases/VERSION_HISTORY.md](docs/10-releases/VERSION_HISTORY.md) for the proposed post-cleanup tag-to-commit mapping.
 
 ## Git Tagging
 
