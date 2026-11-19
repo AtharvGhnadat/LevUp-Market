@@ -1,17 +1,39 @@
-import { ChevronDown, LogOut } from "lucide-react";
+import {
+  ChevronDown,
+  LogOut,
+  Bell,
+  House,
+  Layers,
+  Wrench,
+  Package,
+  Mail,
+  Headphones,
+  Settings,
+} from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { useAuth } from "@/auth/auth-context";
 import { accountLink, workspaceLinks, initials } from "@/workspace/navigation";
-import { ButtonLink } from "@/components/ui/Button";
+import { authEntry } from "@/auth/auth-navigation";
 import { to } from "@/lib/routes";
+
+const icons = {
+  "/dashboard": House,
+  "/dashboard/projects": Layers,
+  "/dashboard/custom-requests": Wrench,
+  "/dashboard/orders": Package,
+  "/dashboard/messages": Mail,
+  "/dashboard/support": Headphones,
+};
 
 export function AccountNavigation({
   mobile,
   currentPath,
   name,
+  unread,
 }: {
   mobile?: boolean;
   name: string;
+  unread: boolean;
   currentPath: string;
 }) {
   const { state, signOutPending, signOutError, signOut } = useAuth();
@@ -47,6 +69,11 @@ export function AccountNavigation({
   if (state.status === "recovering") return null;
 
   if (state.status !== "signed-in") {
+    const returnTo =
+      ["/cart", "/checkout", "/custom-project"].includes(currentPath) ||
+      currentPath.startsWith("/projects/")
+        ? currentPath + window.location.search
+        : "/dashboard";
     return (
       <div
         className={
@@ -56,20 +83,19 @@ export function AccountNavigation({
         }
       >
         <a
-          className="nav-site-link"
-          href={to("/login")}
+          className="market-sign-in"
+          href={authEntry("/login", returnTo)}
           aria-current={currentPath === "/login" ? "page" : undefined}
         >
           Sign In
         </a>
-        <ButtonLink
-          href={to("/signup")}
-          variant="ink"
-          className="px-4 font-sans"
+        <a
+          href={authEntry("/signup", returnTo)}
+          className="market-create"
           aria-current={currentPath === "/signup" ? "page" : undefined}
         >
           Create Account
-        </ButtonLink>
+        </a>
         {signOutError && (
           <p
             role="alert"
@@ -88,42 +114,62 @@ export function AccountNavigation({
 
   const links = (
     <>
-      <div className="flex min-w-0 items-center gap-3 border-b border-line px-3 py-3">
-        <span className="account-initials" aria-hidden="true">
-          {initials(name)}
-        </span>
-        <span className="min-w-0 break-words font-display font-semibold">{name}</span>
-      </div>
+      {mobile && (
+        <div className="flex min-w-0 items-center gap-3 border-b border-line px-3 py-3">
+          <span className="account-initials" aria-hidden="true">
+            {initials(name)}
+          </span>
+          <span className="min-w-0 wrap-anywhere font-display font-semibold">{name}</span>
+        </div>
+      )}
       {workspaceLinks.length > 0 && (
         <section aria-label="My workspace">
-          <h3 className="nav-group-title">My workspace</h3>
-          {workspaceLinks.map(({ href, label }) => (
-            <a
-              key={href}
-              href={to(href)}
-              aria-current={currentPath === href ? "page" : undefined}
-              className="nav-panel-link"
-            >
-              {label}
-            </a>
-          ))}
+          {mobile && <h3 className="nav-group-title">My workspace</h3>}
+          {workspaceLinks.map(({ href, label }) => {
+            const Icon = icons[href as keyof typeof icons];
+            return (
+              <a
+                key={href}
+                href={to(href)}
+                aria-current={currentPath === href ? "page" : undefined}
+                className={
+                  "nav-panel-link account-row " +
+                  (href === "/dashboard/support" ? "account-support" : "")
+                }
+              >
+                <Icon size={18} strokeWidth={1.65} aria-hidden="true" />
+                {label}
+                {href === "/dashboard/messages" && unread && (
+                  <span className="unread-dot" aria-label="Unread replies" />
+                )}
+              </a>
+            );
+          })}
         </section>
       )}
-      <section aria-label="Account" className="mt-2 border-t border-line pt-1">
+      <section aria-label="Account" className="mt-1">
         <a
           href={to(accountLink.href)}
-          aria-current={currentPath === accountLink.href ? "page" : undefined}
-          className="nav-panel-link"
+          aria-current={
+            currentPath === accountLink.href
+              ? "page"
+              : currentPath.startsWith("/account/")
+                ? "location"
+                : undefined
+          }
+          className="nav-panel-link account-row"
         >
+          <Settings size={18} strokeWidth={1.65} aria-hidden="true" />
           {accountLink.label}
         </a>
         <button
           type="button"
           disabled={signOutPending}
           onClick={() => void signOut()}
-          className="nav-panel-link w-full justify-between disabled:opacity-60"
+          className="nav-panel-link account-row account-signout w-full disabled:opacity-60"
         >
-          {signOutPending ? "Signing out…" : "Sign Out"} <LogOut size={16} aria-hidden="true" />
+          <LogOut size={18} aria-hidden="true" />
+          {signOutPending ? "Signing out…" : "Sign Out"}
         </button>
         {signOutError && (
           <p role="alert" className="px-3 py-1 text-sm text-red-800">
@@ -136,42 +182,52 @@ export function AccountNavigation({
   if (mobile) return <div>{links}</div>;
 
   return (
-    <div
-      ref={widget}
-      className="relative shrink-0"
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
-      }}
-      onKeyDown={(event) => {
-        if (open && event.key === "Escape") {
-          event.preventDefault();
-          setOpen(false);
-          trigger.current?.focus();
-        }
-      }}
-    >
-      <button
-        ref={trigger}
-        type="button"
-        aria-label="Account"
-        aria-controls={menuId}
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-        className="nav-site-link max-w-48 border border-line bg-white px-2.5"
+    <>
+      <a
+        href={to("/dashboard/messages")}
+        className="nav-icon-control relative"
+        aria-label={unread ? "Notifications, unread messages" : "Notifications"}
       >
-        <span className="account-initials" aria-hidden="true">
-          {initials(name)}
-        </span>
-        <span className="min-w-0 truncate">{name.split(/\s+/u)[0]}</span>
-        <ChevronDown aria-hidden="true" className="size-4" strokeWidth={1.75} />
-      </button>
+        <Bell size={19} strokeWidth={1.7} aria-hidden="true" />
+        {unread && <span className="unread-dot absolute end-2 top-2" aria-hidden="true" />}
+      </a>
       <div
-        id={menuId}
-        hidden={!open}
-        className="nav-flyout absolute end-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] w-64 overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-card"
+        ref={widget}
+        className="relative min-w-0"
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+        }}
+        onKeyDown={(event) => {
+          if (open && event.key === "Escape") {
+            event.preventDefault();
+            setOpen(false);
+            trigger.current?.focus();
+          }
+        }}
       >
-        {links}
+        <button
+          ref={trigger}
+          type="button"
+          aria-label="Account"
+          aria-controls={menuId}
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+          className="market-identity"
+        >
+          <span className="account-initials" aria-hidden="true">
+            {initials(name)}
+          </span>
+          <span className="min-w-0 truncate">{name}</span>
+          <ChevronDown aria-hidden="true" className="size-4" strokeWidth={1.75} />
+        </button>
+        <div
+          id={menuId}
+          hidden={!open}
+          className="nav-flyout absolute end-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] w-64 overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-panel"
+        >
+          {links}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

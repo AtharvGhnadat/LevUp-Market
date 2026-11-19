@@ -1,16 +1,31 @@
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
-import { allProjectsLink, currentProjectLink, projectCategoryLinks } from "@/data/navigation";
+import {
+  allProjectsLink,
+  currentProjectLink,
+  projectCategoryLinks,
+  resourceLinks,
+} from "@/data/navigation";
 import { cn } from "@/lib/cn";
 import { to } from "@/lib/routes";
 
-export function NavDropdown({ currentPath }: { currentPath: string }) {
+export function NavDropdown({
+  currentPath,
+  resources = false,
+}: {
+  currentPath: string;
+  resources?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuId = useId();
   const inProjects = currentPath === "/projects" || currentPath.startsWith("/projects/");
-  const selectedHref = currentProjectLink(currentPath, window.location.search);
+  const selectedHref = resources
+    ? currentPath
+    : currentProjectLink(currentPath, window.location.search);
+  const landing = resources ? { href: "/resources", label: "All resources" } : allProjectsLink;
+  const links = resources ? resourceLinks : projectCategoryLinks;
 
   useEffect(() => {
     if (!open) return;
@@ -41,13 +56,17 @@ export function NavDropdown({ currentPath }: { currentPath: string }) {
       <button
         ref={buttonRef}
         type="button"
-        aria-current={inProjects ? "location" : undefined}
+        aria-current={
+          (resources ? currentPath.startsWith("/resources") || currentPath === "/faq" : inProjects)
+            ? "location"
+            : undefined
+        }
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((value) => !value)}
         className="nav-site-link"
       >
-        Projects
+        {resources ? "Resources" : "Projects"}
         <ChevronDown
           aria-hidden="true"
           className={cn("size-4 transition-transform duration-150", open && "rotate-180")}
@@ -58,19 +77,24 @@ export function NavDropdown({ currentPath }: { currentPath: string }) {
       <div
         id={menuId}
         hidden={!open}
-        className="nav-flyout absolute start-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] w-[25rem] overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-card"
+        className={cn(
+          "nav-flyout absolute start-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-panel",
+          resources ? "w-56" : "w-[25rem]",
+        )}
       >
         <a
-          href={to(allProjectsLink.href)}
-          aria-current={selectedHref === allProjectsLink.href ? "page" : undefined}
+          href={to(landing.href)}
+          aria-current={selectedHref === landing.href ? "page" : undefined}
           className="nav-panel-link justify-between"
           onClick={() => setOpen(false)}
         >
-          {allProjectsLink.label}
+          {landing.label}
           <ArrowRight aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
         </a>
-        <ul className="mt-2 grid grid-cols-2 gap-1 border-t border-line pt-2">
-          {projectCategoryLinks.map(({ href, label }) => (
+        <ul
+          className={cn("mt-2 grid gap-1 border-t border-line pt-2", !resources && "grid-cols-2")}
+        >
+          {links.map(({ href, label }) => (
             <li key={href}>
               <a
                 href={to(href)}
@@ -82,6 +106,13 @@ export function NavDropdown({ currentPath }: { currentPath: string }) {
               </a>
             </li>
           ))}
+          {resources && (
+            <li className="min-[80rem]:hidden">
+              <a className="nav-panel-link" href={to("/about")}>
+                About
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     </div>

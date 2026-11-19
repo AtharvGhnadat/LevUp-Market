@@ -26,6 +26,8 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
                 ["All projects", "/projects"],
                 ["Custom development", "/custom-project"],
                 ["How it works", "/#how-it-works"],
+                ["Resources", "/resources"],
+                ["About", "/about"],
                 ["Account settings", "/account"],
               ]
           ).map(([label, path]) => (
