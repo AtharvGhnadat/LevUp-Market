@@ -121,8 +121,9 @@
     *,
     *::before,
     *::after {
-      transition-duration: 0.01ms !important;
-      animation-duration: 0.01ms !important;
+      transition: none !important;
+      animation: none !important;
+      scroll-behavior: auto !important;
     }
   }
 }
@@ -205,36 +206,431 @@
   }
 }
 @layer components {
-  .account-initials { @apply inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-alloy font-mono text-xs font-medium text-mineral; }
-  .compact-avatar { @apply hidden sm:inline-flex; }
-  .nav-group-title { @apply px-3 pt-3 pb-1 text-xs font-semibold text-muted; }
-  .nav-drawer { padding-bottom: max(.25rem, env(safe-area-inset-bottom)); }
-  .nav-flyout { transition: opacity 170ms ease-out, transform 170ms ease-out, display 170ms allow-discrete; }
-  .nav-flyout[hidden] { opacity: 0; transform: translateY(-4px); pointer-events: none; }
-  @starting-style { .nav-flyout:not([hidden]) { opacity: 0; transform: translateY(-4px); } }
+  .account-initials {
+    @apply inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-alloy font-mono text-xs font-medium text-mineral;
+  }
+  .compact-avatar {
+    @apply hidden sm:inline-flex;
+  }
+  .nav-group-title {
+    @apply px-3 pt-3 pb-1 text-xs font-semibold text-muted;
+  }
+  .nav-drawer {
+    padding-bottom: max(0.25rem, env(safe-area-inset-bottom));
+  }
+  .nav-flyout {
+    transition:
+      opacity 170ms ease-out,
+      transform 170ms ease-out,
+      display 170ms allow-discrete;
+  }
+  .nav-flyout[hidden] {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+  }
+  @starting-style {
+    .nav-flyout:not([hidden]) {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
 }
 @layer components {
-  .workspace-back { @apply inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted underline-offset-4 hover:text-alloy hover:underline; }
-  .auth-spread { @apply mx-auto grid w-full max-w-[1280px] items-center gap-8 px-5 py-6 sm:px-8 sm:py-10; }
-  .auth-form-panel { @apply mx-auto w-full min-w-0 max-w-[28rem]; }
-  .auth-heading { font-size:clamp(2.15rem,3.4vw,3.35rem); line-height:1.05; letter-spacing:-.045em; @apply mt-4 font-display font-semibold text-alloy; }
-  .auth-plate { @apply mx-auto w-full max-w-[28rem] overflow-hidden rounded-lg bg-alloy text-mineral; }
-  .auth-photo { @apply block h-36 w-full object-cover sm:h-52; }
-  .auth-caption { @apply flex min-h-20 items-center justify-between gap-3 px-5 py-4 hover:bg-alloy-soft focus-visible:-outline-offset-4; }
-  .auth-guidance { @apply mx-auto w-full max-w-[28rem] border-t-2 border-volt pt-4; }
-  @media(min-width:55rem) {
-    .auth-spread { min-height: min(760px, calc(100svh - 10rem)); grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(2rem,6vw,6rem); padding-block:clamp(2.5rem,5vw,5rem); }
-    .auth-form-panel { grid-area:1 / 2; }
-    .auth-plate { grid-area:1 / 1; max-width:none; }
-    .auth-photo { height:clamp(19rem,33vw,29rem); }
-    .auth-caption { padding:1.35rem 1.75rem; }
-    .auth-service { max-width:64rem; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); }
-    .auth-service .auth-form-panel { grid-area:auto; }
-    .auth-guidance { align-self:center; max-width:18rem; }
+  .workspace-back {
+    @apply inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted underline-offset-4 hover:text-alloy hover:underline;
   }
-  .auth-form-panel input { transition: border-color 140ms ease-out, background-color 140ms ease-out; }
-  @keyframes customer-enter { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
-  @media(prefers-reduced-motion:no-preference) {
-    .customer-enter { animation:customer-enter 200ms cubic-bezier(.22,1,.36,1) both; }
+  .auth-spread {
+    @apply mx-auto grid w-full max-w-[1280px] items-center gap-8 px-5 py-6 sm:px-8 sm:py-10;
+  }
+  .auth-form-panel {
+    @apply mx-auto w-full min-w-0 max-w-[28rem];
+  }
+  .auth-heading {
+    font-size: clamp(2.15rem, 3.4vw, 3.35rem);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    @apply mt-4 font-display font-semibold text-alloy;
+  }
+  .auth-plate {
+    @apply mx-auto w-full max-w-[28rem] overflow-hidden rounded-lg bg-alloy text-mineral;
+  }
+  .auth-photo {
+    @apply block h-36 w-full object-cover sm:h-52;
+  }
+  .auth-caption {
+    @apply flex min-h-20 items-center justify-between gap-3 px-5 py-4 hover:bg-alloy-soft focus-visible:-outline-offset-4;
+  }
+  .auth-guidance {
+    @apply mx-auto w-full max-w-[28rem] border-t-2 border-volt pt-4;
+  }
+  @media (min-width: 55rem) {
+    .auth-spread {
+      min-height: min(760px, calc(100svh - 10rem));
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(2rem, 6vw, 6rem);
+      padding-block: clamp(2.5rem, 5vw, 5rem);
+    }
+    .auth-form-panel {
+      grid-area: 1 / 2;
+    }
+    .auth-plate {
+      grid-area: 1 / 1;
+      max-width: none;
+    }
+    .auth-photo {
+      height: clamp(19rem, 33vw, 29rem);
+    }
+    .auth-caption {
+      padding: 1.35rem 1.75rem;
+    }
+    .auth-service {
+      max-width: 64rem;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    }
+    .auth-service .auth-form-panel {
+      grid-area: auto;
+    }
+    .auth-guidance {
+      align-self: center;
+      max-width: 18rem;
+    }
+  }
+  .auth-form-panel input {
+    transition:
+      border-color 140ms ease-out,
+      background-color 140ms ease-out;
+  }
+  @keyframes customer-enter {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .customer-enter {
+      animation: customer-enter 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+  }
+}
+@layer components {
+  .workspace-shell {
+    @apply mx-auto grid w-full max-w-[1280px] items-start gap-6 px-5 py-5 sm:px-8 sm:py-8 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-12 lg:py-10 xl:grid-cols-[14rem_minmax(0,1fr)] xl:gap-16;
+  }
+  .workspace-rail {
+    @apply sticky top-24 hidden border-e border-line pe-5 lg:block;
+  }
+  .workspace-nav-link {
+    @apply flex min-h-11 items-center rounded-xs border-s-2 border-transparent px-3 text-sm font-medium hover:bg-mineral-deep;
+  }
+  .workspace-nav-link[aria-current] {
+    @apply border-s-volt-text bg-white text-alloy;
+  }
+  .workspace-content {
+    @apply min-w-0 pb-10;
+  }
+  .workspace-crumb {
+    @apply mb-4 flex min-h-8 flex-wrap items-center gap-2 text-sm text-muted;
+  }
+  .workspace-crumb a {
+    @apply inline-flex min-h-11 items-center underline-offset-4 hover:underline;
+  }
+  .workspace-title,
+  .workspace-gate h1 {
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    @apply font-display font-semibold;
+  }
+  .workspace-intro {
+    @apply mt-2 mb-7 max-w-[62ch] leading-relaxed text-muted;
+  }
+  .workspace-gate {
+    @apply mx-auto min-h-[55vh] w-full max-w-4xl space-y-4 px-5 py-12;
+  }
+  .workspace-action {
+    @apply inline-flex min-h-11 items-center justify-center rounded-md bg-alloy px-5 text-sm font-semibold text-white hover:bg-alloy-soft;
+  }
+  .workspace-link {
+    @apply inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-volt-text underline-offset-4 hover:underline disabled:text-muted;
+  }
+  .workspace-section-title {
+    @apply mb-3 border-b border-alloy/25 pb-3 font-display text-xl font-semibold;
+  }
+  .workspace-empty,
+  .profile-checklist,
+  .identity-summary {
+    @apply my-3 min-w-0 rounded-md border border-line bg-white p-5 sm:p-6;
+  }
+  .workspace-empty {
+    @apply border-s-2 border-s-volt-text;
+  }
+  .workspace-feedback {
+    @apply my-3 rounded-sm bg-white p-4 text-sm text-muted;
+  }
+  .workspace-row {
+    @apply flex min-h-14 items-center justify-between gap-4 border-b border-line py-3;
+  }
+  a.workspace-row:hover {
+    @apply text-volt-text;
+  }
+  .workspace-list {
+    @apply border-t border-line;
+  }
+  .overview-grid {
+    @apply grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)];
+  }
+  .settings-form {
+    @apply max-w-[45rem] rounded-md border border-line bg-white p-4 sm:p-6;
+  }
+  .settings-grid {
+    @apply grid gap-4 sm:grid-cols-2;
+  }
+  .settings-sections {
+    @apply max-w-[45rem] space-y-8;
+  }
+  .field-label {
+    @apply block text-sm font-semibold text-alloy;
+  }
+  .workspace-input {
+    @apply mt-1.5 block min-h-11 w-full min-w-0 rounded-md border border-muted/80 bg-white px-3 py-2 text-base font-normal text-alloy;
+    transition: border-color 140ms ease-out;
+  }
+  .workspace-input:focus-visible {
+    @apply border-volt-text;
+  }
+  .form-error,
+  .form-confirmation {
+    @apply my-3 border-s-2 px-3 py-2 text-sm font-medium;
+  }
+  .form-error {
+    @apply border-red-700 bg-red-50 text-red-900;
+  }
+  .form-confirmation {
+    @apply border-success bg-mineral text-alloy;
+  }
+}
+@layer components {
+  .profile-checklist progress {
+    appearance: none;
+    border: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--color-mineral-deep);
+  }
+  .profile-checklist progress::-webkit-progress-bar {
+    background: var(--color-mineral-deep);
+  }
+  .profile-checklist progress::-webkit-progress-value {
+    background: var(--color-alloy);
+  }
+  .profile-checklist progress::-moz-progress-bar {
+    background: var(--color-alloy);
+  }
+}
+@layer components {
+  .market-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    padding: 4px;
+  }
+  .market-bar {
+    @apply mx-auto flex w-full max-w-[1640px] flex-wrap items-center justify-between border border-alloy/15 bg-white;
+    border-radius: 12px;
+    min-height: 56px;
+    padding: 4px;
+    box-shadow: 0 3px 12px rgb(32 55 53 / 0.08);
+  }
+  .market-tools {
+    @apply ms-auto flex min-w-0 items-center;
+  }
+  .market-primary {
+    @apply flex items-center;
+  }
+  .market-account-slot {
+    display: none;
+  }
+  .market-sign-in,
+  .market-create {
+    @apply inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-md px-3.5 text-sm font-semibold focus-visible:outline-offset-2;
+    transition:
+      background-color 140ms ease-out,
+      transform 140ms ease-out;
+  }
+  .market-sign-in {
+    @apply border border-alloy text-alloy hover:bg-mineral;
+  }
+  .market-create {
+    @apply border border-volt-action bg-volt-action text-white hover:bg-volt-action-hover;
+  }
+  .market-create:active,
+  .market-sign-in:active {
+    transform: translateY(1px);
+  }
+  .market-identity {
+    @apply flex min-h-11 min-w-0 items-center gap-2 border-s border-line ps-3 pe-1 text-sm font-semibold hover:text-volt-text;
+  }
+  .market-identity {
+    max-width: min(100%, 10rem);
+  }
+  .market-identity svg {
+    flex: none;
+  }
+  .market-identity[aria-expanded="true"] > svg {
+    transform: rotate(180deg);
+  }
+  .market-identity > svg {
+    transition: transform 160ms ease-out;
+  }
+  .account-row {
+    @apply gap-3 font-medium;
+  }
+  .account-row:hover {
+    background-color: var(--color-volt-tint);
+  }
+  .account-row svg {
+    flex: none;
+  }
+  .account-row[aria-current] {
+    @apply border-s-transparent bg-volt-tint;
+  }
+  .account-support,
+  .account-signout {
+    @apply mt-2 border-t border-t-line;
+  }
+  .account-signout {
+    color: var(--color-volt-text);
+  }
+  .unread-dot {
+    @apply inline-block size-2 shrink-0 rounded-full bg-volt-action;
+  }
+  .cart-count {
+    @apply absolute end-0 top-0 min-w-4 rounded-full bg-volt-action px-1 text-center font-mono text-xs leading-4 text-white tabular-nums;
+  }
+  .resource-page {
+    @apply mx-auto w-full max-w-5xl px-5 py-8 sm:px-8 lg:py-14;
+  }
+  .resource-lead {
+    @apply mt-3 mb-8 max-w-prose text-lg text-muted;
+  }
+  .resource-section {
+    @apply max-w-3xl border-t border-line py-5;
+  }
+  .resource-section h2 {
+    @apply mb-2 font-display text-xl font-semibold;
+  }
+  .resource-section p,
+  .resource-about p {
+    @apply max-w-prose leading-relaxed text-muted;
+  }
+  .resource-about {
+    @apply grid items-start gap-6 md:grid-cols-2;
+  }
+  .resource-about img {
+    @apply w-full rounded-md;
+  }
+  @media (min-width: 360px) {
+    .market-header {
+      padding: 6px 8px;
+    }
+    .market-bar {
+      padding: 5px 8px;
+    }
+  }
+  @media (min-width: 40rem) {
+    .market-header {
+      padding: 8px 16px;
+    }
+    .market-bar {
+      padding: 8px 16px;
+    }
+    .market-tools {
+      gap: 4px;
+    }
+    .market-search {
+      width: clamp(9rem, 15vw, 16.5rem);
+      justify-content: flex-start;
+      gap: 0.6rem;
+      border: 1px solid var(--color-line);
+      padding: 0 0.75rem;
+      background: var(--color-mineral);
+    }
+  }
+  @media (min-width: 75rem) {
+    .market-header {
+      padding: 12px clamp(12px, 1.6vw, 28px) 6px;
+    }
+    .market-bar {
+      flex-wrap: nowrap;
+      gap: clamp(8px, 1vw, 20px);
+      min-height: 4.5rem;
+      padding: 8px clamp(12px, 1.25vw, 24px);
+      border-radius: 16px;
+    }
+    .market-primary .nav-site-link {
+      padding-inline: clamp(6px, 0.55vw, 12px);
+    }
+    .market-primary .nav-site-link[aria-current]::after {
+      width: auto;
+      inset-inline: 0.65rem;
+      bottom: 0;
+      background: var(--color-volt-action);
+    }
+    .market-bar > nav {
+      border-inline-start: 1px solid var(--color-line);
+      padding-inline-start: clamp(8px, 1vw, 20px);
+    }
+    .market-account-slot {
+      display: flex;
+      flex-shrink: 0;
+      width: clamp(13.5rem, 16vw, 16rem);
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .market-search {
+      flex-shrink: 1;
+      min-width: 8rem;
+      border-color: color-mix(in srgb, var(--color-alloy) 35%, white);
+      background: white;
+    }
+    .market-tools .market-sign-in {
+      margin-inline-end: 4px;
+    }
+  }
+  @media (min-width: 88rem) {
+    .market-bar {
+      min-height: 4.875rem;
+    }
+    .market-primary .nav-site-link {
+      font-size: 1rem;
+      padding-inline: clamp(10px, 0.85vw, 16px);
+    }
+    .market-tools {
+      gap: 6px;
+    }
+    .market-search {
+      width: clamp(14rem, 16.5vw, 17rem);
+    }
+    .market-account-slot {
+      width: clamp(15rem, 16vw, 17rem);
+    }
+    .market-identity {
+      max-width: min(100%, 12.75rem);
+      font-size: 1rem;
+    }
+    .market-create,
+    .market-sign-in,
+    .account-row {
+      font-size: 1rem;
+    }
+    .market-create,
+    .market-sign-in {
+      padding-inline: 1rem;
+    }
   }
 }

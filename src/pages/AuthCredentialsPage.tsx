@@ -25,7 +25,9 @@ import { useAuth } from "@/auth/auth-context";
 export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
   const signup = mode === "signup";
   const params = new URLSearchParams(window.location.search);
-  const destination = safeAuthDestination(params.get("next"));
+  const destination = safeAuthDestination(
+    params.get("next") ?? (signup ? "/account/profile" : null),
+  );
   const { state } = useAuth();
   const configured = isSupabaseConfigured();
   const [error, setError] = useState("");
@@ -128,6 +130,8 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
       });
       if (failure?.status === 429) {
         setError("Too many requests. Wait a moment before trying again.");
+      } else if (failure && (!failure.status || failure.status >= 500)) {
+        setError("We couldn’t reach account services. Please try again.");
       } else {
         setResendNotice(
           "If this address can receive another confirmation link, we'll send one shortly.",

@@ -1,3 +1,5 @@
+import { customerRoutes } from "@/workspace/navigation";
+import { usePageAnchors } from "@/lib/use-page-anchors";
 import { currentRoute } from "@/lib/routes";
 import { lazy, Suspense, useEffect } from "react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -8,6 +10,9 @@ import { CartProvider } from "@/state/cart";
 import { AuthProvider } from "@/auth/AuthProvider";
 import { authEntry, safeAuthDestination } from "@/auth/auth-navigation";
 
+const ResourcePage = lazy(() =>
+  import("@/pages/ResourcePage").then((module) => ({ default: module.ResourcePage })),
+);
 const ProjectsPage = lazy(() =>
   import("@/pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })),
 );
@@ -67,7 +72,6 @@ const authPages = {
   "/forgot-password": <ForgotPasswordPage />,
   "/reset-password": <ResetPasswordPage />,
   "/auth/callback": <AuthCallbackPage />,
-  "/account": <AccountPage />,
 };
 
 /**
@@ -75,7 +79,9 @@ const authPages = {
  * routes in the PRD when the platform migrates (app/page.tsx, app/projects/..., etc.).
  */
 export default function App() {
+  usePageAnchors();
   const path = currentRoute();
+  const workspace = customerRoutes.some((route) => route.href === path);
   const authPage = Object.prototype.hasOwnProperty.call(authPages, path)
     ? authPages[path as keyof typeof authPages]
     : null;
@@ -92,7 +98,15 @@ export default function App() {
           </a>
           <SiteHeader currentPath={path} />
           <main id="main" className="flex-1">
-            {authPage ? (
+            {workspace ? (
+              <Suspense fallback={<PageLoading />}>
+                <AccountPage path={path} />
+              </Suspense>
+            ) : ["/resources", "/resources/project-guidelines", "/faq", "/about"].includes(path) ? (
+              <Suspense fallback={<PageLoading />}>
+                <ResourcePage path={path} />
+              </Suspense>
+            ) : authPage ? (
               <Suspense fallback={<PageLoading />}>{authPage}</Suspense>
             ) : path === "/" ? (
               <HomePage />
@@ -134,7 +148,7 @@ export default function App() {
               <PlannedRoutePage path={path} />
             )}
           </main>
-          <SiteFooter compact={Boolean(authPage)} />
+          <SiteFooter compact={workspace || Boolean(authPage)} />
         </div>
       </AuthProvider>
     </CartProvider>

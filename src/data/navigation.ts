@@ -3,11 +3,17 @@ import { categories } from "./categories";
 export type NavLink = { label: string; href: string };
 
 /** Routes follow the PRD route inventory (section 10) where one exists. */
-export const resourceLinks: NavLink[] = [
-  { label: "Project Guidelines", href: "/resources/project-guidelines" },
-  { label: "Technical Articles", href: "/resources/articles" },
-  { label: "FAQs", href: "/faq" },
-  { label: "Support Center", href: "/contact" },
+export const resourceLinks = [
+  {
+    href: "/resources/project-guidelines",
+    label: "Project guide",
+    description: "Choose a project, compare packages and prepare a custom brief.",
+  },
+  {
+    href: "/faq",
+    label: "Customer FAQs",
+    description: "Answers about sign-in, requests, hardware addresses and your cart.",
+  },
 ];
 
 export const allProjectsLink: NavLink = { label: "All projects", href: "/projects" };

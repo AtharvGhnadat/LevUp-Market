@@ -5,14 +5,17 @@ import { isSupabasePublicKey } from "@/lib/supabase-public-key";
 
 describe("authentication return destinations", () => {
   it.each([
-    ["https://example.invalid", "/account"],
-    ["//example.invalid/checkout", "/account"],
-    ["/\\example.invalid", "/account"],
-    ["/%2f%2fexample.invalid", "/account"],
-    ["/projects/../admin", "/account"],
-    ["/projects/%2e%2e/checkout", "/account"],
-    ["/auth/callback", "/account"],
-    ["/admin", "/account"],
+    ["https://example.invalid", "/dashboard"],
+    ["//example.invalid/checkout", "/dashboard"],
+    ["/\\example.invalid", "/dashboard"],
+    ["/%2f%2fexample.invalid", "/dashboard"],
+    ["/projects/../admin", "/dashboard"],
+    ["/projects/%2e%2e/checkout", "/dashboard"],
+    ["/auth/callback", "/dashboard"],
+    ["/admin", "/dashboard"],
+    ["/account/academic", "/account/academic"],
+    ["/dashboard/orders?order=LP-07", "/dashboard/orders?order=LP-07"],
+    ["/account/missing", "/dashboard"],
     ["/checkout?source=cart#summary", "/checkout?source=cart#summary"],
     ["/projects/esp32-smart-irrigation-system", "/projects/esp32-smart-irrigation-system"],
   ])("validates %s", (input, output) => {
