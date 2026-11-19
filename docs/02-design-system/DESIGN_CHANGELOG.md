@@ -7,6 +7,16 @@
 
 ## History
 
+### [2026-11-19] Catalog-first navigation
+
+The approved direction gives catalog search the most space on desktop and makes Custom development a plain navigation link. The Projects disclosure uses the six catalog categories and indicates the selected category with type weight and a Volt edge line.
+
+- **Header and drawer** — The expanded row begins at 70rem. Compact widths keep the approved logo and 44px Search, Cart and Menu controls. The bounded drawer scrolls internally, closes on navigation or resize to desktop, and restores a usable focus position.
+- **Search** — One dialog replaces the two viewport-specific implementations. It uses existing catalog suggestions and query parameters, with named Clear and Close controls and a keyboard shortcut on the header trigger.
+- **Working destinations** — How it works links to the homepage section. Account and resource destinations are omitted from the public header while their routes are placeholders.
+
+The [navigation design and verification record](NAVIGATION.md) includes the before-and-after evidence and coverage. Method adapted from [Unslop](https://github.com/heydamir/unslop) by Damir Sokolovsky under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
 ### [2026-11-18] Stage E — Custom Project Development Requisition Interface
 
 **Changed by:** Principal Product Designer, Design Systems Architect, Senior Frontend Engineer  

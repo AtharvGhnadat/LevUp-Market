@@ -1,80 +1,84 @@
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
-import type { NavItem } from "@/data/navigation";
+import { allProjectsLink, currentProjectLink, projectCategoryLinks } from "@/data/navigation";
 import { cn } from "@/lib/cn";
 import { to } from "@/lib/routes";
 
-export const navItemClass = cn(
-  "relative inline-flex h-10 items-center gap-1.5 whitespace-nowrap font-sans text-sm font-medium text-alloy transition-colors duration-150 hover:text-volt-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action",
-  "after:absolute after:inset-x-0 after:bottom-1 after:h-[2px] after:origin-left after:scale-x-0 after:rounded-full after:bg-volt-action after:transition-transform after:duration-150 hover:after:scale-x-100",
-  "aria-[current=page]:after:scale-x-100",
-);
-
-/** Disclosure-style menu: click or Enter toggles, Escape and outside click close. */
-export function NavDropdown({ item, active }: { item: NavItem; active: boolean }) {
+export function NavDropdown({ currentPath }: { currentPath: string }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuId = useId();
+  const inProjects = currentPath === "/projects" || currentPath.startsWith("/projects/");
+  const selectedHref = currentProjectLink(currentPath, window.location.search);
 
   useEffect(() => {
     if (!open) return;
-    function onPointer(e: PointerEvent) {
-      if (!ref.current?.contains(e.target as Node)) setOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
+    function onPointerDown(event: PointerEvent) {
+      if (event.target instanceof Node && !rootRef.current?.contains(event.target)) {
         setOpen(false);
-        buttonRef.current?.focus();
       }
     }
-    document.addEventListener("pointerdown", onPointer);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("pointerdown", onPointer);
-      document.removeEventListener("keydown", onKey);
-    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [open]);
 
   return (
     <div
-      ref={ref}
+      ref={rootRef}
       className="relative"
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+      onKeyDown={(event) => {
+        if (open && event.key === "Escape") {
+          event.preventDefault();
+          setOpen(false);
+          buttonRef.current?.focus();
+        }
       }}
     >
       <button
         ref={buttonRef}
         type="button"
+        aria-current={inProjects ? "location" : undefined}
         aria-expanded={open}
         aria-controls={menuId}
-        onClick={() => setOpen((v) => !v)}
-        className={cn(navItemClass, active && "after:scale-x-100")}
+        onClick={() => setOpen((value) => !value)}
+        className="nav-site-link"
       >
-        {item.label}
+        Projects
         <ChevronDown
           aria-hidden="true"
-          className={cn(
-            "h-3.5 w-3.5 text-muted transition-transform duration-150",
-            open && "rotate-180",
-          )}
+          className={cn("size-4 transition-transform duration-150", open && "rotate-180")}
           strokeWidth={1.75}
         />
       </button>
+
       <div
         id={menuId}
         hidden={!open}
-        className="absolute top-full left-0 z-50 mt-2 w-64 rounded-xl border border-line bg-white p-1.5 shadow-panel"
+        className="absolute start-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] w-[25rem] overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-card"
       >
-        <ul>
-          {item.children?.map((child) => (
-            <li key={child.href + child.label}>
+        <a
+          href={to(allProjectsLink.href)}
+          aria-current={selectedHref === allProjectsLink.href ? "page" : undefined}
+          className="nav-panel-link justify-between"
+          onClick={() => setOpen(false)}
+        >
+          {allProjectsLink.label}
+          <ArrowRight aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.75} />
+        </a>
+        <ul className="mt-2 grid grid-cols-2 gap-1 border-t border-line pt-2">
+          {projectCategoryLinks.map(({ href, label }) => (
+            <li key={href}>
               <a
-                href={to(child.href)}
-                className="block rounded-md px-3 py-2 text-sm text-alloy transition-colors duration-150 hover:bg-mineral focus-visible:bg-mineral focus-visible:outline-none"
+                href={to(href)}
+                aria-current={selectedHref === href ? "page" : undefined}
+                className="nav-panel-link h-full"
+                onClick={() => setOpen(false)}
               >
-                {child.label}
+                {label}
               </a>
             </li>
           ))}

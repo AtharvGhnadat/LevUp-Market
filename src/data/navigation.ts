@@ -1,7 +1,6 @@
 import { categories } from "./categories";
 
 export type NavLink = { label: string; href: string };
-export type NavItem = NavLink & { children?: NavLink[] };
 
 /** Routes follow the PRD route inventory (section 10) where one exists. */
 export const resourceLinks: NavLink[] = [
@@ -11,22 +10,26 @@ export const resourceLinks: NavLink[] = [
   { label: "Support Center", href: "/contact" },
 ];
 
-export const primaryNav: NavItem[] = [
-  {
-    label: "Explore Projects",
-    href: "/projects",
-    children: [
-      { label: "All Projects", href: "/projects" },
-      ...categories.map((c) => ({
-        label: c.name,
-        href: `/projects?category=${c.slug}`,
-      })),
-    ],
-  },
-  { label: "Custom Projects", href: "/custom-project" },
-  { label: "How It Works", href: "/how-it-works" },
-  { label: "Resources", href: "/resources", children: resourceLinks },
+export const allProjectsLink: NavLink = { label: "All projects", href: "/projects" };
+
+export const projectCategoryLinks = categories.map(({ slug, name }) => ({
+  slug,
+  label: name,
+  href: `/projects?category=${slug}`,
+}));
+
+export const primaryNav: NavLink[] = [
+  { label: "Custom development", href: "/custom-project" },
+  { label: "How it works", href: "/#how-it-works" },
 ];
+
+export function currentProjectLink(path: string, search: string): string | undefined {
+  if (path !== allProjectsLink.href) return;
+  const category = new URLSearchParams(search).get("category");
+  return category
+    ? projectCategoryLinks.find(({ slug }) => slug === category)?.href
+    : allProjectsLink.href;
+}
 
 export const footerGroups: Array<{ title: string; links: NavLink[] }> = [
   {

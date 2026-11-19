@@ -12,6 +12,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Changed
+
+- Reworked public navigation around project search and category discovery. The header now links to the working custom development form and homepage process section, and the compact layout keeps the live cart visible without clipping at narrow widths.
+
 ### Security & Remediation (`2026-11-18` — Codex Review Findings Remediation)
 
 - **Cashfree Server Enablement Gate (S1):** Introduced explicit `CASHFREE_PAYMENTS_ENABLED` server-side control (defaulting to `false`); payment creation and verification fail closed with HTTP 503 and zero upstream network requests when disabled.
