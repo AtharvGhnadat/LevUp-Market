@@ -291,7 +291,7 @@ export function todayIsoDate(now = new Date()): string {
 
 export const DRAFT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-export function validateCustomProjectForm(
+export function validateEngineeringBrief(
   state: CustomProjectFormState,
   now = new Date(),
 ): CustomProjectFieldErrors {
@@ -342,6 +342,14 @@ export function validateCustomProjectForm(
     errors.deliverables = "Select at least one required deliverable.";
   }
 
+  return errors;
+}
+
+export function validateCustomProjectForm(
+  state: CustomProjectFormState,
+  now = new Date(),
+): CustomProjectFieldErrors {
+  const errors = validateEngineeringBrief(state, now);
   if (state.contactName.trim().length < 2) {
     errors.contactName = "Enter your full name.";
   }

@@ -37,6 +37,7 @@ import {
   todayIsoDate,
   validateAttachmentCandidate,
   validateCustomProjectForm,
+  validateEngineeringBrief,
   type AttachmentMetadata,
   type CustomProjectFieldErrors,
   type CustomProjectFormState,
@@ -87,6 +88,7 @@ function getInitialFormState(): {
 
 export function CustomProjectPage() {
   const { state: customer } = useAuth();
+  const signedIn = customer.status === "signed-in";
   const [sending, setSending] = useState(false),
     [sendError, setSendError] = useState("");
   const requestKey = useRef<string | null>(null);
@@ -251,7 +253,9 @@ export function CustomProjectPage() {
 
   const handleReviewSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const validationErrors = validateCustomProjectForm(form);
+    const validationErrors = signedIn
+      ? validateEngineeringBrief(form)
+      : validateCustomProjectForm(form);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       window.setTimeout(() => errorBannerRef.current?.focus(), 0);
@@ -824,8 +828,12 @@ export function CustomProjectPage() {
               {/* Section 04: Reference Files & Contact Information */}
               <SectionCard
                 code="04"
-                title="Reference Files & Contact Information"
-                description="Attach optional diagrams, syllabus briefs or datasheets, and provide contact details for your quotation."
+                title={signedIn ? "Reference files" : "Reference Files & Contact Information"}
+                description={
+                  signedIn
+                    ? "Files are staged on this device for your own export. Your account identifies the brief you submit."
+                    : "Stage optional reference files and add the contact details you want on your local specification."
+                }
               >
                 <div className="space-y-6">
                   {/* Attachments */}
@@ -895,96 +903,98 @@ export function CustomProjectPage() {
                     </div>
                   </div>
 
-                  {/* Contact Fields */}
-                  <div className="grid grid-cols-1 gap-5 border-t border-line pt-5 sm:grid-cols-2">
-                    <div>
-                      <FieldLabel htmlFor="cp-name" required>
-                        Full Name
-                      </FieldLabel>
-                      <input
-                        id="cp-name"
-                        type="text"
-                        required
-                        value={form.contactName}
-                        onChange={(e) => updateField("contactName", e.target.value)}
-                        aria-invalid={Boolean(errors.contactName)}
-                        aria-describedby={errors.contactName ? "cp-name-error" : undefined}
-                        placeholder="Your full name"
-                        className={inputClass(Boolean(errors.contactName))}
-                      />
-                      {errors.contactName && (
-                        <FieldError id="cp-name-error">{errors.contactName}</FieldError>
-                      )}
-                    </div>
+                  {/* Contact fields belong to the guest export. The authenticated brief uses its owner. */}
+                  {!signedIn && (
+                    <div className="grid grid-cols-1 gap-5 border-t border-line pt-5 sm:grid-cols-2">
+                      <div>
+                        <FieldLabel htmlFor="cp-name" required>
+                          Full Name
+                        </FieldLabel>
+                        <input
+                          id="cp-name"
+                          type="text"
+                          required
+                          value={form.contactName}
+                          onChange={(e) => updateField("contactName", e.target.value)}
+                          aria-invalid={Boolean(errors.contactName)}
+                          aria-describedby={errors.contactName ? "cp-name-error" : undefined}
+                          placeholder="Your full name"
+                          className={inputClass(Boolean(errors.contactName))}
+                        />
+                        {errors.contactName && (
+                          <FieldError id="cp-name-error">{errors.contactName}</FieldError>
+                        )}
+                      </div>
 
-                    <div>
-                      <FieldLabel htmlFor="cp-email" required>
-                        Email Address
-                      </FieldLabel>
-                      <input
-                        id="cp-email"
-                        type="email"
-                        required
-                        value={form.contactEmail}
-                        onChange={(e) => updateField("contactEmail", e.target.value)}
-                        aria-invalid={Boolean(errors.contactEmail)}
-                        aria-describedby={errors.contactEmail ? "cp-email-error" : undefined}
-                        placeholder="you@institution.edu"
-                        className={inputClass(Boolean(errors.contactEmail))}
-                      />
-                      {errors.contactEmail && (
-                        <FieldError id="cp-email-error">{errors.contactEmail}</FieldError>
-                      )}
-                    </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-email" required>
+                          Email Address
+                        </FieldLabel>
+                        <input
+                          id="cp-email"
+                          type="email"
+                          required
+                          value={form.contactEmail}
+                          onChange={(e) => updateField("contactEmail", e.target.value)}
+                          aria-invalid={Boolean(errors.contactEmail)}
+                          aria-describedby={errors.contactEmail ? "cp-email-error" : undefined}
+                          placeholder="you@institution.edu"
+                          className={inputClass(Boolean(errors.contactEmail))}
+                        />
+                        {errors.contactEmail && (
+                          <FieldError id="cp-email-error">{errors.contactEmail}</FieldError>
+                        )}
+                      </div>
 
-                    <div>
-                      <FieldLabel htmlFor="cp-phone" required>
-                        Phone / WhatsApp Number
-                      </FieldLabel>
-                      <input
-                        id="cp-phone"
-                        type="tel"
-                        required
-                        value={form.contactPhone}
-                        onChange={(e) => updateField("contactPhone", e.target.value)}
-                        aria-invalid={Boolean(errors.contactPhone)}
-                        aria-describedby={errors.contactPhone ? "cp-phone-error" : undefined}
-                        placeholder="10-digit mobile number"
-                        className={inputClass(Boolean(errors.contactPhone))}
-                      />
-                      {errors.contactPhone && (
-                        <FieldError id="cp-phone-error">{errors.contactPhone}</FieldError>
-                      )}
-                    </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-phone" required>
+                          Phone / WhatsApp Number
+                        </FieldLabel>
+                        <input
+                          id="cp-phone"
+                          type="tel"
+                          required
+                          value={form.contactPhone}
+                          onChange={(e) => updateField("contactPhone", e.target.value)}
+                          aria-invalid={Boolean(errors.contactPhone)}
+                          aria-describedby={errors.contactPhone ? "cp-phone-error" : undefined}
+                          placeholder="10-digit mobile number"
+                          className={inputClass(Boolean(errors.contactPhone))}
+                        />
+                        {errors.contactPhone && (
+                          <FieldError id="cp-phone-error">{errors.contactPhone}</FieldError>
+                        )}
+                      </div>
 
-                    <div>
-                      <FieldLabel htmlFor="cp-institution">
-                        College / Organization (Optional)
-                      </FieldLabel>
-                      <input
-                        id="cp-institution"
-                        type="text"
-                        value={form.institution}
-                        onChange={(e) => updateField("institution", e.target.value)}
-                        placeholder="Institution or company name"
-                        className={inputClass(false)}
-                      />
-                    </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-institution">
+                          College / Organization (Optional)
+                        </FieldLabel>
+                        <input
+                          id="cp-institution"
+                          type="text"
+                          value={form.institution}
+                          onChange={(e) => updateField("institution", e.target.value)}
+                          placeholder="Institution or company name"
+                          className={inputClass(false)}
+                        />
+                      </div>
 
-                    <div className="sm:col-span-2">
-                      <FieldLabel htmlFor="cp-account-ref">
-                        Existing LevUp Account Email or Previous Order Reference (Optional)
-                      </FieldLabel>
-                      <input
-                        id="cp-account-ref"
-                        type="text"
-                        value={form.accountReference}
-                        onChange={(e) => updateField("accountReference", e.target.value)}
-                        placeholder="Optional account reference once customer accounts are active"
-                        className={inputClass(false)}
-                      />
+                      <div className="sm:col-span-2">
+                        <FieldLabel htmlFor="cp-account-ref">
+                          Existing LevUp Account Email or Previous Order Reference (Optional)
+                        </FieldLabel>
+                        <input
+                          id="cp-account-ref"
+                          type="text"
+                          value={form.accountReference}
+                          onChange={(e) => updateField("accountReference", e.target.value)}
+                          placeholder="Account email or order reference"
+                          className={inputClass(false)}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </SectionCard>
 
@@ -1198,29 +1208,32 @@ export function CustomProjectPage() {
                   </div>
                 )}
 
-                <div className="border-t border-line pt-5">
-                  <h3 className="font-display text-sm font-semibold text-alloy">
-                    Contact &amp; Account Details
-                  </h3>
-                  <dl className="mt-2.5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                    <SummaryItem label="Name" value={form.contactName} />
-                    <SummaryItem label="Email" value={form.contactEmail} />
-                    <SummaryItem label="Phone" value={form.contactPhone} mono />
-                    {form.institution.trim() && (
-                      <SummaryItem label="Institution" value={form.institution} />
-                    )}
-                    {form.accountReference.trim() && (
-                      <SummaryItem label="Account Reference" value={form.accountReference} />
-                    )}
-                  </dl>
-                </div>
+                {!signedIn && (
+                  <div className="border-t border-line pt-5">
+                    <h3 className="font-display text-sm font-semibold text-alloy">
+                      Contact &amp; Account Details
+                    </h3>
+                    <dl className="mt-2.5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                      <SummaryItem label="Name" value={form.contactName} />
+                      <SummaryItem label="Email" value={form.contactEmail} />
+                      <SummaryItem label="Phone" value={form.contactPhone} mono />
+                      {form.institution.trim() && (
+                        <SummaryItem label="Institution" value={form.institution} />
+                      )}
+                      {form.accountReference.trim() && (
+                        <SummaryItem label="Account Reference" value={form.accountReference} />
+                      )}
+                    </dl>
+                  </div>
+                )}
 
-                {customer.status === "signed-in" && (
+                {signedIn && (
                   <section className="rounded-md border border-line bg-white p-5">
                     <h3 className="font-display text-lg font-semibold">Submit to your workspace</h3>
                     <p className="mt-2 max-w-prose text-sm text-muted">
                       Send the project requirements, budget, delivery date and selected deliverables
-                      for review. Contact form details and reference files stay in this browser.
+                      for review. Your verified account identifies the request. Reference files stay
+                      on this device.
                     </p>
                     <Button
                       variant="ink"
@@ -1287,8 +1300,8 @@ export function CustomProjectPage() {
               <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
                 Your custom engineering specification for{" "}
                 <strong className="font-medium text-alloy">{form.title}</strong> passed all
-                validation. You can download the specification and contact details as a file. This
-                export stays on your device.
+                validation. You can download the specification as a file. This export stays on your
+                device.
               </p>
 
               <dl className="mt-6 grid grid-cols-1 gap-4 rounded-lg border border-line bg-mineral/40 p-4 text-xs sm:grid-cols-2">
@@ -1296,7 +1309,9 @@ export function CustomProjectPage() {
                 <SummaryItem label="Category" value={categoryLabel} />
                 <SummaryItem label="Budget Range" value={budgetLabel} />
                 <SummaryItem label="Target Delivery Date" value={form.targetDeliveryDate} mono />
-                <SummaryItem label="Contact Email" value={form.contactEmail} />
+                {form.contactEmail && (
+                  <SummaryItem label="Contact Email" value={form.contactEmail} />
+                )}
                 <SummaryItem
                   label="Deliverables"
                   value={`${activeSelectedDeliverables.length} selected`}

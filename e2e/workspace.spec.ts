@@ -304,9 +304,8 @@ test("submits a reviewed custom brief once and lists its stored status", async (
   const target = new Date();
   target.setUTCMonth(target.getUTCMonth() + 3);
   await page.locator("#cp-date").fill(target.toISOString().slice(0, 10));
-  await page.locator("#cp-name").fill("Sample Student");
-  await page.locator("#cp-email").fill("student@example.invalid");
-  await page.locator("#cp-phone").fill("9000000000");
+  await expect(page.locator("#cp-phone")).toHaveCount(0);
+  await expect(page.locator("#cp-email")).toHaveCount(0);
   await page.getByRole("button", { name: "Review Requisition" }).click();
   await page.getByRole("button", { name: "Submit engineering brief" }).click();
   await expect(page).toHaveURL(/\/dashboard\/custom-requests$/);
