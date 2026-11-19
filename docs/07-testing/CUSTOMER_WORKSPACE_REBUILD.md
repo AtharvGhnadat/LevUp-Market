@@ -86,6 +86,19 @@ The header and document fit all nine requested viewports, from 320 × 700 throug
 
 The evidence folder also contains form validation, category preferences, populated orders and messages, customer request and support screens, large text and browser zoom. All identities and activity in the captures belong to local fixtures. [36 final captures](../02-design-system/screenshots/customer-workspace/after)
 
+### Browser compatibility and hosted acceptance follow-up
+
+**Verified, Medium, corrected.** In desktop Playwright WebKit 27.2, clicking Account and then pressing Escape left the disclosure expanded. The trigger lacked focus and the keyboard event missed the disclosure handler. The account and public disclosure buttons now focus their trigger when activated. Escape closes the panel and returns focus to that button. [Account trigger](../../src/components/layout/AccountNavigation.tsx) ? [Public trigger](../../src/components/layout/NavDropdown.tsx) ? [Pointer-to-keyboard regression](../../e2e/navigation.spec.ts)
+
+Eight scenarios passed on each of Chromium, Firefox 159.0 and WebKit 27.2 on Windows, for 24 passes with retries disabled. These cover sign-in validation, signup confirmation, recovery, the compact account drawer, form reflow, Escape after pointer activation, student profile persistence, and the responsive signed-in menu. The tests use local Auth responses and an isolated PostgreSQL fixture. An initial WebKit profile check timed out waiting for the form after reload. The isolated rerun and final compatibility run both passed the saved-value assertion.
+
+```sh
+pnpm exec playwright install chromium firefox webkit
+pnpm exec playwright test --config playwright.compatibility.config.ts --workers=1 --grep 'pointer-opened navigation|sign in validates|signup confirmation, resend|recovery validates|mobile drawer links|authentication pages and header reflow|signed-in navigation reflows|saves a student profile'
+```
+
+Read-only hosted checks reconfirmed that email registration is enabled and automatic confirmation is off. All six workspace relations had RLS enabled and rejected anonymous zero-row probes. The six service-side schema projections resolved successfully. The hosted project has no CLI migration ledger. Live mailbox delivery, hosted saves with two dedicated customer accounts and physical-device accessibility remain open. No Android device was attached to the verification workstation.
+
 ## Verification, checkpoints and release assessment
 
 | Gate                | Result                                                                                                                                                      |

@@ -211,7 +211,10 @@ export function AccountNavigation({
           aria-label="Account"
           aria-controls={menuId}
           aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
+          onClick={(event) => {
+            event.currentTarget.focus({ preventScroll: true });
+            setOpen((value) => !value);
+          }}
           className="market-identity"
         >
           <span className="account-initials" aria-hidden="true">

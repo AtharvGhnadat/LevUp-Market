@@ -8,6 +8,22 @@ function header(page: Page) {
   return page.getByRole("banner");
 }
 
+test("a pointer-opened navigation disclosure closes on Escape and keeps focus", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/login");
+  const header = page.getByRole("banner");
+  for (const name of ["Projects", "Resources"]) {
+    const trigger = header.getByRole("button", { name, exact: true });
+    await trigger.click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await page.keyboard.press("Escape");
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(trigger).toBeFocused();
+  }
+});
+
 test("desktop Projects disclosure supports keyboard navigation and real category links", async ({
   page,
 }) => {

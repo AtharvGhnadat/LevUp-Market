@@ -63,7 +63,10 @@ export function NavDropdown({
         }
         aria-expanded={open}
         aria-controls={menuId}
-        onClick={() => setOpen((value) => !value)}
+        onClick={(event) => {
+          event.currentTarget.focus({ preventScroll: true });
+          setOpen((value) => !value);
+        }}
         className="nav-site-link"
       >
         {resources ? "Resources" : "Projects"}
