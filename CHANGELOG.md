@@ -20,7 +20,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Changed
 
-- The header now shares the same search and cart layout before and after sign-in. The verified account adds a reply indicator and grouped account links. Sign-in and signup use distinct workbench photography, and protected links return customers to the requested page. [Implementation and browser evidence](docs/07-testing/CUSTOMER_WORKSPACE_REBUILD.md)
+- The header now shares the same search and cart layout before and after sign-in. The verified account adds a reply indicator and grouped account links. Sign-in and signup pair task-specific introductions with responsive form cards and an optional remembered email on sign-in, and protected links return customers to the requested page. [Implementation and browser evidence](docs/07-testing/CUSTOMER_WORKSPACE_REBUILD.md)
 - Reworked public navigation around project search and category discovery. The header now links to the working custom development form and homepage process section, and the compact layout keeps the live cart visible without clipping at narrow widths.
 
 ### Security & Remediation (`2026-11-18` — Codex Review Findings Remediation)

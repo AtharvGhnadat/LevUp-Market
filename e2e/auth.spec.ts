@@ -33,6 +33,41 @@ test("sign in validates fields, reveals passwords on request and hides provider 
   await expect(page.getByText("Email verified")).toBeVisible();
 });
 
+test("remembering an email requires a successful opt-in and can be cleared on this device", async ({
+  page,
+}) => {
+  await mockAuth(page);
+  await page.goto("/login");
+  const main = page.getByRole("main");
+  const remember = main.getByLabel("Remember my email");
+  await expect(remember).not.toBeChecked();
+  await remember.check();
+  await main.getByLabel("Email address").fill(fixtureEmail);
+  await main.getByLabel("Password", { exact: true }).fill("incorrect");
+  await main.getByRole("button", { name: "Sign In" }).click();
+  await expect(main.getByRole("alert")).toBeVisible();
+  await page.reload();
+  await expect(main.getByLabel("Email address")).toHaveValue("");
+  await remember.check();
+  await main.getByLabel("Email address").fill(fixtureEmail);
+  await main.getByLabel("Password", { exact: true }).fill(fixturePassword);
+  await main.getByRole("button", { name: "Sign In" }).click();
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await page.goto("/account");
+  await main.getByRole("button", { name: "Sign Out" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.goto("/create-account");
+  await expect(main.getByRole("heading", { name: "Create Account", exact: true })).toBeVisible();
+  await expect(main.getByLabel("Email address")).toHaveValue("");
+  await main.getByRole("link", { name: "Sign In" }).click();
+  await expect(main.getByLabel("Email address")).toHaveValue(fixtureEmail);
+  await expect(main.getByLabel("Password", { exact: true })).toHaveValue("");
+  await remember.uncheck();
+  await page.reload();
+  await expect(remember).not.toBeChecked();
+  await expect(main.getByLabel("Email address")).toHaveValue("");
+});
+
 test("signup confirmation, resend and callback use the provider and preserve a safe destination", async ({
   page,
 }) => {

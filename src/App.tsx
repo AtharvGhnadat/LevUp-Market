@@ -68,6 +68,7 @@ function SignupRedirect() {
 const authPages = {
   "/login": <AuthCredentialsPage mode="login" />,
   "/signup": <AuthCredentialsPage mode="signup" />,
+  "/create-account": <AuthCredentialsPage mode="signup" />,
   "/register": <SignupRedirect />,
   "/forgot-password": <ForgotPasswordPage />,
   "/reset-password": <ResetPasswordPage />,

@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, LockKeyhole, Mail, UserRound, UserRoundPlus } from "lucide-react";
 import { useState } from "react";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthField, AuthNotice } from "@/components/auth/AuthFields";
@@ -22,8 +22,28 @@ import {
 import { useAuthForm } from "@/auth/use-auth-form";
 import { useAuth } from "@/auth/auth-context";
 
+const rememberedEmailKey = "levup-remembered-email";
+
+function readRememberedEmail() {
+  try {
+    return localStorage.getItem(rememberedEmailKey) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function rememberEmail(value: string) {
+  try {
+    if (value) localStorage.setItem(rememberedEmailKey, value);
+    else localStorage.removeItem(rememberedEmailKey);
+  } catch {
+    /* The form also works when storage is unavailable. */
+  }
+}
+
 export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
   const signup = mode === "signup";
+  const [savedEmail] = useState(() => (signup ? "" : readRememberedEmail()));
   const params = new URLSearchParams(window.location.search);
   const destination = safeAuthDestination(
     params.get("next") ?? (signup ? "/account/profile" : null),
@@ -109,6 +129,7 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
             return;
           }
         }
+        if (!signup) rememberEmail(values.rememberEmail ? email : "");
         setRecoveryAccount(null);
         window.location.replace(to(destination));
       } catch {
@@ -183,21 +204,15 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
     );
   }
 
-  const title = signup ? "Create your LevUp account" : "Sign in to your workspace";
   return (
     <AuthLayout
       mode={mode}
-      title={title}
+      title={signup ? "Create Account" : "Sign In"}
       description={
         signup
-          ? "Start with your sign-in details. You can add your institution and project interests later."
-          : "Access your engineering projects, requests and account details."
+          ? "Set up your LevUp Projects account to get started."
+          : "Access your LevUp Projects account."
       }
-      guide={{
-        title: "Continue where you left off",
-        description:
-          "Your project selections stay in this browser while you sign in or create an account.",
-      }}
     >
       {state.status === "loading" ? (
         <AuthNotice>Checking your session…</AuthNotice>
@@ -238,6 +253,8 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
             <AuthField
               name="name"
               label="Full name"
+              icon={UserRound}
+              placeholder="Enter your full name"
               autoComplete="name"
               required
               error={errors.name}
@@ -246,6 +263,9 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
           <AuthField
             name="email"
             label="Email address"
+            icon={Mail}
+            defaultValue={savedEmail}
+            placeholder="Enter your email address"
             autoComplete="email"
             type="email"
             required
@@ -255,6 +275,8 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
             name="password"
             label="Password"
             type="password"
+            icon={LockKeyhole}
+            placeholder={signup ? "Create a password" : "Enter your password"}
             autoComplete={signup ? "new-password" : "current-password"}
             required
             hint={signup ? passwordHint : undefined}
@@ -265,22 +287,37 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
               name="confirmation"
               label="Confirm password"
               type="password"
+              icon={LockKeyhole}
+              placeholder="Confirm your password"
               autoComplete="new-password"
               required
               error={errors.confirmation}
             />
           ) : (
-            <a
-              href={to("/forgot-password")}
-              className="inline-flex min-h-11 items-center text-sm font-medium text-volt-text underline-offset-3 hover:underline"
-            >
-              Forgot password?
-            </a>
+            <div className="auth-options">
+              <label>
+                <input
+                  type="checkbox"
+                  name="rememberEmail"
+                  defaultChecked={Boolean(savedEmail)}
+                  onChange={(event) => {
+                    if (!event.currentTarget.checked) rememberEmail("");
+                  }}
+                />
+                Remember my email
+              </label>
+              <a
+                href={to("/forgot-password")}
+                className="inline-flex min-h-11 items-center text-sm font-medium text-volt-text underline-offset-3 hover:underline"
+              >
+                Forgot password?
+              </a>
+            </div>
           )}
           <Button
             type="submit"
-            variant="ink"
-            className="mt-1 w-full min-h-12 justify-between px-5 font-sans"
+            variant="primary"
+            className="auth-submit w-full"
             disabled={pending || !configured}
           >
             {pending
@@ -292,15 +329,20 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
                 : "Sign In"}
             <ArrowRight size={18} aria-hidden="true" />
           </Button>
-          <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
-            {signup ? "Already have an account?" : "New to LevUp?"}
-            <a
-              href={authEntry(signup ? "/login" : "/signup", destination)}
-              className="inline-flex min-h-11 items-center font-medium text-volt-text underline underline-offset-3"
-            >
-              {signup ? "Sign In" : "Create Account"}
-            </a>
-          </p>
+          <div className="auth-alternate">
+            <div className="auth-divider">
+              <span>
+                {signup ? "Already have an account?" : "New to LevUp Projects?"}{" "}
+                {signup && <a href={authEntry("/login", destination)}>Sign In</a>}
+              </span>
+            </div>
+            {!signup && (
+              <a className="auth-create-link" href={authEntry("/signup", destination)}>
+                <UserRoundPlus size={19} aria-hidden="true" />
+                Create a New Account
+              </a>
+            )}
+          </div>
         </form>
       )}
     </AuthLayout>

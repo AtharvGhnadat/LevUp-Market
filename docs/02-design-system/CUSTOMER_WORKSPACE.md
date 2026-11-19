@@ -19,7 +19,7 @@ The review used the actual Vite app with the Supabase SDK and a synthetic browse
 - **Product** — Students and other customers find engineering projects, prepare briefs and keep private details for project work.
 - **Character** — Practical, precise and quietly warm.
 - **World** — A student engineering workbench. Mineral paper, Alloy ink and the existing catalog’s physical components carry through the storefront.
-- **Moments** — A photographed engineering subject grounds sign-in and signup. Inside the workspace, the real project list, order history and saved profile take priority.
+- **Moments** — The updated authentication references pair a Mineral welcome panel and Volt underline with a warm white form card. Desktop places the form on the right. Mobile leads with the form and places the benefits below it. Inside the workspace, the real project list, order history and saved profile take priority.
 - **Signature** — The Volt edge used on the storefront marks the current workspace page and important form feedback.
 
 Desktop uses one public header and an in-page navigation column for the six workspace destinations. Settings gets a separate index and drill-down pages. Compact layouts put the same groups in the existing native drawer and use a parent breadcrumb inside each page. Login, signup and recovery use different content within one shell. The smaller footer on task pages keeps account work in focus. The initial audit found no useful published About or Resources page for the header.

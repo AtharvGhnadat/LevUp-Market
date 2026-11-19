@@ -1,27 +1,83 @@
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+﻿import {
+  ArrowLeft,
+  Box,
+  Headphones,
+  Layers,
+  LockKeyhole,
+  MailCheck,
+  Settings2,
+} from "lucide-react";
 import { useEffect, useRef, type ReactNode } from "react";
+import { LogoMark } from "@/components/brand/Logo";
 import { to } from "@/lib/routes";
 
 type Props = {
   title: string;
   description: string;
-  guide: { title: string; description: string };
   children: ReactNode;
-  mode?: "login" | "signup";
-};
+} & (
+  | { mode: "login" | "signup"; guide?: never }
+  | { mode?: undefined; guide: { title: string; description: string } }
+);
 
-const features = {
+const guides = {
   login: {
-    image: "robotics",
-    category: "Robotics",
-    slug: "robotics",
-    alt: "An articulated orange robot arm and gripper on a workshop surface",
+    label: "Account access",
+    title: (
+      <>
+        Welcome back to
+        <br />
+        LevUp Projects
+      </>
+    ),
+    intro: "Pick up your projects, track an order, or get help with a custom request.",
+    benefits: [
+      {
+        icon: Layers,
+        title: "Your projects",
+        detail: "Open your purchased projects and available deliverables.",
+      },
+      {
+        icon: Box,
+        title: "Orders & requests",
+        detail: "Check an order or follow a custom development request.",
+      },
+      {
+        icon: Headphones,
+        title: "Dedicated support",
+        detail: "Read replies and continue a conversation with the team.",
+      },
+    ],
   },
   signup: {
-    image: "electronics",
-    category: "IoT & electronics",
-    slug: "iot-electronics",
-    alt: "A collection of microcontrollers and electronic components on a workbench",
+    label: "Get started",
+    title: (
+      <>
+        Create your
+        <br />
+        LevUp Projects
+        <br />
+        account
+      </>
+    ),
+    intro: "Keep your engineering projects, orders and custom requests together in one workspace.",
+    benefits: [
+      {
+        icon: Layers,
+        title: "Build your project library",
+        detail: "Find your purchased projects and their resources in one place.",
+      },
+      {
+        icon: Box,
+        title: "Manage custom requests",
+        detail: "Submit your project brief and follow its progress.",
+      },
+      {
+        icon: Settings2,
+        title: "Make it your workspace",
+        detail: "Add your institution, course and project interests when you’re ready.",
+      },
+    ],
   },
 };
 
@@ -37,50 +93,84 @@ export function AuthLayout({ title, description, guide, children, mode }: Props)
       document.title = saved;
     };
   }, [title]);
-  const feature = mode && features[mode];
+  const feature = mode && guides[mode];
   return (
     <section
       aria-labelledby="auth-title"
-      className={feature ? "auth-spread" : "auth-spread auth-service"}
+      className={feature ? "auth-canvas" : "auth-spread auth-service"}
     >
-      <div className="auth-form-panel customer-enter">
-        <a href={to("/projects")} className="workspace-back">
-          <ArrowLeft size={15} aria-hidden="true" />
-          Project catalog
-        </a>
-        <h1 ref={heading} id="auth-title" tabIndex={-1} className="auth-heading">
-          {title}
-        </h1>
-        <p className="mb-6 mt-3 max-w-[45ch] leading-relaxed text-muted">{description}</p>
-        {children}
-      </div>
-      {feature ? (
-        <aside className="auth-plate">
-          <img
-            src={to(`/workbench/${feature.image}.webp`)}
-            alt={feature.alt}
-            width={950}
-            height={610}
-            className="auth-photo"
-          />
-          <a className="auth-caption" href={to(`/projects?category=${feature.slug}`)}>
-            <span>
-              <span className="block text-sm text-muted-on-alloy">From the project catalog</span>
-              <span className="mt-1 block font-display text-2xl font-semibold">
-                {feature.category}
-              </span>
-            </span>
-            <ArrowUpRight size={22} aria-hidden="true" />
-          </a>
-        </aside>
-      ) : (
-        <aside className="auth-guidance">
-          <h2 className="font-display text-lg font-semibold">{guide.title}</h2>
-          <p className="mt-2 max-w-[38ch] text-sm leading-relaxed text-muted">
-            {guide.description}
-          </p>
-        </aside>
+      {feature && (
+        <div aria-hidden="true" className="auth-watermark">
+          <LogoMark />
+        </div>
       )}
+      <div className={feature ? "auth-columns" : "contents"}>
+        <div className={feature ? "auth-card customer-enter" : "auth-form-panel customer-enter"}>
+          {!feature && (
+            <a href={to("/projects")} className="workspace-back">
+              <ArrowLeft size={15} aria-hidden="true" />
+              Project catalog
+            </a>
+          )}
+          <h1
+            ref={heading}
+            id="auth-title"
+            tabIndex={-1}
+            className={feature ? "auth-card-title" : "auth-heading"}
+          >
+            {title}
+          </h1>
+          <p
+            className={
+              feature ? "auth-card-intro" : "mb-6 mt-3 max-w-[45ch] leading-relaxed text-muted"
+            }
+          >
+            {description}
+          </p>
+          {children}
+          {feature && (
+            <div className="auth-footnotes">
+              <span>
+                <LockKeyhole aria-hidden="true" />
+                Password sign-in
+              </span>
+              <span>
+                <MailCheck aria-hidden="true" />
+                Email verification
+              </span>
+            </div>
+          )}
+        </div>
+        {feature ? (
+          <aside className="auth-story customer-enter" aria-labelledby="auth-welcome">
+            <p className="auth-kicker">{feature.label}</p>
+            <h2 id="auth-welcome">{feature.title}</h2>
+            <p className="auth-story-intro">{feature.intro}</p>
+            <ul className="auth-benefits">
+              {feature.benefits.map(({ icon: Icon, title: benefit, detail }) => (
+                <li key={benefit}>
+                  <span className="auth-benefit-icon">
+                    <Icon aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3>{benefit}</h3>
+                    <p>{detail}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        ) : (
+          guide && (
+            <aside className="auth-guidance">
+              <h2 className="font-display text-lg font-semibold">{guide.title}</h2>
+              <p className="mt-2 max-w-[38ch] text-sm leading-relaxed text-muted">
+                {guide.description}
+              </p>
+            </aside>
+          )
+        )}
+      </div>
     </section>
   );
 }
