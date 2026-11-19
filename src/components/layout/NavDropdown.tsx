@@ -58,7 +58,7 @@ export function NavDropdown({ currentPath }: { currentPath: string }) {
       <div
         id={menuId}
         hidden={!open}
-        className="absolute start-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] w-[25rem] overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-card"
+        className="nav-flyout absolute start-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] w-[25rem] overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-card"
       >
         <a
           href={to(allProjectsLink.href)}

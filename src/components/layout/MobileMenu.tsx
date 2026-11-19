@@ -13,10 +13,11 @@ type Props = {
   ref: Ref<HTMLDialogElement>;
   currentPath: string;
   currentHref: string;
+  name: string;
   onClose: () => void;
 };
 
-export function MobileMenu({ ref, currentPath, currentHref, onClose }: Props) {
+export function MobileMenu({ ref, currentPath, currentHref, onClose, name }: Props) {
   const selectedHref = currentProjectLink(currentPath, window.location.search);
 
   function onClick(event: MouseEvent<HTMLDialogElement>) {
@@ -62,10 +63,8 @@ export function MobileMenu({ ref, currentPath, currentHref, onClose }: Props) {
         </button>
       </div>
 
-      <nav aria-label="Mobile" className="p-2">
-        <div className="mb-2 border-b border-line pb-2 pt-1">
-          <AccountNavigation mobile currentPath={currentPath} />
-        </div>
+      <nav aria-label="Mobile" className="p-3">
+        <h3 className="nav-group-title">Explore</h3>
         <ul>
           <li className="mb-1 border-b border-line pb-1">
             <details className="group">
@@ -104,6 +103,9 @@ export function MobileMenu({ ref, currentPath, currentHref, onClose }: Props) {
             </li>
           ))}
         </ul>
+        <div className="mt-3 border-t border-line pt-2">
+          <AccountNavigation mobile currentPath={currentPath} name={name} />
+        </div>
       </nav>
     </dialog>
   );

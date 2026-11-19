@@ -1,5 +1,7 @@
 import { Menu, ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/auth/auth-context";
+import { accountName, initials } from "@/workspace/navigation";
 import { Logo } from "@/components/brand/Logo";
 import { primaryNav } from "@/data/navigation";
 import { cn } from "@/lib/cn";
@@ -29,6 +31,10 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
   const menuTrigger = useRef<HTMLButtonElement>(null);
   const menuDialog = useRef<HTMLDialogElement>(null);
   const { count } = useCart();
+  const { state } = useAuth();
+  const name = accountName(
+    state.status === "signed-in" ? state.user.user_metadata.full_name : undefined,
+  );
   const currentHref = currentPath === "/" && fragment ? `/${fragment}` : currentPath;
 
   function openSearch() {
@@ -130,8 +136,8 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
               </span>
             )}
           </a>
-          <div className="hidden min-[75rem]:flex min-[75rem]:min-w-52 min-[75rem]:justify-end">
-            <AccountNavigation currentPath={currentPath} />
+          <div className="hidden min-[75rem]:flex min-[75rem]:min-w-52 min-[75rem]:justify-start">
+            <AccountNavigation currentPath={currentPath} name={name} />
           </div>
           <button
             ref={menuTrigger}
@@ -141,8 +147,16 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="nav-icon-control min-[75rem]:hidden"
+            className="nav-icon-control sm:ms-2 sm:w-32 sm:gap-2 sm:border sm:border-line sm:bg-white sm:px-2 min-[75rem]:hidden"
           >
+            <span className="hidden min-w-0 truncate text-sm font-medium sm:inline">
+              {state.status === "signed-in" ? name.split(/\s+/u)[0] : "Menu"}
+            </span>
+            {state.status === "signed-in" && (
+              <span aria-hidden="true" className="account-initials compact-avatar">
+                {initials(name)}
+              </span>
+            )}
             <Menu aria-hidden="true" className="size-[18px]" strokeWidth={1.75} />
           </button>
         </div>
@@ -152,6 +166,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
       <MobileMenu
         ref={menuDialog}
         currentHref={currentHref}
+        name={name}
         currentPath={currentPath}
         onClose={() => setMenuOpen(false)}
       />

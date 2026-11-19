@@ -1,14 +1,17 @@
-import { ChevronDown, UserRound } from "lucide-react";
+import { ChevronDown, LogOut } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { useAuth } from "@/auth/auth-context";
+import { accountLink, workspaceLinks, initials } from "@/workspace/navigation";
 import { ButtonLink } from "@/components/ui/Button";
 import { to } from "@/lib/routes";
 
 export function AccountNavigation({
   mobile,
   currentPath,
+  name,
 }: {
   mobile?: boolean;
+  name: string;
   currentPath: string;
 }) {
   const { state, signOutPending, signOutError, signOut } = useAuth();
@@ -84,38 +87,53 @@ export function AccountNavigation({
   }
 
   const links = (
-    <div className="space-y-1">
-      <a
-        href={to("/account")}
-        aria-current={currentPath === "/account" ? "page" : undefined}
-        className="nav-panel-link"
-      >
-        Account settings
-      </a>
-      <button
-        type="button"
-        disabled={signOutPending}
-        onClick={() => void signOut()}
-        className="nav-panel-link w-full disabled:opacity-60"
-      >
-        {signOutPending ? "Signing out…" : "Sign Out"}
-      </button>
-      {signOutError && (
-        <p role="alert" className="px-3 py-1 text-sm text-red-800">
-          {signOutError}
-        </p>
+    <>
+      <div className="flex min-w-0 items-center gap-3 border-b border-line px-3 py-3">
+        <span className="account-initials" aria-hidden="true">
+          {initials(name)}
+        </span>
+        <span className="min-w-0 break-words font-display font-semibold">{name}</span>
+      </div>
+      {workspaceLinks.length > 0 && (
+        <section aria-label="My workspace">
+          <h3 className="nav-group-title">My workspace</h3>
+          {workspaceLinks.map(({ href, label }) => (
+            <a
+              key={href}
+              href={to(href)}
+              aria-current={currentPath === href ? "page" : undefined}
+              className="nav-panel-link"
+            >
+              {label}
+            </a>
+          ))}
+        </section>
       )}
-    </div>
-  );
-
-  if (mobile) {
-    return (
-      <section aria-label="Account" className="space-y-1">
-        <h2 className="px-3 pb-1 text-sm font-semibold text-muted">Account</h2>
-        {links}
+      <section aria-label="Account" className="mt-2 border-t border-line pt-1">
+        <a
+          href={to(accountLink.href)}
+          aria-current={currentPath === accountLink.href ? "page" : undefined}
+          className="nav-panel-link"
+        >
+          {accountLink.label}
+        </a>
+        <button
+          type="button"
+          disabled={signOutPending}
+          onClick={() => void signOut()}
+          className="nav-panel-link w-full justify-between disabled:opacity-60"
+        >
+          {signOutPending ? "Signing out…" : "Sign Out"} <LogOut size={16} aria-hidden="true" />
+        </button>
+        {signOutError && (
+          <p role="alert" className="px-3 py-1 text-sm text-red-800">
+            {signOutError}
+          </p>
+        )}
       </section>
-    );
-  }
+    </>
+  );
+  if (mobile) return <div>{links}</div>;
 
   return (
     <div
@@ -135,19 +153,22 @@ export function AccountNavigation({
       <button
         ref={trigger}
         type="button"
+        aria-label="Account"
         aria-controls={menuId}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="nav-site-link"
+        className="nav-site-link max-w-48 border border-line bg-white px-2.5"
       >
-        <UserRound aria-hidden="true" className="size-[18px]" strokeWidth={1.75} />
-        Account
+        <span className="account-initials" aria-hidden="true">
+          {initials(name)}
+        </span>
+        <span className="min-w-0 truncate">{name.split(/\s+/u)[0]}</span>
         <ChevronDown aria-hidden="true" className="size-4" strokeWidth={1.75} />
       </button>
       <div
         id={menuId}
         hidden={!open}
-        className="absolute end-0 top-full z-50 mt-2 w-52 rounded-lg border border-line bg-white p-2 shadow-card"
+        className="nav-flyout absolute end-0 top-full z-50 mt-2 max-h-[calc(100dvh-6rem)] w-64 overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-card"
       >
         {links}
       </div>
