@@ -134,7 +134,7 @@ export default function App() {
               <PlannedRoutePage path={path} />
             )}
           </main>
-          <SiteFooter />
+          <SiteFooter compact={Boolean(authPage)} />
         </div>
       </AuthProvider>
     </CartProvider>

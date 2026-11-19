@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthField, AuthNotice } from "@/components/auth/AuthFields";
@@ -178,14 +179,15 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
     );
   }
 
-  const title = signup ? "Create your LevUp account" : "Sign in to LevUp";
+  const title = signup ? "Create your LevUp account" : "Sign in to your workspace";
   return (
     <AuthLayout
+      mode={mode}
       title={title}
       description={
         signup
-          ? "Set up your account with your name, email and a password."
-          : "Use your LevUp email and password to access your account."
+          ? "Start with your sign-in details. You can add your institution and project interests later."
+          : "Access your engineering projects, requests and account details."
       }
       guide={{
         title: "Continue where you left off",
@@ -274,7 +276,7 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
           <Button
             type="submit"
             variant="ink"
-            className="w-full min-h-12 font-sans"
+            className="mt-1 w-full min-h-12 justify-between px-5 font-sans"
             disabled={pending || !configured}
           >
             {pending
@@ -284,6 +286,7 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
               : signup
                 ? "Create Account"
                 : "Sign In"}
+            <ArrowRight size={18} aria-hidden="true" />
           </Button>
           <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
             {signup ? "Already have an account?" : "New to LevUp?"}
