@@ -1,10 +1,11 @@
-import { defineConfig, type HtmlTagDescriptor, type Plugin } from "vite";
+import { defineConfig, loadEnv, type HtmlTagDescriptor, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import fs from "node:fs";
 import path from "node:path";
 
 import siteConfiguration from "./.figma/make/site.json";
+import { isSupabasePublicKey } from "./src/lib/supabase-public-key";
 
 // Vite config — https://vitejs.dev/config/
 
@@ -120,6 +121,14 @@ function cashfreeApiPlugin(): Plugin {
 }
 
 export default defineConfig(({ mode }) => {
+  const publicAuthEnv = loadEnv(mode, process.cwd(), "VITE_SUPABASE_");
+  for (const envKey of ["VITE_SUPABASE_PUBLISHABLE_KEY", "VITE_SUPABASE_ANON_KEY"]) {
+    const key = publicAuthEnv[envKey]?.trim();
+    if (key && !isSupabasePublicKey(key)) {
+      throw new Error(`${envKey} must be a Supabase publishable or legacy anon key.`);
+    }
+  }
+
   // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
   const emitSourcemaps = mode === "development";
 

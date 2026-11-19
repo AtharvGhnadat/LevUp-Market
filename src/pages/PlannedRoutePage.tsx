@@ -11,8 +11,6 @@ const staticTitles: Record<string, { title: string; section?: string }> = {
   "/custom-project": { title: "Custom project request", section: "#custom" },
   "/how-it-works": { title: "How it works", section: "#how-it-works" },
   "/cart": { title: "Cart" },
-  "/login": { title: "Login / Sign up" },
-  "/register": { title: "Create an account" },
   "/faq": { title: "Frequently asked questions" },
   "/contact": { title: "Contact & support" },
   "/terms": { title: "Terms of service" },

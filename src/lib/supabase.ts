@@ -1,45 +1,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
+import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "./supabase-config";
 
-function getEnvValue(metaKey?: string, procKey?: string): string {
-  if (typeof import.meta !== "undefined" && import.meta.env && metaKey) {
-    const val = import.meta.env[metaKey];
-    if (typeof val === "string" && val.trim().length > 0) return val.trim();
-  }
-  if (typeof process !== "undefined" && process.env && procKey) {
-    const val = process.env[procKey];
-    if (typeof val === "string" && val.trim().length > 0) return val.trim();
-  }
-  return "";
-}
-
-export function getSupabaseUrl(): string {
-  return (
-    getEnvValue("VITE_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_URL") ||
-    getEnvValue("", "SUPABASE_URL") ||
-    ""
-  );
-}
-
-export function getSupabaseAnonKey(): string {
-  return (
-    getEnvValue("VITE_SUPABASE_ANON_KEY", "NEXT_PUBLIC_SUPABASE_ANON_KEY") ||
-    getEnvValue("", "SUPABASE_ANON_KEY") ||
-    ""
-  );
-}
-
-export function isSupabaseConfigured(): boolean {
-  const url = getSupabaseUrl();
-  const key = getSupabaseAnonKey();
-  return Boolean(
-    url &&
-    key &&
-    !url.includes("your-supabase-url") &&
-    !key.includes("placeholder") &&
-    !key.includes("your-anon-key"),
-  );
-}
+export { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "./supabase-config";
 
 let clientInstance: SupabaseClient | null = null;
 
@@ -60,7 +23,7 @@ export function getSupabaseClient(): SupabaseClient {
   const url = getSupabaseUrl();
   const key = getSupabaseAnonKey();
 
-  if (!url || !key) {
+  if (!isSupabaseConfigured()) {
     const isTest =
       typeof process !== "undefined" &&
       (process.env.NODE_ENV === "test" || Boolean(process.env.VITEST));
@@ -78,7 +41,7 @@ export function getSupabaseClient(): SupabaseClient {
       );
     }
     throw new Error(
-      "Supabase client is not configured. Define VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.",
+      "Supabase client is not configured. Define VITE_SUPABASE_URL and a public Supabase key in your environment.",
     );
   }
 
@@ -86,7 +49,8 @@ export function getSupabaseClient(): SupabaseClient {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true,
+      flowType: "pkce",
+      detectSessionInUrl: false,
     },
   });
 

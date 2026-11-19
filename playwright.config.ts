@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const testUrl = "http://localhost:8461";
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -8,7 +10,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: "http://localhost:8443",
+    baseURL: testUrl,
     trace: "on-first-retry",
   },
   projects: [
@@ -19,8 +21,15 @@ export default defineConfig({
   ],
   webServer: {
     command: "pnpm dev",
-    url: "http://localhost:8443",
-    reuseExistingServer: !process.env.CI,
+    url: testUrl,
+    reuseExistingServer: false,
+    env: {
+      PORT: "8461",
+      VITE_SUPABASE_URL: `${testUrl}/__auth-fixture`,
+      VITE_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_levup_e2e_fixture",
+      VITE_SUPABASE_ANON_KEY: "",
+      CASHFREE_PAYMENTS_ENABLED: "false",
+    },
     timeout: 120 * 1000,
   },
 });

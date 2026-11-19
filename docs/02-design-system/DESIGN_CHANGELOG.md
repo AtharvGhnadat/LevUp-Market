@@ -7,6 +7,16 @@
 
 ## History
 
+### [2026-11-19] Customer authentication
+
+The approved engineering service desk direction puts the form first. Manrope headings and IBM Plex Sans controls sit on Mineral, with short, route-specific guidance on Alloy. Volt marks confirmation and recovery notices.
+
+- **Desktop** — Sign In is a text link and Create Account is the primary account action. After session verification, one compact Account disclosure contains Account settings and Sign Out. The expanded row now starts at 75rem.
+- **Compact** — Search, Cart and Menu stay in the header. Account actions appear at the top of the existing drawer.
+- **Forms** — Shared labels, password visibility, inline validation, keyboard focus and live feedback cover sign-in, signup, verification and recovery. The layouts stack in reading order on narrow screens.
+
+See the [customer authentication audit and verification record](../07-testing/CUSTOMER_AUTH_EXPERIENCE.md). Method adapted from [Unslop](https://github.com/heydamir/unslop) by Damir Sokolovsky under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
 ### [2026-11-19] Catalog-first navigation
 
 The approved direction gives catalog search the most space on desktop and makes Custom development a plain navigation link. The Projects disclosure uses the six catalog categories and indicates the selected category with type weight and a Volt edge line.

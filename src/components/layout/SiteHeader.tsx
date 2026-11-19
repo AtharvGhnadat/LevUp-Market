@@ -5,12 +5,13 @@ import { primaryNav } from "@/data/navigation";
 import { cn } from "@/lib/cn";
 import { to } from "@/lib/routes";
 import { useCart } from "@/state/cart";
+import { AccountNavigation } from "./AccountNavigation";
 import { HeaderSearch } from "./HeaderSearch";
 import { MobileMenu } from "./MobileMenu";
 import { NavDropdown } from "./NavDropdown";
 import { SearchDialog } from "./SearchDialog";
 
-const desktopNavigation = "(min-width: 70rem)";
+const desktopNavigation = "(min-width: 75rem)";
 
 function showNavigationDialog(dialog: HTMLDialogElement, trigger: HTMLButtonElement | null) {
   const root = document.documentElement;
@@ -86,10 +87,10 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-mineral">
-      <div className="mx-auto flex min-h-16 w-full max-w-[1348px] items-center justify-between px-[clamp(0.25rem,calc((100%_-_18.5rem)/2),0.5rem)] py-2 min-[360px]:gap-1 min-[360px]:px-4 sm:px-8 min-[70rem]:min-h-[4.5rem] min-[70rem]:gap-8">
+      <div className="mx-auto flex min-h-16 w-full max-w-[1348px] items-center justify-between px-[clamp(0.25rem,calc((100%_-_18.5rem)/2),0.5rem)] py-2 min-[360px]:gap-1 min-[360px]:px-4 sm:px-8 min-[75rem]:min-h-[4.5rem] min-[75rem]:gap-6">
         <Logo />
 
-        <nav aria-label="Primary" className="hidden shrink-0 min-[70rem]:block">
+        <nav aria-label="Primary" className="hidden shrink-0 min-[75rem]:block">
           <ul className="flex items-center gap-1 xl:gap-3">
             <li>
               <NavDropdown currentPath={currentPath} />
@@ -108,7 +109,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
           </ul>
         </nav>
 
-        <div className="ml-auto flex min-w-0 shrink-0 items-center min-[70rem]:gap-2">
+        <div className="ml-auto flex min-w-0 shrink-0 items-center min-[75rem]:gap-2">
           <HeaderSearch ref={searchTrigger} onOpen={openSearch} />
           <a
             href={to("/cart")}
@@ -129,6 +130,9 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
               </span>
             )}
           </a>
+          <div className="hidden min-[75rem]:flex min-[75rem]:min-w-52 min-[75rem]:justify-end">
+            <AccountNavigation currentPath={currentPath} />
+          </div>
           <button
             ref={menuTrigger}
             type="button"
@@ -137,7 +141,7 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="nav-icon-control min-[70rem]:hidden"
+            className="nav-icon-control min-[75rem]:hidden"
           >
             <Menu aria-hidden="true" className="size-[18px]" strokeWidth={1.75} />
           </button>

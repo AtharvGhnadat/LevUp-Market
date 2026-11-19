@@ -7,6 +7,7 @@ import {
   projectCategoryLinks,
 } from "@/data/navigation";
 import { to } from "@/lib/routes";
+import { AccountNavigation } from "./AccountNavigation";
 
 type Props = {
   ref: Ref<HTMLDialogElement>;
@@ -62,6 +63,9 @@ export function MobileMenu({ ref, currentPath, currentHref, onClose }: Props) {
       </div>
 
       <nav aria-label="Mobile" className="p-2">
+        <div className="mb-2 border-b border-line pb-2 pt-1">
+          <AccountNavigation mobile currentPath={currentPath} />
+        </div>
         <ul>
           <li className="mb-1 border-b border-line pb-1">
             <details className="group">
