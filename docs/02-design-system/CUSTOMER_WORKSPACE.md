@@ -24,6 +24,8 @@ The review used the actual Vite app with the Supabase SDK and a synthetic browse
 
 Desktop uses one public header and an in-page navigation column for the six workspace destinations. Settings gets a separate index and drill-down pages. Compact layouts put the same groups in the existing native drawer and use a parent breadcrumb inside each page. Login, signup and recovery use different content within one shell. The smaller footer on task pages keeps account work in focus. The initial audit found no useful published About or Resources page for the header.
 
+The subsequent header reference explicitly included About and Resources. The implementation supplies an About page, a project guide, a customer FAQ and a resources index. The public navigation links to those pages at every supported width. [Implemented routes and browser captures](../07-testing/CUSTOMER_WORKSPACE_REBUILD.md)
+
 ## Data design before migration
 
 Use the existing private `profiles` row for personal and academic fields and preferred catalog categories. Authentication email and verification come from Supabase Auth. Keep the legacy college and department fields as the source of those values. Store multiple private shipping addresses as children of a profile. Use the profile’s nullable default-address reference with an ownership constraint. Change only the sections a form edits. Read order headers, items and entitlement metadata from the existing tables under RLS. The workspace must distinguish empty records from failed reads.

@@ -1,12 +1,16 @@
 # Version History & Post-Remediation Milestone Mapping — LevUp Projects
 
 **Document Status:** Pre-release (No Git SemVer tags created yet)  
-**Last Updated:** 2026-11-18
+**Last Updated:** 2026-11-19
 
 > [!IMPORTANT]
 > No SemVer Git tags have been created or pushed yet. All entries below reflect verified local/remote commit milestones and **proposed** post-cleanup tag candidates for review only.
 
 ---
+
+## Unreleased customer workspace
+
+The feature branch `feat/customer-workspace-rebuild` starts at the customer authentication commit `0a1f6fc`. It stacks above the catalog-first navigation commit `335a451`. The workspace migration, responsive header, authentication pages, student settings and QA evidence belong to the same unreleased change. This entry records branch ancestry. Release and tag decisions remain pending. [Workspace implementation record](../07-testing/CUSTOMER_WORKSPACE_REBUILD.md)
 
 ## 1. Verified Commit History (Post-Remediation)
 

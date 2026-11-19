@@ -85,7 +85,7 @@ test("manages an optional hardware address and an owned default", async ({ page,
   await main.getByRole("link", { name: "Edit address", exact: true }).click();
   await main.getByLabel("City", { exact: true }).fill("Mumbai");
   await main.getByRole("button", { name: "Save address" }).click();
-  await expect(main.getByRole("status")).toHaveText("Address saved.");
+  await expect(main.getByRole("status").filter({ hasText: "Address saved." })).toBeVisible();
   await expect(main.getByText(/Example Campus Road, Mumbai/)).toBeVisible();
   await page.reload();
   await expect(main.getByText(/Example Campus Road, Mumbai/)).toBeVisible();

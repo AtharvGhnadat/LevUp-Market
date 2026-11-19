@@ -14,10 +14,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
+- A customer workspace for orders, project packages, engineering briefs, support tickets and staff replies. Students can save optional academic details, private hardware delivery addresses and preferred project categories. The workspace migration enforces ownership and limits customer writes to the fields each workflow needs.
+- Public project guidance, customer FAQs and an About page, reachable from the header and drawer.
 - Customer account access through Supabase Auth with email and password, email confirmation, password recovery, and protected account settings. The header and mobile drawer show actions for the verified session, and password sign-in preserves the browser cart.
 
 ### Changed
 
+- The header now shares the same search and cart layout before and after sign-in. The verified account adds a reply indicator and grouped account links. Sign-in and signup use distinct workbench photography, and protected links return customers to the requested page. [Implementation and browser evidence](docs/07-testing/CUSTOMER_WORKSPACE_REBUILD.md)
 - Reworked public navigation around project search and category discovery. The header now links to the working custom development form and homepage process section, and the compact layout keeps the live cart visible without clipping at narrow widths.
 
 ### Security & Remediation (`2026-11-18` — Codex Review Findings Remediation)

@@ -1,8 +1,10 @@
 # LevUp Projects — Architecture Overview
 
 **Status:** Baseline documented  
-**Revision:** 1.0.0  
-**Last updated:** 2026-11-17  
+**Revision:** 1.1.0
+
+**Last updated:** 2026-11-19
+
 **ADR reference:** [ADR-0001](adr/ADR-0001-architecture-baseline.md)
 
 ---
@@ -16,10 +18,11 @@ Browser
         ├── Tailwind CSS v4 design system
         ├── Static TypeScript data files (catalog, categories, project details)
         ├── localStorage cart (independent of customer identity)
-        └── One customer auth provider using Supabase Auth
+        ├── One customer auth provider using Supabase Auth
+        └── Protected workspace → Supabase Data API → owner-scoped PostgreSQL policies
 ```
 
-The public storefront is a Vite SPA. Supabase Auth owns email and password identity, verification, recovery and session refresh. The account page displays verified identity from the Auth API. It does not query orders or custom requests. The existing Cashfree gate controls payment availability.
+The public storefront is a Vite SPA. Supabase Auth owns email and password identity, verification, recovery and session refresh. The workspace combines verified identity with private profile, address, order, entitlement, brief, ticket, reply and read-receipt records. A small repository owns the browser queries and their field projections. The authenticated layout handles guards, navigation and page hierarchy. The existing Cashfree gate controls payment availability.
 
 The current account routes use browser SDK storage and PKCE callbacks. The server-rendered session and admin architecture below remains a target. [Customer authentication architecture](../05-security/AUTHENTICATION.md)
 
