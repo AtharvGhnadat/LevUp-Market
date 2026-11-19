@@ -23,6 +23,8 @@ describe("Supabase Client Provider", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.unstubAllEnvs();
+    vi.stubEnv("VITE_SUPABASE_PUBLISHABLE_KEY", "");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "");
     resetSupabaseClientForTesting();
   });
 
@@ -46,7 +48,7 @@ describe("Supabase Client Provider", () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "");
 
     expect(() => getSupabaseClient()).toThrow(
-      "Supabase client is not configured. Define VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.",
+      "Supabase client is not configured. Define VITE_SUPABASE_URL and a public Supabase key in your environment.",
     );
   });
 
@@ -63,10 +65,7 @@ describe("Supabase Client Provider", () => {
 
   it("initializes a valid singleton when synthetic credentials are provided", () => {
     vi.stubEnv("VITE_SUPABASE_URL", "https://synthetic-test-project.supabase.co");
-    vi.stubEnv(
-      "VITE_SUPABASE_ANON_KEY",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.synthetic-anon-token",
-    );
+    vi.stubEnv("VITE_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_synthetic_anon_token");
 
     expect(isSupabaseConfigured()).toBe(true);
 

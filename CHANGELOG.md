@@ -12,6 +12,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Added
+
+- Customer account access through Supabase Auth with email and password, email confirmation, password recovery, and protected account settings. The header and mobile drawer show actions for the verified session, and password sign-in preserves the browser cart.
+
 ### Changed
 
 - Reworked public navigation around project search and category discovery. The header now links to the working custom development form and homepage process section, and the compact layout keeps the live cart visible without clipping at narrow widths.

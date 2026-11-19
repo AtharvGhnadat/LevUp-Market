@@ -15,10 +15,13 @@ Browser
         ├── Custom path-switch router (window.location.pathname)
         ├── Tailwind CSS v4 design system
         ├── Static TypeScript data files (catalog, categories, project details)
-        └── localStorage cart (no backend)
+        ├── localStorage cart (independent of customer identity)
+        └── One customer auth provider using Supabase Auth
 ```
 
-No server. No database. No authentication. No payments.
+The public storefront is a Vite SPA. Supabase Auth owns email and password identity, verification, recovery and session refresh. The account page displays verified identity from the Auth API. It does not query orders or custom requests. The existing Cashfree gate controls payment availability.
+
+The current account routes use browser SDK storage and PKCE callbacks. The server-rendered session and admin architecture below remains a target. [Customer authentication architecture](../05-security/AUTHENTICATION.md)
 
 ---
 

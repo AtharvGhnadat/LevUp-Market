@@ -50,16 +50,21 @@ test("desktop Projects disclosure supports keyboard navigation and real category
   await expect(electronics).toHaveAttribute("aria-current", "page");
 });
 
-test("public header links to working destinations before account features ship", async ({
+test("public header links to working destinations, including Sign In and Create Account", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/projects");
   const banner = header(page);
   const nav = banner.getByRole("navigation", { name: "Primary" });
-  await expect(
-    banner.locator('a[href="/login"], a[href="/register"], a[href="/dashboard"]'),
-  ).toHaveCount(0);
+  await expect(banner.getByRole("link", { name: "Sign In", exact: true })).toHaveAttribute(
+    "href",
+    "/login",
+  );
+  await expect(banner.getByRole("link", { name: "Create Account", exact: true })).toHaveAttribute(
+    "href",
+    "/signup",
+  );
   await nav.getByRole("link", { name: "Custom development" }).click();
   await expect(page.getByRole("heading", { name: "Request a Custom Project" })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Custom development" })).toHaveAttribute(
@@ -132,9 +137,8 @@ test("compact drawer manages focus, section links and the switch to desktop", as
       Number.parseFloat(getComputedStyle(element).transitionDuration),
     ),
   ).toBeLessThan(0.001);
-  await expect(
-    drawer.locator('a[href="/login"], a[href="/register"], a[href="/dashboard"]'),
-  ).toHaveCount(0);
+  await expect(drawer.getByRole("link", { name: "Sign In", exact: true })).toBeVisible();
+  await expect(drawer.getByRole("link", { name: "Create Account", exact: true })).toBeVisible();
   await expect(page.locator("#mobile-menu:modal")).toHaveCount(1);
   const projects = drawer.locator("summary");
   await projects.focus();
