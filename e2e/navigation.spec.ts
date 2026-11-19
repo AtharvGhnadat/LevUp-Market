@@ -41,7 +41,9 @@ test("desktop Projects disclosure supports keyboard navigation and real category
   await page.mouse.click(4, 30);
   await expect(projects).toHaveAttribute("aria-expanded", "false");
   await projects.click();
-  await expect(nav.getByRole("link")).toHaveCount(9);
+  const panel = nav.locator(`[id="${await projects.getAttribute("aria-controls")}"]`);
+  await expect(panel.getByRole("link")).toHaveCount(7);
+  await expect(nav.getByRole("link", { name: "About", exact: true })).toBeVisible();
   await electronics.click();
   await expect(page).toHaveURL(/\/projects\?category=iot-electronics$/);
   await expect(page.getByRole("main").locator("article").first()).toBeVisible();
@@ -140,11 +142,15 @@ test("compact drawer manages focus, section links and the switch to desktop", as
   await expect(drawer.getByRole("link", { name: "Sign In", exact: true })).toBeVisible();
   await expect(drawer.getByRole("link", { name: "Create Account", exact: true })).toBeVisible();
   await expect(page.locator("#mobile-menu:modal")).toHaveCount(1);
-  const projects = drawer.locator("summary");
+  const projects = drawer.locator("summary").filter({ hasText: /^Projects$/ });
   await projects.focus();
   await page.keyboard.press("Space");
   await expect(drawer.getByRole("link", { name: "All projects" })).toBeVisible();
-  await expect(drawer.locator("details")).toHaveAttribute("open", "");
+  await expect(
+    drawer
+      .locator("details")
+      .filter({ has: page.locator("summary").filter({ hasText: /^Projects$/ }) }),
+  ).toHaveAttribute("open", "");
   await page.keyboard.press("Escape");
   await expect(menu).toBeFocused();
   await expect(menu).toHaveAttribute("aria-expanded", "false");

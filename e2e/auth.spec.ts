@@ -27,7 +27,9 @@ test("sign in validates fields, reveals passwords on request and hides provider 
   await expect(page.getByText("Provider detail hidden by the UI.")).toHaveCount(0);
   await password.fill(fixturePassword);
   await password.press("Enter");
-  await expect(page).toHaveURL(/\/account$/);
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page.getByRole("heading", { name: "Overview", exact: true })).toBeVisible();
+  await page.goto("/account");
   await expect(page.getByText("Email verified")).toBeVisible();
 });
 
