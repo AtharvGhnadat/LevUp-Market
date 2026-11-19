@@ -1,3 +1,4 @@
+import { useAuth } from "@/auth/auth-context";
 import {
   AlertCircle,
   ArrowLeft,
@@ -85,6 +86,32 @@ function getInitialFormState(): {
 }
 
 export function CustomProjectPage() {
+  const { state: customer } = useAuth();
+  const [sending, setSending] = useState(false),
+    [sendError, setSendError] = useState("");
+  const requestKey = useRef<string | null>(null);
+  const submitting = useRef(false);
+  async function submitToWorkspace() {
+    if (customer.status !== "signed-in" || submitting.current) return;
+    if (form.title.trim().length > 160) {
+      setSendError("Shorten the project title to 160 characters before submitting.");
+      return;
+    }
+    submitting.current = true;
+    setSending(true);
+    setSendError("");
+    try {
+      requestKey.current ??= crypto.randomUUID();
+      const { submitBrief } = await import("@/workspace/repository");
+      await submitBrief(form, requestKey.current);
+      clearCustomProjectDraft(window.localStorage);
+      window.location.assign(to("/dashboard/custom-requests"));
+    } catch {
+      setSendError("We couldn’t confirm submission. Your specification is still here. Try again.");
+      submitting.current = false;
+      setSending(false);
+    }
+  }
   const initial = useMemo(() => getInitialFormState(), []);
   const [form, setForm] = useState<CustomProjectFormState>(initial.form);
   const [attachments, setAttachments] = useState<AttachmentMetadata[]>([]);
@@ -232,22 +259,35 @@ export function CustomProjectPage() {
     }
     setErrors({});
     setPhase("review");
-    pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    pageTopRef.current?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
     window.setTimeout(() => reviewHeadingRef.current?.focus(), 50);
   };
 
   const handleConfirmPrototype = () => {
+    if (submitting.current) return;
     clearCustomProjectDraft(window.localStorage);
     setDraftSavedAt("");
     setDraftRestored(false);
     setPhase("submitted");
-    pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    pageTopRef.current?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
     window.setTimeout(() => submittedHeadingRef.current?.focus(), 50);
   };
 
   const handleBackToEdit = () => {
+    if (submitting.current) return;
+    requestKey.current = null;
+    setSendError("");
     setPhase("edit");
-    pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    pageTopRef.current?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
     window.setTimeout(() => editHeadingRef.current?.focus(), 50);
   };
 
@@ -310,7 +350,9 @@ export function CustomProjectPage() {
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-lg border border-volt-action/30 bg-volt-tint px-3 py-2 font-mono text-xs font-medium text-volt-text">
                 <Info aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-                Interactive frontend prototype · Backend not yet connected
+                {customer.status === "signed-in"
+                  ? "Submit your reviewed brief to your workspace"
+                  : "Local specification preview · Sign in to submit a brief"}
               </span>
             </div>
           </div>
@@ -326,7 +368,7 @@ export function CustomProjectPage() {
                   ? "Current stage: 01 Drafting requirements"
                   : phase === "review"
                     ? "Current stage: 01 Reviewing requisition"
-                    : "Prototype prepared · Stage 02 requires live backend"}
+                    : "Local specification ready for export"}
               </span>
             </div>
 
@@ -1173,15 +1215,36 @@ export function CustomProjectPage() {
                   </dl>
                 </div>
 
-                {/* Honest Prototype Notice */}
+                {customer.status === "signed-in" && (
+                  <section className="rounded-md border border-line bg-white p-5">
+                    <h3 className="font-display text-lg font-semibold">Submit to your workspace</h3>
+                    <p className="mt-2 max-w-prose text-sm text-muted">
+                      Send the project requirements, budget, delivery date and selected deliverables
+                      for review. Contact form details and reference files stay in this browser.
+                    </p>
+                    <Button
+                      variant="ink"
+                      disabled={sending}
+                      className="mt-3"
+                      onClick={() => void submitToWorkspace()}
+                    >
+                      {sending ? "Submitting…" : "Submit engineering brief"}
+                    </Button>
+                    {sendError && (
+                      <p role="alert" className="form-error">
+                        {sendError}
+                      </p>
+                    )}
+                  </section>
+                )}
                 <div className="rounded-lg border border-volt-action/30 bg-volt-tint/60 p-4 text-xs leading-relaxed text-alloy">
                   <p className="font-display font-semibold text-volt-text">
-                    Prototype Submission Notice
+                    Local specification export
                   </p>
                   <p className="mt-1">
                     Confirming below completes this interactive frontend requisition preview and
-                    prepares an exportable specification file. Server-side persistence, file storage
-                    upload and live quotation dispatch are not connected yet.
+                    prepares an exportable specification file. This local export includes your
+                    contact details. It does not submit the brief or upload files.
                   </p>
                 </div>
 
@@ -1195,7 +1258,7 @@ export function CustomProjectPage() {
                     size="lg"
                     onClick={handleConfirmPrototype}
                   >
-                    Confirm Requisition Preview
+                    Prepare local export
                     <Check aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
                   </Button>
                 </div>
@@ -1224,9 +1287,8 @@ export function CustomProjectPage() {
               <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
                 Your custom engineering specification for{" "}
                 <strong className="font-medium text-alloy">{form.title}</strong> passed all
-                client-side validation checks. Because the custom-project submission API and file
-                storage backend are not connected yet, no server record or quotation has been
-                created.
+                validation. You can download the specification and contact details as a file. This
+                export stays on your device.
               </p>
 
               <dl className="mt-6 grid grid-cols-1 gap-4 rounded-lg border border-line bg-mineral/40 p-4 text-xs sm:grid-cols-2">
