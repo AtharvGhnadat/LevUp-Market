@@ -11,9 +11,12 @@ test.describe("Storefront & Catalog Flow", () => {
     const logo = page.getByRole("link", { name: /LevUp Projects/i }).first();
     await expect(logo).toBeVisible();
 
-    // Verify navigation links in primary nav
-    await expect(page.getByRole("link", { name: "Explore Projects" }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: "Custom Projects" }).first()).toBeVisible();
+    const navigation = page.getByRole("navigation", { name: "Primary", exact: true });
+    await expect(navigation.getByRole("button", { name: "Projects", exact: true })).toBeVisible();
+    await expect(navigation.getByRole("link", { name: "Custom development" })).toHaveAttribute(
+      "href",
+      "/custom-project",
+    );
 
     // Verify hero heading
     const heroTitle = page.locator("#hero-title");

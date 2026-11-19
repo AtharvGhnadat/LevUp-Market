@@ -1,118 +1,155 @@
-import { Menu, Search, ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { Menu, ShoppingCart } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
-import { Container } from "@/components/ui/Container";
 import { primaryNav } from "@/data/navigation";
+import { cn } from "@/lib/cn";
 import { to } from "@/lib/routes";
 import { useCart } from "@/state/cart";
 import { HeaderSearch } from "./HeaderSearch";
 import { MobileMenu } from "./MobileMenu";
-import { NavDropdown, navItemClass } from "./NavDropdown";
+import { NavDropdown } from "./NavDropdown";
 import { SearchDialog } from "./SearchDialog";
 
-function isActive(href: string, currentPath: string) {
-  return currentPath === href || (href !== "/" && currentPath.startsWith(`${href}/`));
+const desktopNavigation = "(min-width: 70rem)";
+
+function showNavigationDialog(dialog: HTMLDialogElement, trigger: HTMLButtonElement | null) {
+  const root = document.documentElement;
+  root.style.setProperty("--nav-scrollbar-width", `${window.innerWidth - root.clientWidth}px`);
+  trigger?.focus({ preventScroll: true });
+  dialog.showModal();
+  dialog.querySelector<HTMLElement>("[data-initial-focus]")?.focus();
 }
 
 export function SiteHeader({ currentPath }: { currentPath: string }) {
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [fragment, setFragment] = useState(() => window.location.hash);
   const [menuOpen, setMenuOpen] = useState(false);
+  const searchTrigger = useRef<HTMLButtonElement>(null);
+  const searchDialog = useRef<HTMLDialogElement>(null);
+  const menuTrigger = useRef<HTMLButtonElement>(null);
+  const menuDialog = useRef<HTMLDialogElement>(null);
   const { count } = useCart();
+  const currentHref = currentPath === "/" && fragment ? `/${fragment}` : currentPath;
+
+  function openSearch() {
+    const dialog = searchDialog.current;
+    if (!dialog || dialog.open) return;
+    showNavigationDialog(dialog, searchTrigger.current);
+  }
+
+  function openMenu() {
+    const dialog = menuDialog.current;
+    if (!dialog || dialog.open) return;
+    showNavigationDialog(dialog, menuTrigger.current);
+    setMenuOpen(true);
+  }
+
+  useEffect(() => {
+    const desktop = window.matchMedia(desktopNavigation);
+    function onLayoutChange(event: MediaQueryListEvent) {
+      if (!event.matches || !menuDialog.current?.open) return;
+      menuDialog.current.close();
+      searchTrigger.current?.focus({ preventScroll: true });
+    }
+
+    function onShortcut(event: KeyboardEvent) {
+      const target = event.target;
+      if (
+        event.defaultPrevented ||
+        event.repeat ||
+        event.altKey ||
+        event.shiftKey ||
+        !(event.ctrlKey || event.metaKey) ||
+        event.key.toLowerCase() !== "k" ||
+        (target instanceof HTMLElement &&
+          (target.isContentEditable || target.closest("input, textarea, select"))) ||
+        document.querySelector("dialog:modal")
+      ) {
+        return;
+      }
+      event.preventDefault();
+      openSearch();
+    }
+
+    function onHashChange() {
+      setFragment(window.location.hash);
+    }
+
+    desktop.addEventListener("change", onLayoutChange);
+    window.addEventListener("keydown", onShortcut);
+    window.addEventListener("hashchange", onHashChange);
+    return () => {
+      desktop.removeEventListener("change", onLayoutChange);
+      window.removeEventListener("keydown", onShortcut);
+      window.removeEventListener("hashchange", onHashChange);
+    };
+  }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-mineral/95 backdrop-blur-sm transition-colors">
-      <Container className="flex h-16 items-center gap-3 sm:h-[72px] sm:gap-6 lg:h-[72px]">
+    <header className="sticky top-0 z-40 border-b border-line bg-mineral">
+      <div className="mx-auto flex min-h-16 w-full max-w-[1348px] items-center justify-between px-[clamp(0.25rem,calc((100%_-_18.5rem)/2),0.5rem)] py-2 min-[360px]:gap-1 min-[360px]:px-4 sm:px-8 min-[70rem]:min-h-[4.5rem] min-[70rem]:gap-8">
         <Logo />
 
-        <nav aria-label="Primary" className="ml-4 hidden shrink-0 lg:block xl:ml-8">
-          <ul className="flex items-center gap-5 xl:gap-6">
-            {primaryNav.map((item) => {
-              const active =
-                isActive(item.href, currentPath) ||
-                Boolean(item.children?.some((c) => isActive(c.href, currentPath)));
-              return (
-                <li key={item.label}>
-                  {item.children ? (
-                    <NavDropdown item={item} active={active} />
-                  ) : (
-                    <a
-                      href={to(item.href)}
-                      aria-current={active ? "page" : undefined}
-                      className={navItemClass}
-                    >
-                      {item.label}
-                    </a>
-                  )}
-                </li>
-              );
-            })}
+        <nav aria-label="Primary" className="hidden shrink-0 min-[70rem]:block">
+          <ul className="flex items-center gap-1 xl:gap-3">
+            <li>
+              <NavDropdown currentPath={currentPath} />
+            </li>
+            {primaryNav.map(({ label, href }) => (
+              <li key={href}>
+                <a
+                  href={to(href)}
+                  aria-current={currentHref === href ? "page" : undefined}
+                  className="nav-site-link"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 sm:gap-2 xl:gap-3">
-          <div className="hidden 2xl:block">
-            <HeaderSearch />
-          </div>
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            aria-haspopup="dialog"
-            aria-label="Search projects"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-alloy transition-colors duration-150 hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action 2xl:hidden"
-          >
-            <Search aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.75} />
-          </button>
-
+        <div className="ml-auto flex min-w-0 shrink-0 items-center min-[70rem]:gap-2">
+          <HeaderSearch ref={searchTrigger} onOpen={openSearch} />
           <a
             href={to("/cart")}
             aria-label={`Cart, ${count} ${count === 1 ? "item" : "items"}`}
             aria-current={currentPath === "/cart" ? "page" : undefined}
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg text-alloy transition-colors duration-150 hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action"
+            className={cn(
+              "nav-icon-control relative",
+              currentPath === "/cart" && "bg-mineral-deep",
+            )}
           >
-            <ShoppingCart aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.75} />
+            <ShoppingCart aria-hidden="true" className="size-[18px]" strokeWidth={1.75} />
             {count > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute top-1 right-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-volt-action px-1 font-mono text-[0.625rem] font-medium text-white tabular-nums"
+                className="absolute end-0.5 top-0.5 min-w-4 rounded-xs bg-mineral-deep px-0.5 text-center font-mono text-xs font-medium leading-4 text-alloy tabular-nums"
               >
                 {count}
               </span>
             )}
           </a>
-
-          <a
-            href={to("/login")}
-            aria-current={currentPath === "/login" ? "page" : undefined}
-            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-lg px-3 font-sans text-sm font-medium text-alloy transition-colors duration-150 hover:bg-alloy/5 hover:text-volt-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
-          >
-            Sign In
-          </a>
-          <a
-            href={to("/register")}
-            className="hidden h-9 shrink-0 items-center whitespace-nowrap rounded-lg bg-volt-action px-4 font-display text-sm font-semibold text-white shadow-xs transition-colors duration-150 hover:bg-volt-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action sm:inline-flex"
-          >
-            Get Started
-          </a>
-
           <button
+            ref={menuTrigger}
             type="button"
-            onClick={() => setMenuOpen(true)}
+            onClick={openMenu}
             aria-label="Open menu"
+            aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-alloy transition-colors duration-150 hover:bg-alloy/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt-action lg:hidden"
+            className="nav-icon-control min-[70rem]:hidden"
           >
-            <Menu aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
+            <Menu aria-hidden="true" className="size-[18px]" strokeWidth={1.75} />
           </button>
         </div>
-      </Container>
+      </div>
 
-      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <SearchDialog ref={searchDialog} />
       <MobileMenu
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
+        ref={menuDialog}
+        currentHref={currentHref}
         currentPath={currentPath}
-        cartCount={count}
+        onClose={() => setMenuOpen(false)}
       />
     </header>
   );
