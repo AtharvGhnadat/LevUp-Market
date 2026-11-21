@@ -1,5 +1,11 @@
-import { ArrowRight, LockKeyhole, Mail, UserRound, UserRoundPlus } from "lucide-react";
+import {
+  googleSignInConfigured,
+  googleErrorMessage,
+  signInWithGoogle,
+} from "@/auth/google-sign-in";
+import { ArrowRight, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { useState } from "react";
+import { GoogleIcon } from "@/components/brand/GoogleIcon";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthField, AuthNotice } from "@/components/auth/AuthFields";
 import { Button } from "@/components/ui/Button";
@@ -49,6 +55,7 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
     params.get("next") ?? (signup ? "/account/profile" : null),
   );
   const { state } = useAuth();
+  const [googlePending, setGooglePending] = useState(false);
   const configured = isSupabaseConfigured();
   const [error, setError] = useState("");
   const [emailSentTo, setEmailSentTo] = useState("");
@@ -138,6 +145,21 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
     },
   );
 
+  async function continueWithGoogle() {
+    if (pending || googlePending) return;
+    setError("");
+    setGooglePending(true);
+    try {
+      await signInWithGoogle();
+      setRecoveryAccount(null);
+      window.location.replace(to(destination));
+    } catch (failure) {
+      setError(googleErrorMessage(failure));
+    } finally {
+      setGooglePending(false);
+    }
+  }
+
   async function resend() {
     if (resendPending) return;
     setError("");
@@ -207,11 +229,11 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
   return (
     <AuthLayout
       mode={mode}
-      title={signup ? "Create Account" : "Sign In"}
+      title={signup ? "Create Account" : "Welcome back"}
       description={
         signup
           ? "Set up your LevUp Projects account to get started."
-          : "Access your LevUp Projects account."
+          : "Sign in to your LevUp account."
       }
     >
       {state.status === "loading" ? (
@@ -230,12 +252,29 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
         <form
           onSubmit={(event) => {
             setError("");
-            void onSubmit(event);
+            if (googlePending) event.preventDefault();
+            else void onSubmit(event);
           }}
           noValidate
-          aria-busy={pending}
-          className="space-y-4"
+          aria-busy={pending || googlePending}
+          className="space-y-2.5"
         >
+          {googleSignInConfigured && (
+            <>
+              <button
+                type="button"
+                disabled={!configured || pending || googlePending}
+                onClick={() => void continueWithGoogle()}
+                className="auth-google-btn flex min-h-10 w-full items-center justify-center gap-2.5 rounded-lg border border-alloy/20 bg-white px-4 text-xs font-semibold text-alloy shadow-2xs transition-colors duration-150 hover:border-alloy/35 hover:bg-mineral/40 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+              >
+                <GoogleIcon className="size-4 shrink-0" />
+                <span>{googlePending ? "Connecting to Google…" : "Continue with Google"}</span>
+              </button>
+              <div className="auth-divider my-1.5">
+                <span>or continue with email</span>
+              </div>
+            </>
+          )}
           {!configured && (
             <AuthNotice error>Account services aren’t available in this environment.</AuthNotice>
           )}
@@ -274,6 +313,16 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
           <AuthField
             name="password"
             label="Password"
+            labelAction={
+              !signup && (
+                <a
+                  href={to("/forgot-password")}
+                  className="inline-flex min-h-11 items-center text-xs font-medium text-volt-text underline-offset-3 hover:underline sm:text-sm"
+                >
+                  Forgot password?
+                </a>
+              )
+            }
             type="password"
             icon={LockKeyhole}
             placeholder={signup ? "Create a password" : "Enter your password"}
@@ -306,19 +355,13 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
                 />
                 Remember my email
               </label>
-              <a
-                href={to("/forgot-password")}
-                className="inline-flex min-h-11 items-center text-sm font-medium text-volt-text underline-offset-3 hover:underline"
-              >
-                Forgot password?
-              </a>
             </div>
           )}
           <Button
             type="submit"
             variant="primary"
             className="auth-submit w-full"
-            disabled={pending || !configured}
+            disabled={pending || googlePending || !configured}
           >
             {pending
               ? signup
@@ -327,21 +370,15 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
               : signup
                 ? "Create Account"
                 : "Sign In"}
-            <ArrowRight size={18} aria-hidden="true" />
+            <ArrowRight size={16} aria-hidden="true" />
           </Button>
-          <div className="auth-alternate">
-            <div className="auth-divider">
-              <span>
-                {signup ? "Already have an account?" : "New to LevUp Projects?"}{" "}
-                {signup && <a href={authEntry("/login", destination)}>Sign In</a>}
-              </span>
-            </div>
-            {!signup && (
-              <a className="auth-create-link" href={authEntry("/signup", destination)}>
-                <UserRoundPlus size={19} aria-hidden="true" />
-                Create a New Account
+          <div className="auth-divider">
+            <span>
+              {signup ? "Already have an account?" : "New to LevUp?"}{" "}
+              <a href={authEntry(signup ? "/login" : "/signup", destination)}>
+                {signup ? "Sign In" : "Create an account"}
               </a>
-            )}
+            </span>
           </div>
         </form>
       )}

@@ -63,7 +63,9 @@ New routes retain the browser’s normal cross-page scroll and history behavior.
 
 ### Sign In and Create Account
 
-The desktop form sits beside a welcome panel with a Volt underline and three account-specific benefits. On narrow screens the form comes first. Both pages were rendered at 1586, 1536, 1440, 390 and 320 CSS pixels. Chromium confirmed that the forms fit at every width and that reduced-motion mode disables their entrance animation.
+The form shares the desktop stage with an illustrative engineering file library, a four-stage custom build and a two-view fixture drawing. The preview uses static example data. Compact layouts display the form alone. The shared header keeps its navigation and the auth footer uses a single copyright line.
+
+Chromium checks covered 1440 ? 900, 1280 ? 800, 1024 ? 768, 768 ? 1024, 390 ? 844 and 360 ? 800. At the primary size the form cards ended at pixel 762 for sign-in and 816 for signup. Each form stayed above the footer. At 125%, 150% and 200% native browser zoom, both submit buttons remained reachable and the document fit the viewport. Four current screenshots are linked in the table below. The local suite exercised the real client SDK against isolated HTTP fixtures. Google login with a real account and hosted email delivery still require separate acceptance.
 
 Sign-in remembers an email address on this device only after a successful, opted-in login. Unchecking the box clears the remembered address immediately. A browser regression verifies failed login, successful login, sign-out, signup, the return to sign-in and clearing the preference. Registration supports `/create-account` and `/signup` and uses the existing 12-character minimum. The policy agreement awaits approved Terms and Privacy content.
 

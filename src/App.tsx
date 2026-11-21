@@ -149,7 +149,13 @@ export default function App() {
               <PlannedRoutePage path={path} />
             )}
           </main>
-          <SiteFooter compact={workspace || Boolean(authPage)} />
+          {authPage ? (
+            <footer className="credential-footer">
+              &copy; {new Date().getFullYear()} LevUp Projects. All rights reserved.
+            </footer>
+          ) : (
+            <SiteFooter compact={workspace} />
+          )}
         </div>
       </AuthProvider>
     </CartProvider>

@@ -12,6 +12,8 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+- Sign In and Create Account share a compact form and an illustrated engineering workspace. The drawing and sample file list are explicitly labelled as a preview. [Browser evidence](docs/07-testing/CUSTOMER_WORKSPACE_REBUILD.md#sign-in-and-create-account)
+
 ### Added
 
 - A customer workspace for orders, project packages, engineering briefs, support tickets and staff replies. Students can save optional academic details, private hardware delivery addresses and preferred project categories. The workspace migration enforces ownership and limits customer writes to the fields each workflow needs.
