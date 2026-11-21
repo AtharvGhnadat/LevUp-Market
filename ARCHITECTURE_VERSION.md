@@ -12,6 +12,10 @@
 
 ---
 
+## Customer workspace revision
+
+Architecture document revision `1.1.0` describes the unreleased workspace added on the customer authentication branch. It reuses the profile created at registration and the existing order tables. PostgreSQL ownership policies and column grants cover the new private customer records. The original baseline above remains the historical comparison point. [Current architecture](docs/01-architecture/ARCHITECTURE.md)
+
 ## Current Architectural Decisions
 
 | ADR                                                                    | Title                                        | Status   |
@@ -30,18 +34,18 @@ _This is the initial baseline. No prior baseline exists._
 
 The table below describes the repository starting baseline (`78b2142`), current branch stack development status, and long-term production target:
 
-| Concern            | Baseline (`78b2142`)                     | Current Stack Status (Development/Staging)                         | Target State                  |
-| ------------------ | ---------------------------------------- | ------------------------------------------------------------------ | ----------------------------- |
-| Frontend framework | Vite 8 + React 19 SPA                    | Vite 8 + React 19 SPA (Unslop design system + Stage E requisition) | Next.js App Router            |
-| Routing            | Custom `window.location.pathname` switch | Custom guarded client routing with subpath `to()` support          | Next.js file-system routing   |
-| Backend            | None                                     | Vite server middleware (development only; payments gated off)      | Supabase + Next.js API routes |
-| Database           | None                                     | Supabase PostgreSQL migrations (initial schema + RLS hardening)    | Supabase PostgreSQL           |
-| Authentication     | None                                     | Supabase Auth client scaffolding (fail-closed in unconfigured env) | Supabase Auth                 |
-| File storage       | None                                     | Local prototype metadata staging (up to 5 files / 10MB)            | Supabase Storage              |
-| Payments           | None                                     | Cashfree SDK + server gateway (gated disabled; rotation pending)   | Cashfree (server-side only)   |
-| Deployment         | Not deployed                             | Figma Make static adapter / preview                                | Vercel                        |
-| CI/CD              | None                                     | GitHub Actions CI (lint, format, typecheck, vitest, build, E2E)    | GitHub Actions                |
-| Monitoring         | None                                     | Structured hourly partitioned file logger (`src/lib/logger.ts`)    | Sentry + Lighthouse CI        |
+| Concern            | Baseline (`78b2142`)                     | Current Stack Status (Development/Staging)                                          | Target State                  |
+| ------------------ | ---------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------- |
+| Frontend framework | Vite 8 + React 19 SPA                    | Vite 8 + React 19 storefront, auth forms and customer workspace                     | Next.js App Router            |
+| Routing            | Custom `window.location.pathname` switch | Custom guarded client routing with subpath `to()` support                           | Next.js file-system routing   |
+| Backend            | None                                     | Vite server middleware (development only; payments gated off)                       | Supabase + Next.js API routes |
+| Database           | None                                     | Existing order data, private profile, address, brief, ticket and reply migrations   | Supabase PostgreSQL           |
+| Authentication     | None                                     | Verified browser sessions, PKCE confirmation and recovery, private workspace routes | Supabase Auth                 |
+| File storage       | None                                     | Local prototype metadata staging (up to 5 files / 10MB)                             | Supabase Storage              |
+| Payments           | None                                     | Cashfree SDK + server gateway (gated disabled; rotation pending)                    | Cashfree (server-side only)   |
+| Deployment         | Not deployed                             | Figma Make static adapter / preview                                                 | Vercel                        |
+| CI/CD              | None                                     | GitHub Actions CI (lint, format, typecheck, vitest, build, E2E)                     | GitHub Actions                |
+| Monitoring         | None                                     | Structured hourly partitioned file logger (`src/lib/logger.ts`)                     | Sentry + Lighthouse CI        |
 
 ---
 

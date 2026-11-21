@@ -1,3 +1,4 @@
+import { useAuth } from "@/auth/auth-context";
 import {
   AlertCircle,
   ArrowLeft,
@@ -36,6 +37,7 @@ import {
   todayIsoDate,
   validateAttachmentCandidate,
   validateCustomProjectForm,
+  validateEngineeringBrief,
   type AttachmentMetadata,
   type CustomProjectFieldErrors,
   type CustomProjectFormState,
@@ -85,6 +87,33 @@ function getInitialFormState(): {
 }
 
 export function CustomProjectPage() {
+  const { state: customer } = useAuth();
+  const signedIn = customer.status === "signed-in";
+  const [sending, setSending] = useState(false),
+    [sendError, setSendError] = useState("");
+  const requestKey = useRef<string | null>(null);
+  const submitting = useRef(false);
+  async function submitToWorkspace() {
+    if (customer.status !== "signed-in" || submitting.current) return;
+    if (form.title.trim().length > 160) {
+      setSendError("Shorten the project title to 160 characters before submitting.");
+      return;
+    }
+    submitting.current = true;
+    setSending(true);
+    setSendError("");
+    try {
+      requestKey.current ??= crypto.randomUUID();
+      const { submitBrief } = await import("@/workspace/repository");
+      await submitBrief(form, requestKey.current);
+      clearCustomProjectDraft(window.localStorage);
+      window.location.assign(to("/dashboard/custom-requests"));
+    } catch {
+      setSendError("We couldn’t confirm submission. Your specification is still here. Try again.");
+      submitting.current = false;
+      setSending(false);
+    }
+  }
   const initial = useMemo(() => getInitialFormState(), []);
   const [form, setForm] = useState<CustomProjectFormState>(initial.form);
   const [attachments, setAttachments] = useState<AttachmentMetadata[]>([]);
@@ -224,7 +253,9 @@ export function CustomProjectPage() {
 
   const handleReviewSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const validationErrors = validateCustomProjectForm(form);
+    const validationErrors = signedIn
+      ? validateEngineeringBrief(form)
+      : validateCustomProjectForm(form);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       window.setTimeout(() => errorBannerRef.current?.focus(), 0);
@@ -232,22 +263,35 @@ export function CustomProjectPage() {
     }
     setErrors({});
     setPhase("review");
-    pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    pageTopRef.current?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
     window.setTimeout(() => reviewHeadingRef.current?.focus(), 50);
   };
 
   const handleConfirmPrototype = () => {
+    if (submitting.current) return;
     clearCustomProjectDraft(window.localStorage);
     setDraftSavedAt("");
     setDraftRestored(false);
     setPhase("submitted");
-    pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    pageTopRef.current?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
     window.setTimeout(() => submittedHeadingRef.current?.focus(), 50);
   };
 
   const handleBackToEdit = () => {
+    if (submitting.current) return;
+    requestKey.current = null;
+    setSendError("");
     setPhase("edit");
-    pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    pageTopRef.current?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
     window.setTimeout(() => editHeadingRef.current?.focus(), 50);
   };
 
@@ -310,7 +354,9 @@ export function CustomProjectPage() {
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-lg border border-volt-action/30 bg-volt-tint px-3 py-2 font-mono text-xs font-medium text-volt-text">
                 <Info aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-                Interactive frontend prototype · Backend not yet connected
+                {customer.status === "signed-in"
+                  ? "Submit your reviewed brief to your workspace"
+                  : "Local specification preview · Sign in to submit a brief"}
               </span>
             </div>
           </div>
@@ -326,7 +372,7 @@ export function CustomProjectPage() {
                   ? "Current stage: 01 Drafting requirements"
                   : phase === "review"
                     ? "Current stage: 01 Reviewing requisition"
-                    : "Prototype prepared · Stage 02 requires live backend"}
+                    : "Local specification ready for export"}
               </span>
             </div>
 
@@ -782,8 +828,12 @@ export function CustomProjectPage() {
               {/* Section 04: Reference Files & Contact Information */}
               <SectionCard
                 code="04"
-                title="Reference Files & Contact Information"
-                description="Attach optional diagrams, syllabus briefs or datasheets, and provide contact details for your quotation."
+                title={signedIn ? "Reference files" : "Reference Files & Contact Information"}
+                description={
+                  signedIn
+                    ? "Files are staged on this device for your own export. Your account identifies the brief you submit."
+                    : "Stage optional reference files and add the contact details you want on your local specification."
+                }
               >
                 <div className="space-y-6">
                   {/* Attachments */}
@@ -853,96 +903,98 @@ export function CustomProjectPage() {
                     </div>
                   </div>
 
-                  {/* Contact Fields */}
-                  <div className="grid grid-cols-1 gap-5 border-t border-line pt-5 sm:grid-cols-2">
-                    <div>
-                      <FieldLabel htmlFor="cp-name" required>
-                        Full Name
-                      </FieldLabel>
-                      <input
-                        id="cp-name"
-                        type="text"
-                        required
-                        value={form.contactName}
-                        onChange={(e) => updateField("contactName", e.target.value)}
-                        aria-invalid={Boolean(errors.contactName)}
-                        aria-describedby={errors.contactName ? "cp-name-error" : undefined}
-                        placeholder="Your full name"
-                        className={inputClass(Boolean(errors.contactName))}
-                      />
-                      {errors.contactName && (
-                        <FieldError id="cp-name-error">{errors.contactName}</FieldError>
-                      )}
-                    </div>
+                  {/* Contact fields belong to the guest export. The authenticated brief uses its owner. */}
+                  {!signedIn && (
+                    <div className="grid grid-cols-1 gap-5 border-t border-line pt-5 sm:grid-cols-2">
+                      <div>
+                        <FieldLabel htmlFor="cp-name" required>
+                          Full Name
+                        </FieldLabel>
+                        <input
+                          id="cp-name"
+                          type="text"
+                          required
+                          value={form.contactName}
+                          onChange={(e) => updateField("contactName", e.target.value)}
+                          aria-invalid={Boolean(errors.contactName)}
+                          aria-describedby={errors.contactName ? "cp-name-error" : undefined}
+                          placeholder="Your full name"
+                          className={inputClass(Boolean(errors.contactName))}
+                        />
+                        {errors.contactName && (
+                          <FieldError id="cp-name-error">{errors.contactName}</FieldError>
+                        )}
+                      </div>
 
-                    <div>
-                      <FieldLabel htmlFor="cp-email" required>
-                        Email Address
-                      </FieldLabel>
-                      <input
-                        id="cp-email"
-                        type="email"
-                        required
-                        value={form.contactEmail}
-                        onChange={(e) => updateField("contactEmail", e.target.value)}
-                        aria-invalid={Boolean(errors.contactEmail)}
-                        aria-describedby={errors.contactEmail ? "cp-email-error" : undefined}
-                        placeholder="you@institution.edu"
-                        className={inputClass(Boolean(errors.contactEmail))}
-                      />
-                      {errors.contactEmail && (
-                        <FieldError id="cp-email-error">{errors.contactEmail}</FieldError>
-                      )}
-                    </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-email" required>
+                          Email Address
+                        </FieldLabel>
+                        <input
+                          id="cp-email"
+                          type="email"
+                          required
+                          value={form.contactEmail}
+                          onChange={(e) => updateField("contactEmail", e.target.value)}
+                          aria-invalid={Boolean(errors.contactEmail)}
+                          aria-describedby={errors.contactEmail ? "cp-email-error" : undefined}
+                          placeholder="you@institution.edu"
+                          className={inputClass(Boolean(errors.contactEmail))}
+                        />
+                        {errors.contactEmail && (
+                          <FieldError id="cp-email-error">{errors.contactEmail}</FieldError>
+                        )}
+                      </div>
 
-                    <div>
-                      <FieldLabel htmlFor="cp-phone" required>
-                        Phone / WhatsApp Number
-                      </FieldLabel>
-                      <input
-                        id="cp-phone"
-                        type="tel"
-                        required
-                        value={form.contactPhone}
-                        onChange={(e) => updateField("contactPhone", e.target.value)}
-                        aria-invalid={Boolean(errors.contactPhone)}
-                        aria-describedby={errors.contactPhone ? "cp-phone-error" : undefined}
-                        placeholder="10-digit mobile number"
-                        className={inputClass(Boolean(errors.contactPhone))}
-                      />
-                      {errors.contactPhone && (
-                        <FieldError id="cp-phone-error">{errors.contactPhone}</FieldError>
-                      )}
-                    </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-phone" required>
+                          Phone / WhatsApp Number
+                        </FieldLabel>
+                        <input
+                          id="cp-phone"
+                          type="tel"
+                          required
+                          value={form.contactPhone}
+                          onChange={(e) => updateField("contactPhone", e.target.value)}
+                          aria-invalid={Boolean(errors.contactPhone)}
+                          aria-describedby={errors.contactPhone ? "cp-phone-error" : undefined}
+                          placeholder="10-digit mobile number"
+                          className={inputClass(Boolean(errors.contactPhone))}
+                        />
+                        {errors.contactPhone && (
+                          <FieldError id="cp-phone-error">{errors.contactPhone}</FieldError>
+                        )}
+                      </div>
 
-                    <div>
-                      <FieldLabel htmlFor="cp-institution">
-                        College / Organization (Optional)
-                      </FieldLabel>
-                      <input
-                        id="cp-institution"
-                        type="text"
-                        value={form.institution}
-                        onChange={(e) => updateField("institution", e.target.value)}
-                        placeholder="Institution or company name"
-                        className={inputClass(false)}
-                      />
-                    </div>
+                      <div>
+                        <FieldLabel htmlFor="cp-institution">
+                          College / Organization (Optional)
+                        </FieldLabel>
+                        <input
+                          id="cp-institution"
+                          type="text"
+                          value={form.institution}
+                          onChange={(e) => updateField("institution", e.target.value)}
+                          placeholder="Institution or company name"
+                          className={inputClass(false)}
+                        />
+                      </div>
 
-                    <div className="sm:col-span-2">
-                      <FieldLabel htmlFor="cp-account-ref">
-                        Existing LevUp Account Email or Previous Order Reference (Optional)
-                      </FieldLabel>
-                      <input
-                        id="cp-account-ref"
-                        type="text"
-                        value={form.accountReference}
-                        onChange={(e) => updateField("accountReference", e.target.value)}
-                        placeholder="Optional account reference once customer accounts are active"
-                        className={inputClass(false)}
-                      />
+                      <div className="sm:col-span-2">
+                        <FieldLabel htmlFor="cp-account-ref">
+                          Existing LevUp Account Email or Previous Order Reference (Optional)
+                        </FieldLabel>
+                        <input
+                          id="cp-account-ref"
+                          type="text"
+                          value={form.accountReference}
+                          onChange={(e) => updateField("accountReference", e.target.value)}
+                          placeholder="Account email or order reference"
+                          className={inputClass(false)}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </SectionCard>
 
@@ -1156,32 +1208,56 @@ export function CustomProjectPage() {
                   </div>
                 )}
 
-                <div className="border-t border-line pt-5">
-                  <h3 className="font-display text-sm font-semibold text-alloy">
-                    Contact &amp; Account Details
-                  </h3>
-                  <dl className="mt-2.5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                    <SummaryItem label="Name" value={form.contactName} />
-                    <SummaryItem label="Email" value={form.contactEmail} />
-                    <SummaryItem label="Phone" value={form.contactPhone} mono />
-                    {form.institution.trim() && (
-                      <SummaryItem label="Institution" value={form.institution} />
-                    )}
-                    {form.accountReference.trim() && (
-                      <SummaryItem label="Account Reference" value={form.accountReference} />
-                    )}
-                  </dl>
-                </div>
+                {!signedIn && (
+                  <div className="border-t border-line pt-5">
+                    <h3 className="font-display text-sm font-semibold text-alloy">
+                      Contact &amp; Account Details
+                    </h3>
+                    <dl className="mt-2.5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                      <SummaryItem label="Name" value={form.contactName} />
+                      <SummaryItem label="Email" value={form.contactEmail} />
+                      <SummaryItem label="Phone" value={form.contactPhone} mono />
+                      {form.institution.trim() && (
+                        <SummaryItem label="Institution" value={form.institution} />
+                      )}
+                      {form.accountReference.trim() && (
+                        <SummaryItem label="Account Reference" value={form.accountReference} />
+                      )}
+                    </dl>
+                  </div>
+                )}
 
-                {/* Honest Prototype Notice */}
+                {signedIn && (
+                  <section className="rounded-md border border-line bg-white p-5">
+                    <h3 className="font-display text-lg font-semibold">Submit to your workspace</h3>
+                    <p className="mt-2 max-w-prose text-sm text-muted">
+                      Send the project requirements, budget, delivery date and selected deliverables
+                      for review. Your verified account identifies the request. Reference files stay
+                      on this device.
+                    </p>
+                    <Button
+                      variant="ink"
+                      disabled={sending}
+                      className="mt-3"
+                      onClick={() => void submitToWorkspace()}
+                    >
+                      {sending ? "Submitting…" : "Submit engineering brief"}
+                    </Button>
+                    {sendError && (
+                      <p role="alert" className="form-error">
+                        {sendError}
+                      </p>
+                    )}
+                  </section>
+                )}
                 <div className="rounded-lg border border-volt-action/30 bg-volt-tint/60 p-4 text-xs leading-relaxed text-alloy">
                   <p className="font-display font-semibold text-volt-text">
-                    Prototype Submission Notice
+                    Local specification export
                   </p>
                   <p className="mt-1">
                     Confirming below completes this interactive frontend requisition preview and
-                    prepares an exportable specification file. Server-side persistence, file storage
-                    upload and live quotation dispatch are not connected yet.
+                    prepares an exportable specification file. This local export includes your
+                    contact details. It does not submit the brief or upload files.
                   </p>
                 </div>
 
@@ -1195,7 +1271,7 @@ export function CustomProjectPage() {
                     size="lg"
                     onClick={handleConfirmPrototype}
                   >
-                    Confirm Requisition Preview
+                    Prepare local export
                     <Check aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
                   </Button>
                 </div>
@@ -1224,9 +1300,8 @@ export function CustomProjectPage() {
               <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
                 Your custom engineering specification for{" "}
                 <strong className="font-medium text-alloy">{form.title}</strong> passed all
-                client-side validation checks. Because the custom-project submission API and file
-                storage backend are not connected yet, no server record or quotation has been
-                created.
+                validation. You can download the specification as a file. This export stays on your
+                device.
               </p>
 
               <dl className="mt-6 grid grid-cols-1 gap-4 rounded-lg border border-line bg-mineral/40 p-4 text-xs sm:grid-cols-2">
@@ -1234,7 +1309,9 @@ export function CustomProjectPage() {
                 <SummaryItem label="Category" value={categoryLabel} />
                 <SummaryItem label="Budget Range" value={budgetLabel} />
                 <SummaryItem label="Target Delivery Date" value={form.targetDeliveryDate} mono />
-                <SummaryItem label="Contact Email" value={form.contactEmail} />
+                {form.contactEmail && (
+                  <SummaryItem label="Contact Email" value={form.contactEmail} />
+                )}
                 <SummaryItem
                   label="Deliverables"
                   value={`${activeSelectedDeliverables.length} selected`}

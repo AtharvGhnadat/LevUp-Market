@@ -7,6 +7,18 @@
 
 ## History
 
+### [2026-11-19] Sign In and Create Account reference update
+
+The welcome panel now pairs a Manrope heading and curved Volt underline with three reasons to use the customer workspace. A warm white form card sits on the right at desktop widths and comes first on mobile. Both forms keep visible labels, password visibility controls and inline validation. Sign-in can remember an email address on this device. The primary action, icon fields and secondary account link are consistent across both pages.
+
+The previous workbench composition is recorded below. The current layouts and browser captures are documented in the [workspace verification record](../07-testing/CUSTOMER_WORKSPACE_REBUILD.md). Implementation commit `e7086f7`.
+
+### [2026-11-19] Adaptive storefront and customer workspace
+
+The supplied before-and-after reference informed the white inset header, outlined Sign In, Volt Create Account and compact account disclosure. Search and Cart keep their positions through session restoration. The approved LevUp brand component provides the mark and wordmark in both states. About folds into Resources at intermediate desktop widths. On small screens, one drawer holds workspace, account and storefront navigation.
+
+An electronics bench introduces registration and a robotics photograph accompanies sign-in. Both have locally served images, Manrope headings and IBM Plex Sans controls. Recovery keeps its single reading column. A narrow navigation column organizes the six desktop workspace destinations. On phones, a parent breadcrumb and the site drawer leave room for the form. The marked active page, 44px controls and visible save feedback carry across these layouts. [Browser comparisons and page captures](../07-testing/CUSTOMER_WORKSPACE_REBUILD.md)
+
 ### [2026-11-19] Customer authentication
 
 The approved engineering service desk direction puts the form first. Manrope headings and IBM Plex Sans controls sit on Mineral, with short, route-specific guidance on Alloy. Volt marks confirmation and recovery notices.

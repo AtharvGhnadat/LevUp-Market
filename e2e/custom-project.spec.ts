@@ -22,9 +22,7 @@ test.describe("Stage E — Custom Project Requisition Flow", () => {
     }
 
     // Verify honest prototype banner
-    await expect(
-      page.getByText(/Interactive frontend prototype · Backend not yet connected/i),
-    ).toBeVisible();
+    await expect(page.getByText(/Local specification preview/i)).toBeVisible();
   });
 
   test("validates required fields and adapts hardware specs by classification", async ({
@@ -82,10 +80,10 @@ test.describe("Stage E — Custom Project Requisition Flow", () => {
       page.getByRole("heading", { name: "Review Your Engineering Requisition" }),
     ).toBeVisible();
     await expect(page.getByText("ESP32 Greenhouse Telemetry Controller")).toBeVisible();
-    await expect(page.getByText(/Prototype Submission Notice/i)).toBeVisible();
+    await expect(page.getByText(/Local specification export/i)).toBeVisible();
 
     // Confirm prototype preview
-    await page.getByRole("button", { name: "Confirm Requisition Preview" }).click();
+    await page.getByRole("button", { name: "Prepare local export" }).click();
     await expect(
       page.getByRole("heading", { name: "Requisition Specification Prepared" }),
     ).toBeVisible();

@@ -29,6 +29,12 @@ export function authErrorMessage(error: AuthError, fallback: string): string {
   ) {
     return "Too many attempts. Wait a moment before trying again.";
   }
+  if (
+    error.name === "AuthRetryableFetchError" ||
+    error.status === 0 ||
+    (error.status && error.status >= 500)
+  )
+    return "We couldn’t reach account services. Please try again.";
   if (error.code === "weak_password")
     return "Your password did not meet the security requirements. Try a longer, unique password.";
   if (error.code === "same_password")

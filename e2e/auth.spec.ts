@@ -27,8 +27,45 @@ test("sign in validates fields, reveals passwords on request and hides provider 
   await expect(page.getByText("Provider detail hidden by the UI.")).toHaveCount(0);
   await password.fill(fixturePassword);
   await password.press("Enter");
-  await expect(page).toHaveURL(/\/account$/);
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page.getByRole("heading", { name: "Overview", exact: true })).toBeVisible();
+  await page.goto("/account");
   await expect(page.getByText("Email verified")).toBeVisible();
+});
+
+test("remembering an email requires a successful opt-in and can be cleared on this device", async ({
+  page,
+}) => {
+  await mockAuth(page);
+  await page.goto("/login");
+  const main = page.getByRole("main");
+  const remember = main.getByLabel("Remember my email");
+  await expect(remember).not.toBeChecked();
+  await remember.check();
+  await main.getByLabel("Email address").fill(fixtureEmail);
+  await main.getByLabel("Password", { exact: true }).fill("incorrect");
+  await main.getByRole("button", { name: "Sign In" }).click();
+  await expect(main.getByRole("alert")).toBeVisible();
+  await page.reload();
+  await expect(main.getByLabel("Email address")).toHaveValue("");
+  await remember.check();
+  await main.getByLabel("Email address").fill(fixtureEmail);
+  await main.getByLabel("Password", { exact: true }).fill(fixturePassword);
+  await main.getByRole("button", { name: "Sign In" }).click();
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await page.goto("/account");
+  await main.getByRole("button", { name: "Sign Out" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.goto("/create-account");
+  await expect(main.getByRole("heading", { name: "Create Account", exact: true })).toBeVisible();
+  await expect(main.getByLabel("Email address")).toHaveValue("");
+  await main.getByRole("link", { name: "Sign In" }).click();
+  await expect(main.getByLabel("Email address")).toHaveValue(fixtureEmail);
+  await expect(main.getByLabel("Password", { exact: true })).toHaveValue("");
+  await remember.uncheck();
+  await page.reload();
+  await expect(remember).not.toBeChecked();
+  await expect(main.getByLabel("Email address")).toHaveValue("");
 });
 
 test("signup confirmation, resend and callback use the provider and preserve a safe destination", async ({
@@ -216,6 +253,33 @@ test("authentication pages and header reflow from 320px through desktop", async 
           ),
         ),
       ).toBeLessThanOrEqual(width);
+    }
+  }
+});
+
+test("the complete credential page fits short desktop and phone screens", async ({ page }) => {
+  await mockAuth(page);
+  for (const path of ["/login", "/signup"]) {
+    await page.goto(path);
+    await page.getByRole("main").locator("form").waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    for (const [width, height] of [
+      [1280, 640],
+      [1366, 650],
+      [1024, 640],
+      [1440, 900],
+      [360, 800],
+      [390, 844],
+    ]) {
+      await page.setViewportSize({ width, height });
+      const size = await page.evaluate(() => ({
+        width: document.documentElement.scrollWidth,
+        height: document.documentElement.scrollHeight,
+        footerBottom: document.querySelector("footer")!.getBoundingClientRect().bottom,
+      }));
+      expect(size.width).toBeLessThanOrEqual(width);
+      expect(size.height).toBeLessThanOrEqual(height + 1);
+      expect(size.footerBottom).toBeLessThanOrEqual(height + 1);
     }
   }
 });

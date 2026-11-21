@@ -11,6 +11,7 @@ import {
   saveCustomProjectDraft,
   validateAttachmentCandidate,
   validateCustomProjectForm,
+  validateEngineeringBrief,
   type CustomProjectFormState,
 } from "./custom-project-state";
 
@@ -36,6 +37,17 @@ function validState(): CustomProjectFormState {
 }
 
 describe("custom-project-state validation", () => {
+  it("uses the verified owner for a workspace brief and keeps guest contact validation", () => {
+    const draft = { ...validState(), contactName: "", contactEmail: "", contactPhone: "" };
+    const day = new Date("2026-11-18");
+    expect(validateEngineeringBrief(draft, day)).toEqual({});
+    expect(Object.keys(validateCustomProjectForm(draft, day)).sort()).toEqual([
+      "contactEmail",
+      "contactName",
+      "contactPhone",
+    ]);
+  });
+
   it("reports clear errors for an empty form", () => {
     const errors = validateCustomProjectForm(emptyCustomProjectForm, new Date("2026-11-18"));
     expect(errors.title).toBeDefined();

@@ -1,4 +1,11 @@
+import {
+  googleSignInConfigured,
+  googleErrorMessage,
+  signInWithGoogle,
+} from "@/auth/google-sign-in";
+import { ArrowRight, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { useState } from "react";
+import { GoogleIcon } from "@/components/brand/GoogleIcon";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthField, AuthNotice } from "@/components/auth/AuthFields";
 import { Button } from "@/components/ui/Button";
@@ -21,11 +28,34 @@ import {
 import { useAuthForm } from "@/auth/use-auth-form";
 import { useAuth } from "@/auth/auth-context";
 
+const rememberedEmailKey = "levup-remembered-email";
+
+function readRememberedEmail() {
+  try {
+    return localStorage.getItem(rememberedEmailKey) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function rememberEmail(value: string) {
+  try {
+    if (value) localStorage.setItem(rememberedEmailKey, value);
+    else localStorage.removeItem(rememberedEmailKey);
+  } catch {
+    /* The form also works when storage is unavailable. */
+  }
+}
+
 export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
   const signup = mode === "signup";
+  const [savedEmail] = useState(() => (signup ? "" : readRememberedEmail()));
   const params = new URLSearchParams(window.location.search);
-  const destination = safeAuthDestination(params.get("next"));
+  const destination = safeAuthDestination(
+    params.get("next") ?? (signup ? "/account/profile" : null),
+  );
   const { state } = useAuth();
+  const [googlePending, setGooglePending] = useState(false);
   const configured = isSupabaseConfigured();
   const [error, setError] = useState("");
   const [emailSentTo, setEmailSentTo] = useState("");
@@ -106,6 +136,7 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
             return;
           }
         }
+        if (!signup) rememberEmail(values.rememberEmail ? email : "");
         setRecoveryAccount(null);
         window.location.replace(to(destination));
       } catch {
@@ -113,6 +144,21 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
       }
     },
   );
+
+  async function continueWithGoogle() {
+    if (pending || googlePending) return;
+    setError("");
+    setGooglePending(true);
+    try {
+      await signInWithGoogle();
+      setRecoveryAccount(null);
+      window.location.replace(to(destination));
+    } catch (failure) {
+      setError(googleErrorMessage(failure));
+    } finally {
+      setGooglePending(false);
+    }
+  }
 
   async function resend() {
     if (resendPending) return;
@@ -127,6 +173,8 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
       });
       if (failure?.status === 429) {
         setError("Too many requests. Wait a moment before trying again.");
+      } else if (failure && (!failure.status || failure.status >= 500)) {
+        setError("We couldn’t reach account services. Please try again.");
       } else {
         setResendNotice(
           "If this address can receive another confirmation link, we'll send one shortly.",
@@ -178,20 +226,15 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
     );
   }
 
-  const title = signup ? "Create your LevUp account" : "Sign in to LevUp";
   return (
     <AuthLayout
-      title={title}
+      mode={mode}
+      title={signup ? "Create Account" : "Welcome back"}
       description={
         signup
-          ? "Set up your account with your name, email and a password."
-          : "Use your LevUp email and password to access your account."
+          ? "Set up your LevUp Projects account to get started."
+          : "Sign in to your LevUp account."
       }
-      guide={{
-        title: "Continue where you left off",
-        description:
-          "Your project selections stay in this browser while you sign in or create an account.",
-      }}
     >
       {state.status === "loading" ? (
         <AuthNotice>Checking your session…</AuthNotice>
@@ -209,12 +252,29 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
         <form
           onSubmit={(event) => {
             setError("");
-            void onSubmit(event);
+            if (googlePending) event.preventDefault();
+            else void onSubmit(event);
           }}
           noValidate
-          aria-busy={pending}
-          className="space-y-4"
+          aria-busy={pending || googlePending}
+          className={signup ? "registration-form" : undefined}
         >
+          {googleSignInConfigured && (
+            <>
+              <button
+                type="button"
+                disabled={!configured || pending || googlePending}
+                onClick={() => void continueWithGoogle()}
+                className="auth-google-btn flex min-h-10 w-full items-center justify-center gap-2.5 rounded-lg border border-alloy/20 bg-white px-4 text-xs font-semibold text-alloy shadow-2xs transition-colors duration-150 hover:border-alloy/35 hover:bg-mineral/40 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+              >
+                <GoogleIcon className="size-4 shrink-0" />
+                <span>{googlePending ? "Connecting to Google…" : "Continue with Google"}</span>
+              </button>
+              <div className="auth-divider my-1.5">
+                <span>or continue with email</span>
+              </div>
+            </>
+          )}
           {!configured && (
             <AuthNotice error>Account services aren’t available in this environment.</AuthNotice>
           )}
@@ -232,6 +292,8 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
             <AuthField
               name="name"
               label="Full name"
+              icon={UserRound}
+              placeholder="Enter your full name"
               autoComplete="name"
               required
               error={errors.name}
@@ -240,6 +302,9 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
           <AuthField
             name="email"
             label="Email address"
+            icon={Mail}
+            defaultValue={savedEmail}
+            placeholder="Enter your email address"
             autoComplete="email"
             type="email"
             required
@@ -248,7 +313,19 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
           <AuthField
             name="password"
             label="Password"
+            labelAction={
+              !signup && (
+                <a
+                  href={to("/forgot-password")}
+                  className="inline-flex min-h-11 items-center text-xs font-medium text-volt-text underline-offset-3 hover:underline sm:text-sm"
+                >
+                  Forgot password?
+                </a>
+              )
+            }
             type="password"
+            icon={LockKeyhole}
+            placeholder={signup ? "Create a password" : "Enter your password"}
             autoComplete={signup ? "new-password" : "current-password"}
             required
             hint={signup ? passwordHint : undefined}
@@ -259,23 +336,32 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
               name="confirmation"
               label="Confirm password"
               type="password"
+              icon={LockKeyhole}
+              placeholder="Confirm your password"
               autoComplete="new-password"
               required
               error={errors.confirmation}
             />
           ) : (
-            <a
-              href={to("/forgot-password")}
-              className="inline-flex min-h-11 items-center text-sm font-medium text-volt-text underline-offset-3 hover:underline"
-            >
-              Forgot password?
-            </a>
+            <div className="auth-options">
+              <label>
+                <input
+                  type="checkbox"
+                  name="rememberEmail"
+                  defaultChecked={Boolean(savedEmail)}
+                  onChange={(event) => {
+                    if (!event.currentTarget.checked) rememberEmail("");
+                  }}
+                />
+                Remember my email
+              </label>
+            </div>
           )}
           <Button
             type="submit"
-            variant="ink"
-            className="w-full min-h-12 font-sans"
-            disabled={pending || !configured}
+            variant="primary"
+            className="auth-submit w-full"
+            disabled={pending || googlePending || !configured}
           >
             {pending
               ? signup
@@ -284,16 +370,16 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
               : signup
                 ? "Create Account"
                 : "Sign In"}
+            <ArrowRight size={16} aria-hidden="true" />
           </Button>
-          <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
-            {signup ? "Already have an account?" : "New to LevUp?"}
-            <a
-              href={authEntry(signup ? "/login" : "/signup", destination)}
-              className="inline-flex min-h-11 items-center font-medium text-volt-text underline underline-offset-3"
-            >
-              {signup ? "Sign In" : "Create Account"}
-            </a>
-          </p>
+          <div className="auth-divider">
+            <span>
+              {signup ? "Already have an account?" : "New to LevUp?"}{" "}
+              <a href={authEntry(signup ? "/login" : "/signup", destination)}>
+                {signup ? "Sign In" : "Create an account"}
+              </a>
+            </span>
+          </div>
         </form>
       )}
     </AuthLayout>

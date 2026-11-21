@@ -5,6 +5,7 @@ import {
   currentProjectLink,
   primaryNav,
   projectCategoryLinks,
+  resourceLinks,
 } from "@/data/navigation";
 import { to } from "@/lib/routes";
 import { AccountNavigation } from "./AccountNavigation";
@@ -13,10 +14,12 @@ type Props = {
   ref: Ref<HTMLDialogElement>;
   currentPath: string;
   currentHref: string;
+  name: string;
+  unread: boolean;
   onClose: () => void;
 };
 
-export function MobileMenu({ ref, currentPath, currentHref, onClose }: Props) {
+export function MobileMenu({ ref, currentPath, currentHref, onClose, name, unread }: Props) {
   const selectedHref = currentProjectLink(currentPath, window.location.search);
 
   function onClick(event: MouseEvent<HTMLDialogElement>) {
@@ -62,10 +65,11 @@ export function MobileMenu({ ref, currentPath, currentHref, onClose }: Props) {
         </button>
       </div>
 
-      <nav aria-label="Mobile" className="p-2">
-        <div className="mb-2 border-b border-line pb-2 pt-1">
-          <AccountNavigation mobile currentPath={currentPath} />
+      <nav aria-label="Mobile" className="p-3">
+        <div className="mb-2 border-b border-line pb-2">
+          <AccountNavigation mobile currentPath={currentPath} name={name} unread={unread} />
         </div>
+        <h3 className="nav-group-title">Explore</h3>
         <ul>
           <li className="mb-1 border-b border-line pb-1">
             <details className="group">
@@ -103,6 +107,36 @@ export function MobileMenu({ ref, currentPath, currentHref, onClose }: Props) {
               </a>
             </li>
           ))}
+          <li>
+            <details className="group">
+              <summary className="nav-panel-link cursor-pointer list-none justify-between">
+                Resources
+                <ChevronDown size={16} aria-hidden="true" className="group-open:rotate-180" />
+              </summary>
+              <ul className="ms-3 border-s border-line ps-2">
+                {resourceLinks.map(({ href, label }) => (
+                  <li key={href}>
+                    <a
+                      className="nav-panel-link"
+                      aria-current={currentPath === href ? "page" : undefined}
+                      href={to(href)}
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </li>
+          <li>
+            <a
+              className="nav-panel-link"
+              aria-current={currentPath === "/about" ? "page" : undefined}
+              href={to("/about")}
+            >
+              About
+            </a>
+          </li>
         </ul>
       </nav>
     </dialog>

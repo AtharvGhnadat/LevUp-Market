@@ -18,6 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let active = true;
     let revision = 0;
     let hadSession = false;
+    let sessionOwner: string | null = null;
     let timer: number | undefined;
     let activeSubscription: { unsubscribe: () => void } | undefined;
     const accept = (value: AuthState) => {
@@ -36,10 +37,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (!session) {
             accept({ status: "signed-out", expired: hadSession && !signingOut.current });
             hadSession = false;
+            sessionOwner = null;
             return;
           }
 
           hadSession = true;
+          if (session.user.id !== sessionOwner) accept({ status: "loading" });
+          sessionOwner = session.user.id;
           if (event === "PASSWORD_RECOVERY") setRecoveryAccount(session.user.id);
           if (event === "PASSWORD_RECOVERY" || isRecoveryAccount(session.user.id)) {
             accept({ status: "recovering" });

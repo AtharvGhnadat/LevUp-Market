@@ -19,19 +19,21 @@ This project uses [Semantic Versioning 2.0.0](https://semver.org/): `MAJOR.MINOR
 
 ## Planned Release Milestones
 
-| Version  | Milestone                                                                               | Status                                                            |
-| -------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `v0.1.0` | Engineering foundation complete: CI, linting, testing, logging infrastructure on `main` | Merge candidate (PR #1 open against `main`)                       |
-| `v0.2.0` | Storefront design, Stage E custom requisition, Supabase schema, Cashfree sandbox (Vite) | Conditional on PR #1, PR #2, PR #3 merges & rotation confirmation |
-| `v0.3.0` | Next.js App Router migration complete with full visual parity and SSR                   | Planned roadmap phase                                             |
-| `v0.4.0` | Live Cashfree payments & transactional order fulfillment (merchant rotation verified)   | Blocked on confirmed credential rotation                          |
-| `v0.5.0` | Customer dashboard complete                                                             | Planned roadmap phase                                             |
-| `v0.6.0` | Admin portal complete                                                                   | Planned roadmap phase                                             |
-| `v1.0.0` | First production release: all PRD features, security review, load tested                | Planned production milestone                                      |
+| Version  | Milestone                                                                               | Status                                                                             |
+| -------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `v0.1.0` | Engineering foundation complete: CI, linting, testing, logging infrastructure on `main` | Merge candidate (PR #1 open against `main`)                                        |
+| `v0.2.0` | Storefront design, Stage E custom requisition, Supabase schema, Cashfree sandbox (Vite) | After foundation, design and Stage E integration and confirmed credential rotation |
+| `v0.3.0` | Next.js App Router migration complete with full visual parity and SSR                   | Planned roadmap phase                                                              |
+| `v0.4.0` | Live Cashfree payments & transactional order fulfillment (merchant rotation verified)   | Blocked on confirmed credential rotation                                           |
+| `v0.5.0` | Customer dashboard complete                                                             | Customer workspace in feature review. Hosted release verification is pending.      |
+| `v0.6.0` | Admin portal complete                                                                   | Planned roadmap phase                                                              |
+| `v1.0.0` | First production release: all PRD features, security review, load tested                | Planned production milestone                                                       |
 
 > [!CAUTION]
 > Do not tag a version unless it has been tested and verified. Never fabricate version history.
 > SemVer tags are applied only to verified commits on `main` after PR merge, CI pass, and credential clearance. Historical SemVer tags remain deferred pending PR merge progression (`Foundation PR #1` → `Design` → `Stage E` → `Remediation`) and confirmed Cashfree credential rotation. See [docs/10-releases/VERSION_HISTORY.md](docs/10-releases/VERSION_HISTORY.md) for post-cleanup milestone mapping.
+
+The customer workspace branch adds migration `20261119150227` and extends the authentication PR. Its CI and screenshots document a development milestone. Assign a release version when a reviewed integration commit reaches the release branch. [Workspace verification](docs/07-testing/CUSTOMER_WORKSPACE_REBUILD.md)
 
 ## Git Tagging
 

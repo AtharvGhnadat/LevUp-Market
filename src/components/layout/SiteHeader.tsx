@@ -1,5 +1,9 @@
 import { Menu, ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/auth/auth-context";
+import { useUnreadReplies } from "@/workspace/use-unread-replies";
+import { useDisplayName } from "@/workspace/use-display-name";
+import { initials } from "@/workspace/navigation";
 import { Logo } from "@/components/brand/Logo";
 import { primaryNav } from "@/data/navigation";
 import { cn } from "@/lib/cn";
@@ -29,6 +33,10 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
   const menuTrigger = useRef<HTMLButtonElement>(null);
   const menuDialog = useRef<HTMLDialogElement>(null);
   const { count } = useCart();
+  const { state } = useAuth();
+  const customer = state.status === "signed-in" ? state.user : undefined;
+  const unread = useUnreadReplies(customer?.id);
+  const name = useDisplayName(customer?.id, customer?.user_metadata.full_name);
   const currentHref = currentPath === "/" && fragment ? `/${fragment}` : currentPath;
 
   function openSearch() {
@@ -86,12 +94,12 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-mineral">
-      <div className="mx-auto flex min-h-16 w-full max-w-[1348px] items-center justify-between px-[clamp(0.25rem,calc((100%_-_18.5rem)/2),0.5rem)] py-2 min-[360px]:gap-1 min-[360px]:px-4 sm:px-8 min-[75rem]:min-h-[4.5rem] min-[75rem]:gap-6">
+    <header className="market-header">
+      <div className="market-bar">
         <Logo />
 
         <nav aria-label="Primary" className="hidden shrink-0 min-[75rem]:block">
-          <ul className="flex items-center gap-1 xl:gap-3">
+          <ul className="market-primary">
             <li>
               <NavDropdown currentPath={currentPath} />
             </li>
@@ -106,10 +114,22 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
                 </a>
               </li>
             ))}
+            <li>
+              <NavDropdown currentPath={currentPath} resources />
+            </li>
+            <li className="hidden min-[80rem]:block">
+              <a
+                href={to("/about")}
+                className="nav-site-link"
+                aria-current={currentPath === "/about" ? "page" : undefined}
+              >
+                About
+              </a>
+            </li>
           </ul>
         </nav>
 
-        <div className="ml-auto flex min-w-0 shrink-0 items-center min-[75rem]:gap-2">
+        <div className="market-tools">
           <HeaderSearch ref={searchTrigger} onOpen={openSearch} />
           <a
             href={to("/cart")}
@@ -122,16 +142,13 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
           >
             <ShoppingCart aria-hidden="true" className="size-[18px]" strokeWidth={1.75} />
             {count > 0 && (
-              <span
-                aria-hidden="true"
-                className="absolute end-0.5 top-0.5 min-w-4 rounded-xs bg-mineral-deep px-0.5 text-center font-mono text-xs font-medium leading-4 text-alloy tabular-nums"
-              >
+              <span aria-hidden="true" className="cart-count">
                 {count}
               </span>
             )}
           </a>
-          <div className="hidden min-[75rem]:flex min-[75rem]:min-w-52 min-[75rem]:justify-end">
-            <AccountNavigation currentPath={currentPath} />
+          <div className="market-account-slot">
+            <AccountNavigation currentPath={currentPath} name={name} unread={unread} />
           </div>
           <button
             ref={menuTrigger}
@@ -141,9 +158,24 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="nav-icon-control min-[75rem]:hidden"
+            className="nav-icon-control sm:ms-2 sm:w-32 sm:gap-2 sm:border sm:border-line sm:bg-white sm:px-2 min-[75rem]:hidden"
           >
-            <Menu aria-hidden="true" className="size-[18px]" strokeWidth={1.75} />
+            {customer && (
+              <span aria-hidden="true" className="account-initials relative">
+                {initials(name)}
+                {unread && (
+                  <span className="unread-dot absolute -end-0.5 -top-0.5 ring-2 ring-white" />
+                )}
+              </span>
+            )}
+            <span className="hidden min-w-0 truncate text-sm font-medium sm:inline">
+              {customer ? name.split(/\s+/u)[0] : "Menu"}
+            </span>
+            <Menu
+              aria-hidden="true"
+              className={cn("size-[18px] shrink-0", customer && "hidden sm:block")}
+              strokeWidth={1.75}
+            />
           </button>
         </div>
       </div>
@@ -152,6 +184,8 @@ export function SiteHeader({ currentPath }: { currentPath: string }) {
       <MobileMenu
         ref={menuDialog}
         currentHref={currentHref}
+        name={name}
+        unread={unread}
         currentPath={currentPath}
         onClose={() => setMenuOpen(false)}
       />

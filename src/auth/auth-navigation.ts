@@ -1,9 +1,10 @@
+import { customerRoutes } from "@/workspace/navigation";
 import { to } from "@/lib/routes";
 
-const defaultDestination = "/account";
+const defaultDestination = "/dashboard";
 const returnPaths = new Set([
   "/",
-  "/account",
+  ...customerRoutes.map((route) => route.href),
   "/cart",
   "/checkout",
   "/custom-project",
