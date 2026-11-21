@@ -257,7 +257,7 @@ export function AuthCredentialsPage({ mode }: { mode: "login" | "signup" }) {
           }}
           noValidate
           aria-busy={pending || googlePending}
-          className="space-y-2.5"
+          className={signup ? "registration-form" : undefined}
         >
           {googleSignInConfigured && (
             <>

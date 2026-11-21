@@ -29,7 +29,7 @@ export function AuthField({
     .join(" ");
 
   return (
-    <div>
+    <div className="auth-field">
       <div className="flex flex-wrap items-center justify-between gap-x-3">
         <label htmlFor={name} className="block text-xs font-semibold text-alloy">
           {label}

@@ -256,3 +256,30 @@ test("authentication pages and header reflow from 320px through desktop", async 
     }
   }
 });
+
+test("the complete credential page fits short desktop and phone screens", async ({ page }) => {
+  await mockAuth(page);
+  for (const path of ["/login", "/signup"]) {
+    await page.goto(path);
+    await page.getByRole("main").locator("form").waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    for (const [width, height] of [
+      [1280, 640],
+      [1366, 650],
+      [1024, 640],
+      [1440, 900],
+      [360, 800],
+      [390, 844],
+    ]) {
+      await page.setViewportSize({ width, height });
+      const size = await page.evaluate(() => ({
+        width: document.documentElement.scrollWidth,
+        height: document.documentElement.scrollHeight,
+        footerBottom: document.querySelector("footer")!.getBoundingClientRect().bottom,
+      }));
+      expect(size.width).toBeLessThanOrEqual(width);
+      expect(size.height).toBeLessThanOrEqual(height + 1);
+      expect(size.footerBottom).toBeLessThanOrEqual(height + 1);
+    }
+  }
+});
